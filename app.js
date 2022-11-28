@@ -11,7 +11,18 @@ app.use(
   })
 )
 
+const models = require('./src/models/index')
 
+app.get('/test', (req, res) => {
+  //models.users.getUsers(req, res)
+  //models.orders.getOrders(req, res)
+  //models.cart.getCart(req, res)
+  //models.vendors.getVendors(req, res)
+  models.products.getProducts(req, res)
+  //models.orders.getOrders(req, res)
+  //models.orders.getOrders(req, res)
+  //res.json(models.users.getUsers(req, res))
+})
 
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}.`)
