@@ -11,6 +11,11 @@ app.use(
   })
 )
 
+const userRoutes = require('./src/routes/users')
+
+app.use(userRoutes)
+
+/*
 const models = require('./src/models/index')
 
 app.get('/test', (req, res) => {
@@ -22,7 +27,7 @@ app.get('/test', (req, res) => {
   //models.orders.getOrders(req, res)
   //models.orders.getOrders(req, res)
   //res.json(models.users.getUsers(req, res))
-})
+})*/
 
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}.`)
