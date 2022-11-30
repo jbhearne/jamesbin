@@ -49,36 +49,38 @@ const createVendor = (request, response) => {
 const updateVendor = (request, response) => {
     const id = parseInt(request.params.id)
     const { name, description, contact } = request.body
-    const { phone, address, city, state, zip, email } = contact
-    let contactId = -1
-
+    const vendorColumns = updateColumns({ name, description } );
+    const userSql = vendorColumns ? 
+      `UPDATE users SET${vendorColumns} WHERE id = $1 RETURNING *` :
+      `SELECT * FROM users WHERE id = $1`;
+  
     pool.query(
-      //note on UPDATE, since each column is specified in the query, the App logic needs to fill in the the unchanged values
-      'UPDATE vendors SET name = $1, description = $2 WHERE id = $4 RETURNING *',
-      [name, description, id],
-      (error, results) => {
-         if (error) {
-          throw error
+      userSql,
+      [id],
+      async (error, results) => {
+        if (error) {
+          throw error;
         }
-        contactId = results.rows[0].contact_id
-      }
-    )
-
-    pool.query(
-      'UPDATE contact SET phone = $1, address = $2, city = $3, state = $4, zip = $5, email = $6 WHERE id = $7',
-      [phone, address, city, state, zip, email, contactId],
-      (error, results) => {
-         if (error) {
-          throw error
-        }
-        response.status(200).send(`Vendor modified with ID: ${id}`)
-      }
-    )
-  }
+        const contactId = await results.rows[0].contact_id;
+        if (Object.keys(contact).length > 0) {
+          const { phone, address, city, state, zip, email } = contact;
+          const contactColumns = updateColumns({ phone, address, city, state, zip, email })
+  
+          pool.query(
+            `UPDATE contact SET${contactColumns} WHERE id = $1`,
+            [contactId],
+            (error, results) => {
+              if (error) {
+                throw error;
+              }
+              response.status(200).send(`User modified with ID: ${id}`);
+          });
+        };
+      });
+  };
 
 const deleteVendor = (request, response) => {
   const id = parseInt(request.params.id)
-  let contactId = -1
 
   pool.query('DELETE FROM vendors WHERE id = $1 RETURNING *', 
   [id],
@@ -86,16 +88,16 @@ const deleteVendor = (request, response) => {
     if (error) {
       throw error
     }
-    contactId = results.rows[0].contact_id
-  })
+    const contactId = results.rows[0].contact_id
 
-  pool.query('DELETE FROM contact WHERE id = $1', 
-  [contactId],
-  (error, results) => {
-    if (error) {
-      throw error
-    }
-    response.status(200).send(`Vendor deleted with ID: ${id}`)
+    pool.query('DELETE FROM contact WHERE id = $1', 
+    [contactId],
+    (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(200).send(`Vendor deleted with ID: ${id}`)
+    })
   })
 }
 

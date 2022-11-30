@@ -1,4 +1,5 @@
 const pool = require('./pool');
+const updateColumns = require('./util/update-columns')
 
 const getUsers = (request, response) => {
   pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
@@ -49,27 +50,33 @@ const createUser = async (request, response) => {
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id);
   const { fullname, username, password, contact } = request.body;
-  const { phone, address, city, state, zip, email } = contact;
+  const userColumns = updateColumns({ fullname, username, password } );
+  const userSql = userColumns ? 
+    `UPDATE users SET${userColumns} WHERE id = $1 RETURNING *` :
+    `SELECT * FROM users WHERE id = $1`;
 
   pool.query(
-    //note on UPDATE, since each column is specified in the query, the App logic needs to fill in the the unchanged values
-    'UPDATE users SET fullname = $1, username = $2, password = $3 WHERE id = $4 RETURNING *',
-    [fullname, username, password, id],
+    userSql,
+    [id],
     async (error, results) => {
       if (error) {
         throw error;
       }
       const contactId = await results.rows[0].contact_id;
+      if (Object.keys(contact).length > 0) {
+        const { phone, address, city, state, zip, email } = contact;
+        const contactColumns = updateColumns({ phone, address, city, state, zip, email })
 
-      pool.query(
-        'UPDATE contact SET phone = $1, address = $2, city = $3, state = $4, zip = $5, email = $6 WHERE id = $7',
-        [phone, address, city, state, zip, email, contactId],
-        (error, results) => {
-          if (error) {
-            throw error;
-          }
-          response.status(200).send(`User modified with ID: ${id}`);
-      });
+        pool.query(
+          `UPDATE contact SET${contactColumns} WHERE id = $1`,
+          [contactId],
+          (error, results) => {
+            if (error) {
+              throw error;
+            }
+            response.status(200).send(`User modified with ID: ${id}`);
+        });
+      };
   });
 };
 
@@ -83,7 +90,10 @@ const deleteUser = (request, response) => {
       throw error;
     }
     const contactId = await results.rows[0].contact_id;
-
+    
+    //probably should not delete these in a real database I might add a flag so that childless addresses could be easily culled
+    //technical 'contact' is the parent so it could belong to multiple users, like roomates or families.
+    //but here I am treeting this as a one-to-on relationship.
     pool.query('DELETE FROM contact WHERE id = $1', 
     [contactId],
     (error, results) => {
