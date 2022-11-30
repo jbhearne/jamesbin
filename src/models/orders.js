@@ -11,8 +11,9 @@ const getOrders = (request, response) => {
 };
 
 const getOrdersByUser = (request, response) => {
-  const { userId } = request.body;
-  pool.query('SELECT * FROM orders WHERE user_id = $1', [userId], (error, results) => {
+  //should i use param with a user route or authorization logic?
+  const id = parseInt(request.params.id);
+  pool.query('SELECT * FROM orders WHERE user_id = $1', [id], (error, results) => {
     if (error) {
     throw error;
     }
@@ -51,7 +52,7 @@ const updateOrder = (request, response) => {
   const { dateCompleted } = request.body;
 
   pool.query(
-    'UPDATE orders SET date_completed = $1, WHERE id = $2',
+    'UPDATE orders SET date_completed = $1 WHERE id = $2',
     [dateCompleted, id],
     (error, results) => {
       if (error) {

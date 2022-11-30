@@ -11,8 +11,8 @@ const getCart = (request, response) => {
 };
 
 const getCartByOrder = (request, response) => {
-  const { orderId } = request.body;
-  pool.query('SELECT * FROM cart WHERE order_id = $1', [orderId], (error, results) => {
+  const id = parseInt(request.params.id);
+  pool.query('SELECT * FROM cart WHERE order_id = $1', [id], (error, results) => {
     if (error) {
     throw error;
     }

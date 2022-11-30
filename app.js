@@ -11,9 +11,17 @@ app.use(
   })
 )
 
-const userRoutes = require('./src/routes/users')
+const userRoutes = require('./src/routes/users');
+const orderRoutes = require('./src/routes/orders');
+const vendorRoutes = require('./src/routes/vendors');
+const productRoutes = require('./src/routes/products');
+const cartRoutes = require('./src/routes/cart');
 
-app.use(userRoutes)
+app.use(userRoutes);
+app.use(orderRoutes);
+app.use(vendorRoutes);
+app.use(productRoutes);
+app.use(cartRoutes);
 
 /*
 const models = require('./src/models/index')

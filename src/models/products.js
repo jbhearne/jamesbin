@@ -1,4 +1,5 @@
 const pool = require('./pool');
+const updateColumns = require('./util/update-columns');
 
 const getProducts = (request, response) => {
   pool.query('SELECT * FROM products ORDER BY id ASC', (error, results) => {
@@ -10,8 +11,8 @@ const getProducts = (request, response) => {
 };
 
 const getProductsByVendor = (request, response) => {
-  const { vendorId } = request.body;
-  pool.query('SELECT * FROM products WHERE vendor_id = $1', [vendorId], (error, results) => {
+  const id = parseInt(request.params.id);
+  pool.query('SELECT * FROM products WHERE vendor_id = $1', [id], (error, results) => {
     if (error) {
       throw error;
     }
@@ -48,7 +49,7 @@ const updateProduct = (request, response) => {
   const id = parseInt(request.params.id);
   const { name, description, price, vendorId } = request.body;
   const productColumns = updateColumns({ name, description, price, vendorId });
-  const userSql = `UPDATE users SET${productColumns} WHERE id = $1 RETURNING *`;
+  const userSql = `UPDATE products SET${productColumns} WHERE id = $1 RETURNING *`;
 
   pool.query(
     userSql,
