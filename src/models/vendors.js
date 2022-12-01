@@ -1,4 +1,4 @@
-const pool = require('./pool');
+const pool = require('./util/pool');
 const updateColumns = require('./util/update-columns');
 
 const getVendors = (request, response) => {

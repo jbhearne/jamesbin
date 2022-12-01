@@ -1,5 +1,5 @@
 
-const pool = require('./pool');
+const pool = require('./util/pool');
 
 const getOrders = (request, response) => {
   pool.query('SELECT * FROM orders ORDER BY id ASC', (error, results) => {

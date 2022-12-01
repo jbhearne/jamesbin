@@ -1,5 +1,7 @@
 
-const pool = require('./pool');
+const pool = require('./util/pool');
+//const { checkManyToOne } = require('./util/check-relation');
+const orderComplete = require('./util/orderCompleted')
 
 const getCart = (request, response) => {
   pool.query('SELECT * FROM cart ORDER BY id ASC', (error, results) => {
@@ -46,19 +48,31 @@ const createCart = (request, response) => {
   });
 };
 
-const updateCart = (request, response) => {
-  const id = parseInt(request.params.id)
-  const { quantity } = request.body
+const updateCart = async (request, response, next) => {
+  //console.log('%c test updateCart', 'color: #ff0000')
+  console.log('\x1B[31mtest updateCart \x1B[37m')
+  const id = parseInt(request.params.id);
+  const { quantity } = request.body;
+  //const orderComplete = await checkManyToOne('orders.date_completed', 'cart', 'orders', 'cart.order_id', 'order.id', id)
+  const isComplete = await orderComplete(id)
+  console.log('7:: ' + isComplete + ' after call to orderComplete in cart.js')
+  if (isComplete) {
+    response.status(400).send(`Cart id: ${id} belongs to order that is already complete`);
+    next();
+  } else {
 
-  pool.query(
-    'UPDATE cart SET quantity = $1 WHERE id = $2',
-    [quantity, id],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-    response.status(200).send(`Cart modified with ID: ${id}`);
-  });
+    pool.query(
+      'UPDATE cart SET quantity = $1 WHERE id = $2',
+      [quantity, id],
+      (error, results) => {
+        if (error) {
+          throw error;
+        }
+        console.log('8:: updated the cart qty')
+        setTimeout(() => {console.log('9:: ' + isComplete + ' has orderComplete resolved?')}, 1000 ) 
+      response.status(200).send(`Cart modified with ID: ${id}`);
+    });
+  }
 };
 
 const deleteCart = (request, response) => {
