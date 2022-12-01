@@ -53,7 +53,6 @@ const updateCart = async (request, response, next) => {
   console.log('\x1B[31mtest updateCart \x1B[37m')
   const id = parseInt(request.params.id);
   const { quantity } = request.body;
-  //const orderComplete = await checkManyToOne('orders.date_completed', 'cart', 'orders', 'cart.order_id', 'order.id', id)
   const isComplete = await orderComplete(id)
   console.log('7:: ' + isComplete + ' after call to orderComplete in cart.js')
   if (isComplete) {

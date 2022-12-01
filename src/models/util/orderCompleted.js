@@ -60,7 +60,7 @@ const pool = require('./pool');
 }*/
 
 
-const orderComplete = async id => {
+/*const orderComplete = async id => {
   console.log('1:: before of the pool.query call')
   const result = await pool.query(
     'SELECT orders.date_completed FROM cart JOIN orders ON cart.order_id = orders.id WHERE cart.id = $1',
@@ -81,7 +81,23 @@ const orderComplete = async id => {
   console.log('5:: ' + result.rows[0] + ' is about to be returned to the pool.query')
   //return  result.rows[0]
   return notNull
+}*/
+
+const orderComplete = async id => {
+  const result = await pool.query(
+    'SELECT orders.date_completed FROM cart JOIN orders ON cart.order_id = orders.id WHERE cart.id = $1',
+    [id]); //no callback... pool.query returns the results and can be used with async/await to create asyncronous functions/modules.
+  let notNull = false;
+  if (result.rows.length === 1) {
+    if (result.rows[0].date_completed) {
+      notNull = true;
+      console.log(result.rows[0].date_completed);
+    } else if (result.rows.length > 1) {
+      throw Error('Multiple Rows.');
+    }
+  }
+  return notNull;
 }
 
 
-module.exports = orderComplete
+module.exports = orderComplete;
