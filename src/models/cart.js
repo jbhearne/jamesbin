@@ -1,6 +1,6 @@
 
 const pool = require('./util/pool');
-//const { checkManyToOne } = require('./util/check-relation');
+//GARBAGE: const { checkManyToOne } = require('./util/check-relation');
 const orderComplete = require('./util/orderCompleted')
 
 const getCart = (request, response) => {
@@ -35,7 +35,7 @@ const getCartById = (request, response) => {
 
 
 const createCart = (request, response) => {
-    //should the dates be generated in the App or in Postgress
+    //??? should the dates be generated in the App or in Postgress
   const { orderId, productId, quantity } = request.body;
 
   pool.query('INSERT INTO cart (order_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *', 
@@ -49,7 +49,7 @@ const createCart = (request, response) => {
 };
 
 const updateCart = async (request, response, next) => {
-  //console.log('%c test updateCart', 'color: #ff0000')
+  //GARBAGE: console.log('%c test updateCart', 'color: #ff0000')
   console.log('\x1B[31mtest updateCart \x1B[37m')
   const id = parseInt(request.params.id);
   const { quantity } = request.body;

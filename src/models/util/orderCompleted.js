@@ -1,6 +1,6 @@
 const pool = require('./pool');
 
-/*const orderComplete = async id => {
+/*GARBAGE: const orderComplete = async id => {
   const pq = pool.query('SELECT orders.date_completed FROM cart JOIN orders ON cart.order_id = orders.id WHERE cart.id = $1',
     [id], async (err, res) => {
       console.log('1:: top of the pool.query callback')
@@ -27,7 +27,7 @@ const pool = require('./pool');
     return pq
 }*/
 
-/*const orderComplete = async id => {
+/*GARBAGE: const orderComplete = async id => {
   let topNull = new Promise((res, rej) => {
   res(pool.query('SELECT orders.date_completed FROM cart JOIN orders ON cart.order_id = orders.id WHERE cart.id = $1',
     [id], async (err, res) => {
@@ -60,7 +60,7 @@ const pool = require('./pool');
 }*/
 
 
-/*const orderComplete = async id => {
+/*GARBAGE: const orderComplete = async id => {
   console.log('1:: before of the pool.query call')
   const result = await pool.query(
     'SELECT orders.date_completed FROM cart JOIN orders ON cart.order_id = orders.id WHERE cart.id = $1',
@@ -86,7 +86,7 @@ const pool = require('./pool');
 const orderComplete = async id => {
   const result = await pool.query(
     'SELECT orders.date_completed FROM cart JOIN orders ON cart.order_id = orders.id WHERE cart.id = $1',
-    [id]); //no callback... pool.query returns the results and can be used with async/await to create asyncronous functions/modules.
+    [id]); ////SECTION no callback... pool.query returns the results and can be used with async/await to create asyncronous functions/modules. SECTION 
   let notNull = false;
   if (result.rows.length === 1) {
     if (result.rows[0].date_completed) {

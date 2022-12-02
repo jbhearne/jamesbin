@@ -11,7 +11,7 @@ const getOrders = (request, response) => {
 };
 
 const getOrdersByUser = (request, response) => {
-  //should i use param with a user route or authorization logic?
+  //??? should i use param with a user route or authorization logic?
   const id = parseInt(request.params.id);
   pool.query('SELECT * FROM orders WHERE user_id = $1', [id], (error, results) => {
     if (error) {
@@ -34,7 +34,7 @@ const getOrderById = (request, response) => {
 
 
 const createOrder = (request, response) => {
-//should the dates be generated in the App or in Postgress
+//??? should the dates be generated in the App or in Postgress
   const { userId, dateStarted } = request.body;
 
   pool.query('INSERT INTO orders (user_id, date_started) VALUES ($1, $2) RETURNING *', 

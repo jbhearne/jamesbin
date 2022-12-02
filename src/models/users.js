@@ -33,7 +33,7 @@ const createUser = async (request, response) => {
     }
     const contactId = await results.rows[0].id;
     console.log(contactId);
-    //must nest calls to pool and use an async function due to the foreign key constraint in users table.
+    //NOTE: must nest calls to pool and use an async function due to the foreign key constraint in users table.
     //the contact_id must exist in contact table BEFORE it can be created in users table.
     pool.query(
       'INSERT INTO users (fullname, username, password, contact_id) VALUES ($1, $2, $3, $4) RETURNING *',
@@ -42,14 +42,23 @@ const createUser = async (request, response) => {
         if (error) {
           throw error;
         }
-        response.status(201).send(`User added with ID: ${results.rows[0].id}`);
+        //response.status(201).send(`User added with ID: ${results.rows[0].id}`);
+        request.body.id = results.rows[0].id;
+        console.log(`created user${request.body.id}`)
+        //response.redirect('login')
     });
   });
 };
 
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id);
+  if (!request.user.admin) {
+    if (request.user.id !== id) {
+      return response.status(401).send('no access')
+    }
+  }
   const { fullname, username, password, contact } = request.body;
+  //FIXME: fix  this flawed uses of template literals
   const userColumns = updateColumns({ fullname, username, password } );
   const userSql = userColumns ? 
     `UPDATE users SET${userColumns} WHERE id = $1 RETURNING *` :
@@ -91,7 +100,7 @@ const deleteUser = (request, response) => {
     }
     const contactId = await results.rows[0].contact_id;
     
-    //probably should not delete these in a real database I might add a flag so that childless addresses could be easily culled
+    //NOTE: probably should not delete these in a real database I might add a flag so that childless addresses could be easily culled
     //technical 'contact' is the parent so it could belong to multiple users, like roomates or families.
     //but here I am treeting this as a one-to-on relationship.
     pool.query('DELETE FROM contact WHERE id = $1', 

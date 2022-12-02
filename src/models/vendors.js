@@ -48,6 +48,8 @@ const createVendor = (request, response) => {
 const updateVendor = (request, response) => {
     const id = parseInt(request.params.id)
     const { name, description, contact } = request.body
+    
+    //FIXME: fix  this flawed uses of template literals
     const vendorColumns = updateColumns({ name, description } );
     const userSql = vendorColumns ? 
       `UPDATE vendors SET${vendorColumns} WHERE id = $1 RETURNING *` :

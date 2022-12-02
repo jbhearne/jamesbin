@@ -2,16 +2,22 @@ const express = require('express');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const pool = require('../../models/util/pool');
-var router = express.Router();
+const bcrypt = require('bcrypt');
+const { createUser } = require('../../models/users')
+const router = express.Router();
 
 
 passport.use(new LocalStrategy((username, password, cb) => {
   console.log('is local running?'); 
-  pool.query('SELECT * FROM users WHERE username = $1', [ username ], (err, res) => {
+  pool.query('SELECT * FROM users WHERE username = $1', [ username ], async (err, res) => {
     console.log('is pool running?')
     if (err) { console.log('error is running'); return cb(err); }
+    //GARBAGE: const salt = await bcrypt.genSalt(10);
+    //const hash = await bcrypt.hash(password, salt);
     if (!res.rows[0]) { console.log('no user' + res.rows[0]); return cb(null, false, { message: 'Incorrect username or password.' }); }
-    if (res.rows[0].password !== password) {console.log(res.rows[0] + ' wrong password ' + res.rows[0] + ' not ' + password); return cb(null, false, { message: 'Incorrect username or password.' })}
+    const correctPassword = await bcrypt.compare(password, res.rows[0].password);
+    if (!correctPassword) {console.log(correctPassword + ' wrong password ' + res.rows[0].password + ' not ' + password); return cb(null, false, { message: 'Incorrect username or password.' })}
+    for (col in res.rows[0]) {console.log(col)}
     return cb(null, res.rows[0]);
   })
 }))
@@ -36,5 +42,36 @@ router.post('/login/password', (req, res, next) => {console.log('howdy'); next()
   successRedirect: '/',
   failureRedirect: '/login'
 }));
+
+router.post('/logout', function(req, res, next) {
+  req.logout(function(err) {
+    if (err) { return next(err); }
+    res.redirect('/');
+  });
+});
+
+router.get('/register', function(req, res, next) {
+  res.send('register');
+});
+
+router.post("/register", async (req, res, next) => {
+  const { username, password } = req.body
+  pool.query('SELECT * FROM users WHERE username = $1', [username], async (error, results) => {
+    if (error) { next(error) }
+    const rows = await results.rows;
+    if (rows.length > 0) {
+      console.log('User already exists.')
+      return res.send('User already exists.')
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
+    req.body.password = hash;
+    await createUser(req, res, next);
+    console.log(`created user${await req.body.id}`)
+    res.redirect('/login')
+  })
+})
+
+
 
 module.exports = router

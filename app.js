@@ -17,7 +17,7 @@ app.use(
   })
 )
 
-//use pool.js just like with queries
+//TODO: use pool.js just like with queries
 const sessionDBaccess = new sessionPool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
@@ -43,13 +43,13 @@ const sessionConfig = {
       secure: false // ENABLE ONLY ON HTTPS
   }}
 
-//app.use(passport.initialize())
+app.use(passport.initialize())
 app.use(session(sessionConfig))
-//app.use(passport.session());
-//app.use(passport.authenticate('session'));
+app.use(passport.session());
+app.use(passport.authenticate('session'));
 
-
-/*const userRoutes = require('./src/routes/users');
+//
+/*GARBAGE: const userRoutes = require('./src/routes/users');
 const orderRoutes = require('./src/routes/orders');
 const vendorRoutes = require('./src/routes/vendors');
 const productRoutes = require('./src/routes/products');
@@ -58,8 +58,9 @@ const cartRoutes = require('./src/routes/cart');*/
 const routes = require('./src/routes/index')
 const authRouter = require('./src/routes/auth/auth');
 app.use('/', authRouter);
-app.use(passport.initialize())
-app.use(passport.session());
+
+//GARBAGE: app.use(passport.initialize())
+//app.use(passport.session());
 
 app.use(routes.userRoutes);
 app.use(routes.orderRoutes);
@@ -71,9 +72,8 @@ app.use(routes.cartRoutes);
 app.get('/', (req, res) => {
   res.send('home')
 })
-/*
+/* GARBAGE: 
 const models = require('./src/models/index')
-
 app.get('/test', (req, res) => {
   //models.users.getUsers(req, res)
   //models.orders.getOrders(req, res)
