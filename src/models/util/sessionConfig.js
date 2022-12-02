@@ -1,3 +1,5 @@
+//TODO: either connect this to app.js or detete it.
+//GARBAGE - ?
 require('dotenv/config')
 
 const sessionDBaccess = new sessionPool({

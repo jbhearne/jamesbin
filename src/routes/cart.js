@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { cart } = require('../models/index');
+const { loggedIn, isAdmin, adminOrCurrentUser } = require('./auth/ensure');
 
 router.get('/cart', cart.getCart);
 router.post('/cart', cart.createCart);

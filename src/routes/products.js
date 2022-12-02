@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { products } = require('../models/index');
+const { loggedIn, isAdmin, adminOrCurrentUser } = require('./auth/ensure');
 
 router.get('/products', products.getProducts);
 router.post('/products', products.createProduct);

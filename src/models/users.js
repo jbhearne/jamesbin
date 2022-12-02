@@ -1,15 +1,17 @@
 const pool = require('./util/pool');
 const updateColumns = require('./util/update-columns')
+const ensure = require('../routes/auth/ensure')
 
 const getUsers = (request, response) => {
   pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error;
     }
-    response.status(200).json(results.rows);
+    response.status(200).json(results.rows); //??? should all responses be moved to routes?
   });
 };
 
+//TODO: need to add a way get the contact info, I have methods for adding and updating it as part of the user, but not displaying it.
 const getUserById = (request, response) => {
   const id = parseInt(request.params.id);
 
@@ -17,7 +19,7 @@ const getUserById = (request, response) => {
     if (error) {
       throw error;
     }
-    response.status(200).json(results.rows);
+    response.status(200).json(results.rows); //??? should all responses be moved to routes?
   });
 };
 
@@ -42,21 +44,22 @@ const createUser = async (request, response) => {
         if (error) {
           throw error;
         }
-        //response.status(201).send(`User added with ID: ${results.rows[0].id}`);
+        //GARBAGE: response.status(201).send(`User added with ID: ${results.rows[0].id}`);
         request.body.id = results.rows[0].id;
         console.log(`created user${request.body.id}`)
-        //response.redirect('login')
+        //GARBAGE: response.redirect('login')
     });
   });
 };
 
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id);
-  if (!request.user.admin) {
+  /*GARBAGE: if (!request.user.admin) {
     if (request.user.id !== id) {
       return response.status(401).send('no access')
     }
-  }
+  }*/
+
   const { fullname, username, password, contact } = request.body;
   //FIXME: fix  this flawed uses of template literals
   const userColumns = updateColumns({ fullname, username, password } );
@@ -72,20 +75,27 @@ const updateUser = (request, response) => {
         throw error;
       }
       const contactId = await results.rows[0].contact_id;
-      if (Object.keys(contact).length > 0) {
-        const { phone, address, city, state, zip, email } = contact;
-        const contactColumns = updateColumns({ phone, address, city, state, zip, email })
+      if(contact) {
+        if (Object.keys(contact).length > 0) {
+          const { phone, address, city, state, zip, email } = contact;
+          const contactColumns = updateColumns({ phone, address, city, state, zip, email })
+          const contactSql = contactColumns ? 
+          `UPDATE contact SET${contactColumns} WHERE id = $1` :
+            `SELECT * FROM contact WHERE id = $1`;
 
-        pool.query(
-          `UPDATE contact SET${contactColumns} WHERE id = $1`,
-          [contactId],
-          (error, results) => {
-            if (error) {
-              throw error;
-            }
-            response.status(200).send(`User modified with ID: ${id}`);
-        });
-      };
+          pool.query(
+            contactSql,
+            [contactId],
+            (error, results) => {
+              if (error) {
+                throw error;
+              }
+              response.status(200).send(`User modified with ID: ${id}`); //??? should all responses be moved to routes?
+          });
+        };
+      } else {
+        response.status(200).send(`User modified with ID: ${id}`)
+      }
   });
 };
 
@@ -109,7 +119,7 @@ const deleteUser = (request, response) => {
       if (error) {
         throw error;
       }
-      response.status(200).send(`User deleted with ID: ${id}`);
+      response.status(200).send(`User deleted with ID: ${id}`); //??? should all responses be moved to routes?
     });
   }); 
 };

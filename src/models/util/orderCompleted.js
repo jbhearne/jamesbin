@@ -86,7 +86,7 @@ const pool = require('./pool');
 const orderComplete = async id => {
   const result = await pool.query(
     'SELECT orders.date_completed FROM cart JOIN orders ON cart.order_id = orders.id WHERE cart.id = $1',
-    [id]); ////SECTION no callback... pool.query returns the results and can be used with async/await to create asyncronous functions/modules. SECTION 
+    [id]); ////LEARNED:  no callback... pool.query returns the results and can be used with async/await to create asyncronous functions/modules.
   let notNull = false;
   if (result.rows.length === 1) {
     if (result.rows[0].date_completed) {

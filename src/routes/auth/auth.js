@@ -3,7 +3,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const pool = require('../../models/util/pool');
 const bcrypt = require('bcrypt');
-const { createUser } = require('../../models/users')
+const { createUser } = require('../../models/users');
+const { useParams } = require('react-router-dom');
 const router = express.Router();
 
 
@@ -24,7 +25,7 @@ passport.use(new LocalStrategy((username, password, cb) => {
 
 passport.serializeUser(function(user, cb) {
   process.nextTick(function() {
-    cb(null, { id: user.id, username: user.username });
+    cb(null, { id: user.id, username: user.username, isAdmin: user.admin });
   });
 });
 

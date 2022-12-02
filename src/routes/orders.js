@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { orders } = require('../models/index');
+const { loggedIn, isAdmin, adminOrCurrentUser } = require('./auth/ensure');
 
 router.get('/orders', orders.getOrders);
 router.post('/orders', orders.createOrder);
