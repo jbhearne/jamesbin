@@ -4,10 +4,10 @@ const { products } = require('../models/index');
 const { loggedIn, isAdmin, adminOrCurrentUser } = require('./auth/ensure');
 
 router.get('/products', products.getProducts);
-router.post('/products', products.createProduct);
+router.post('/products', isAdmin, products.createProduct);
 router.get('/products/:id', products.getProductById);
-router.put('/products/:id', products.updateProduct);
-router.delete('/products/:id', products.deleteProduct);
+router.put('/products/:id', isAdmin, products.updateProduct);
+router.delete('/products/:id', isAdmin, products.deleteProduct);
 //REVIEW: must decide how this works. is it thru the route or is it thru authorization?
 router.get('/products/vendor/:id', products.getProductsByVendor);
 

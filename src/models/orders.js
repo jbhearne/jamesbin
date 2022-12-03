@@ -35,8 +35,8 @@ const getOrderById = (request, response) => {
 
 const createOrder = (request, response) => {
 //??? should the dates be generated in the App or in Postgress
-  const { userId, dateStarted } = request.body;
-
+  const { userId, dateStarted } = request.body; //TODO: should I get user id from req.user object? yes because otherwise anyone could create an order for any other user. 
+  console.log(userId + ' '+ dateStarted)
   pool.query('INSERT INTO orders (user_id, date_started) VALUES ($1, $2) RETURNING *', 
     [userId, dateStarted], 
     (error, results) => {

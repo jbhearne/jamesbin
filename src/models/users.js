@@ -23,6 +23,8 @@ const getUserById = (request, response) => {
   });
 };
 
+
+//TODO: this is causing postman to hang up. it must not be returning any values.
 const createUser = async (request, response) => {
   const { fullname, username, password, contact } = request.body;
   const { phone, address, city, state, zip, email } = contact;
@@ -99,6 +101,8 @@ const updateUser = (request, response) => {
   });
 };
 
+
+//FIXME: need to add cascade to orders table and then to cart table
 const deleteUser = (request, response) => {
   const id = parseInt(request.params.id);
 

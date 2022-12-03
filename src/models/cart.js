@@ -1,7 +1,8 @@
 
 const pool = require('./util/pool');
 //GARBAGE: const { checkManyToOne } = require('./util/check-relation');
-const orderComplete = require('./util/orderCompleted')
+const orderComplete = require('./util/orderCompleted');
+//const { response } = require('express');
 
 const getCart = (request, response) => {
   pool.query('SELECT * FROM cart ORDER BY id ASC', (error, results) => {
@@ -33,10 +34,23 @@ const getCartById = (request, response) => {
   });
 };
 
+const getCartWithProductsByUser = (request, response) => {
+  const id = parseInt(request.params.id);
+  const sql = 'SELECT cart.id, cart.order_id, cart.product_id, products.name, products.price, cart.quantity\
+   FROM cart JOIN products ON cart.product_id = products.id JOIN orders ON cart.order_id = orders.id\
+   WHERE orders.user_id = $1 AND orders.date_completed IS NULL;'
+  
+  pool.query(sql, [id], (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+  })
+}
 
 const createCart = (request, response) => {
     //??? should the dates be generated in the App or in Postgress
-  const { orderId, productId, quantity } = request.body;
+  const { orderId, productId, quantity } = request.body; //TODO: should I get order id from some other source like req.user? yes because otherwise anyone could create an order for any other user. 
 
   pool.query('INSERT INTO cart (order_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *', 
     [orderId, productId, quantity], 
@@ -91,5 +105,6 @@ module.exports = {
     getCartById,
     createCart,
     updateCart,
-    deleteCart
+    deleteCart,
+    getCartWithProductsByUser
 };

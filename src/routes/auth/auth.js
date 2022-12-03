@@ -19,6 +19,7 @@ passport.use(new LocalStrategy((username, password, cb) => {
     const correctPassword = await bcrypt.compare(password, res.rows[0].password);
     if (!correctPassword) {console.log(correctPassword + ' wrong password ' + res.rows[0].password + ' not ' + password); return cb(null, false, { message: 'Incorrect username or password.' })}
     for (col in res.rows[0]) {console.log(col)}
+    console.log(res.rows[0].admin)
     return cb(null, res.rows[0]);
   })
 }))
@@ -44,6 +45,8 @@ router.post('/login/password', (req, res, next) => {console.log('howdy'); next()
   failureRedirect: '/login'
 }));
 
+
+//??? do I need to make it that a user needs to logout before another logs in or does it matter?
 router.post('/logout', function(req, res, next) {
   req.logout(function(err) {
     if (err) { return next(err); }
