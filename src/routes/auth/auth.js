@@ -58,6 +58,7 @@ router.get('/register', function(req, res, next) {
   res.send('register');
 });
 
+//ANCHOR[id=register] uses createUser function originally created for POST-/user route
 router.post("/register", async (req, res, next) => {
   const { username, password } = req.body
   pool.query('SELECT * FROM users WHERE username = $1', [username], async (error, results) => {
