@@ -1,4 +1,4 @@
-//TODO: either connect this to app.js or detete it.
+//REVIEW: for now we will assume it is better to put it in the main app. TODO: either connect this to app.js or detete it.
 //GARBAGE - ?
 require('dotenv/config')
 

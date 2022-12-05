@@ -12,6 +12,7 @@ const getOrders = (request, response) => {
 
 const getOrdersByUser = (request, response) => {
   //??? should i use param with a user route or authorization logic?
+  //??? #getOrdersByUser do i need this function or should I use more logic  in getOrders?
   const id = parseInt(request.params.id);
   pool.query('SELECT * FROM orders WHERE user_id = $1', [id], (error, results) => {
     if (error) {
@@ -34,11 +35,12 @@ const getOrderById = (request, response) => {
 
 
 const createOrder = (request, response) => {
-//??? should the dates be generated in the App or in Postgress
-  const { userId, dateStarted } = request.body; //TODO: should I get user id from req.user object? yes because otherwise anyone could create an order for any other user. 
-  console.log(userId + ' '+ dateStarted)
-  pool.query('INSERT INTO orders (user_id, date_started) VALUES ($1, $2) RETURNING *', 
-    [userId, dateStarted], 
+//DONE: ??? should the dates be generated in the App or in Postgress
+  //DONE: const { userId, dateStarted } = request.body; //TODO: should I get user id from req.user object? yes because otherwise anyone could create an order for any other user. 
+  const userId = request.user.id  //REVIEW: this should work if the user is creating an order, but would  not work if admin wanted to create an order for another user.
+  //GARBAGE - console.log(userId + ' '+ dateStarted)
+  pool.query('INSERT INTO orders (user_id, date_started) VALUES ($1, NOW()) RETURNING *', 
+    [userId], 
     (error, results) => {
       if (error) {
         throw error;
@@ -81,4 +83,3 @@ module.exports = {
     updateOrder,
     deleteOrder
 };
-  

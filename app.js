@@ -5,7 +5,8 @@ const passport = require('passport');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const randomString = require('randomstring')
-const sessionPool = require('pg').Pool
+//DONE: PASS: const sessionPool = require('pg').Pool
+const sessionPool = require('./src/models/util/pool')
 
 const app = express()
 const PORT = process.env.PORT
@@ -17,14 +18,17 @@ app.use(
   })
 )
 
-//TODO: use pool.js just like with queries
-const sessionDBaccess = new sessionPool({
+//DONE: PASS  TODO: use pool.js just like with queries
+/*const sessionDBaccess = new sessionPool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
   database: process.env.DATABASE,
   password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT})
+  port: process.env.DB_PORT})*/
 
+const sessionDBaccess = sessionPool;
+
+//??? should i move this to another file?
 const sessionConfig = {
   store: new pgSession({
       pool: sessionDBaccess,

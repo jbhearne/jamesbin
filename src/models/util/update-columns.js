@@ -13,7 +13,7 @@ const updateColumns = rowObj => {
     colUpdate = rowObj[colName] ? ` ${colName} = '${rowObj[colName]}'` : '';
     columnsArr.push(colUpdate);
   }
-  //TODO: probably should change to the JS filter method.
+  //NOTE: probably should change to the JS filter method.
   for (let i=0; i < columnsArr.length; i++) {
     console.log(i)
     if (columnsArr[i].length === 0) {
