@@ -11,8 +11,8 @@ const getOrders = (request, response) => {
 };
 
 const getOrdersByUser = (request, response) => {
-  //??? should i use param with a user route or authorization logic?
-  //??? #getOrdersByUser do i need this function or should I use more logic  in getOrders?
+  //DONE: ??? should i use param with a user route or authorization logic?
+  //REVIEW: ??? #getOrdersByUser do i need this function or should I use more logic  in getOrders?
   const id = parseInt(request.params.id);
   pool.query('SELECT * FROM orders WHERE user_id = $1', [id], (error, results) => {
     if (error) {

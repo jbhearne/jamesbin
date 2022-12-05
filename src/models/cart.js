@@ -49,7 +49,7 @@ const getCartWithProductsByUser = (request, response) => {
   })
 }
 
-const createCart = async (request, response) => { //TODO: rename to createCartItem
+const createCartItem = async (request, response) => { //DONE: TODO: rename to createCartItem
     //GARBAGE: ??? should the dates be generated in the App or in Postgress
     //SELECT * FROM orders WHERE user_id = request.user.id AND date_completed IS NULL;
     //DONE: PASS: TODO: if a user is creating a cart item it needs to belong to an non-completed order owned by the user
@@ -67,6 +67,24 @@ const createCart = async (request, response) => { //TODO: rename to createCartIt
       }
       response.status(201).send(`Cart added with ID: ${results.rows[0].id}`);
   });
+};
+
+const createCartItemOnOrder = async (request, response) => { 
+  const id = parseInt(request.params.id);
+  const { productId, quantity } = request.body;
+  const order = await pool.query('SELECT * FROM orders WHERE id = $1;', [id])
+  if (!order.rows[0].date_completed) {
+    pool.query('INSERT INTO cart (order_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *', 
+      [id, productId, quantity], 
+      async (error, results) => {
+        if (error) {
+        throw error;
+        }
+        response.status(201).send(`Cart added with ID: ${results.rows[0].id}`);
+    });
+  } else {
+    response.status(400).send(`Order ${id} is already complete`);
+  }
 };
 
 const updateCart = async (request, response, next) => {
@@ -133,8 +151,8 @@ const updateCartWithUser = async (request, response, next) => {
   }
 };
 
-/*??? started this function, but realized that since there are multiple cart items per user/order it does not make sense.
-//i need to create a functio or alter the above that allows for the slection of cart items by id, but only those that belong to the user.
+/*DONE: ??? started this function, but realized that since there are multiple cart items per user/order it does not make sense.
+//i need to create a function or alter the above that allows for the slection of cart items by id, but only those that belong to the user.
   const updateCartByUser = async (request, response, next) => {
   const id = parseInt(request.params.id);
   const { quantity } = request.body;
@@ -154,13 +172,51 @@ const deleteCart = (request, response) => {
   });
 };
 
+//ANCHOR[id=deleteCartWithUser] adding a method for removing cart items
+const deleteCartWithUser = async (request, response, next) => {
+  const id = parseInt(request.params.id);
+  const userId = request.user.id
+  const sql = 'SELECT cart.id FROM cart JOIN orders ON cart.order_id = orders.id WHERE orders.user_id = $1'
+  const userCart = await pool.query(sql, [userId])
+  console.log(userCart.rows)
+  const carts = [];
+  for (let cart in userCart.rows) {
+    console.log(userCart.rows[cart].id)
+    carts.push(userCart.rows[cart].id)
+  }
+  console.log(carts)
+  if (carts.includes(id)) {
+    const isComplete = await orderComplete(id)
+    if (isComplete) {
+      response.status(400).send(`Cart id: ${id} belongs to order that is already complete`);
+      next();
+    } else {
+      pool.query(
+        'DELETE FROM cart WHERE id = $1',
+        [id],
+        (error, results) => {
+          if (error) {
+            throw error;
+          }
+          //GARBAGE: console.log('8:: updated the cart qty')
+          //setTimeout(() => {console.log('9:: ' + isComplete + ' has orderComplete resolved?')}, 1000 ) 
+        response.status(200).send(`Cart deleted with ID: ${id}`);
+      });
+    }
+  } else {
+    response.status(400).send(`Cart id: ${id} does not belong to current user`);
+  }
+};
+
 module.exports = {
     getCart,
     getCartByOrder,
     getCartById,
-    createCart,
+    createCartItem,
     updateCart,
     deleteCart,
     getCartWithProductsByUser,
-    updateCartWithUser
+    updateCartWithUser,
+    createCartItemOnOrder,
+    deleteCartWithUser
 };
