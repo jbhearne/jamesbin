@@ -15,21 +15,22 @@ const isOrderOpen = async (userId) => {
 const defaultBillingAndDelivery = async (userId) => {
   const user =  await pool.query('SELECT * FROM users WHERE id = $1', [userId])
   const { fullname, contact_id } = user.rows[0]
+
   const defaultBillingMethod = 'credit card'
   const defaultDeliveryMethod = 'standard shipping' //ANCHOR[id=defaultMethod] - change some other selection method.
+
   const createdBilling = await pool.query('INSERT INTO billing (payer_name, method, contact_id) VALUES ($1, $2, $3) RETURNING *;',
   [ fullname, defaultBillingMethod, contact_id, ]);
+
   const createdDelivery = await pool.query('INSERT INTO delivery (receiver_name, method, contact_id) VALUES ($1, $2, $3) RETURNING *;',
   [ fullname, defaultDeliveryMethod, contact_id, ]);
-  //console.log(createdBilling.rows[0].id)
+
   return {
     billingId: createdBilling.rows[0].id,
     deliveryId: createdDelivery.rows[0].id
   }
 }
 
-//DONE: PASS: 
-//SECTION crreated to restructure delivery and billing info for retreival and storage. I think i overdid this one. should be a simpler way.
 const findBillingInfo = async (orderId) => {
   const sql = 'SELECT orders.billing_id, billing.payer_name, billing.method, billing.contact_id, billing.cc_placeholder,\
    contact.phone, contact.address, contact.city, contact.state, contact.zip, contact.email\
@@ -37,6 +38,7 @@ const findBillingInfo = async (orderId) => {
     WHERE orders.id = $1'
 
   const billing  = await pool.query(sql, [orderId]);
+
   const info = {
     id: billing.rows[0].billing_id,
     payerName: billing.rows[0].payer_name,
@@ -61,6 +63,7 @@ const findDeliveryInfo = async (orderId) => {
     WHERE orders.id = $1'
 
   const delivery  = await pool.query(sql, [orderId]);
+
   const info = {
     id: delivery.rows[0].delivery_id,
     receiverName: delivery.rows[0].receiver_name,
@@ -80,6 +83,7 @@ const findDeliveryInfo = async (orderId) => {
 
 const formatNewContact = async (contactObj) => {
   newContact = await addContactInfo(contactObj) //REVIEW - if this should even be in a formatting function. probably not since it makes it different than the funcitons below.
+  
   contact = {
     id: newContact.id,
     phone: newContact.phone,
@@ -116,22 +120,28 @@ const formatNewBilling =  (billingId, billingObj, contactObj) => {
 const updateDelivery = async (deliveryId, updates, contactId) => {
   const { receiverName, deliveryMethod, notes } = updates
   const sql = 'UPDATE delivery SET receiver_name = $1, method = $2, notes = $3, contact_id = $4 WHERE id = $5 RETURNING *;';
+
   const results = await pool.query(sql, [receiverName, deliveryMethod, notes, contactId, deliveryId])
+
   return results.rows[0]
 }
 
 const updateBilling = async (billingId, updates, contactId) => {
   const { payerName, paymentMethod } = updates
   const sql = 'UPDATE billing SET payer_name = $1, method = $2, contact_id = $3 WHERE id = $4 RETURNING *;';
+
   const results = await pool.query(sql, [payerName, paymentMethod, contactId, billingId])
+
   return results.rows[0]
 }
-//!SECTION
 
-//DONE: PASS a way to add creditcard info, but not really. just a flourish in that direction.
+
+// a way to add creditcard info, but not really. just a flourish in that direction.
 const addCCToBilling = async (cc, billingId) => {
   sql = 'UPDATE billing SET cc_placeholder = $1 WHERE id = $2'
+
   results = pool.query(sql, [cc, billingId]);
+  
   return results;
 }
 

@@ -2,6 +2,7 @@ const pool = require('./util/pool');
 const updateColumns = require('./util/update-columns');
 const { findVendorById } = require('./util/findVendor')
 
+//get all vendors
 const getVendors = (request, response) => {
     pool.query('SELECT * FROM vendors ORDER BY id ASC', (error, results) => {
       if (error) {
@@ -11,6 +12,7 @@ const getVendors = (request, response) => {
     })
 }
 
+//get a vendor using vendor ID route parameter
 const getVendorById = (request, response) => {
     const id = parseInt(request.params.id)
   
@@ -22,7 +24,7 @@ const getVendorById = (request, response) => {
     })
   }
 
-
+//create a Vendor
 const createVendor = (request, response) => {
   const { name, description, contact } = request.body
   const { phone, address, city, state, zip, email } = contact
@@ -46,15 +48,10 @@ const createVendor = (request, response) => {
   });
 };
 
+//update a vendor. querys vendor table and compares old vendor info to new vendor info 
 const updateVendor = async (request, response) => {
     const id = parseInt(request.params.id)
     const updates = request.body
-    
-    //DONE: PASS: FIXME: fix  this flawed uses of template literals
-    //WARN: const vendorColumns = updateColumns({ name, description } );
-    //const userSql = vendorColumns ? 
-    //  `UPDATE vendors SET${vendorColumns} WHERE id = $1 RETURNING *` :
-    //  `SELECT * FROM vendors WHERE id = $1`;
     const vendorObj = await findVendorById(id);
 
     if (updates.contact) {
@@ -64,6 +61,7 @@ const updateVendor = async (request, response) => {
         if (updates.contact[key]) { vendorObj.contact[key] = updates.contact[key] }
       }
     }
+
     for (key in vendorObj) {
       if (updates[key] && typeof updates[key] !== 'object') { vendorObj[key] = updates[key] }
     }
@@ -79,7 +77,6 @@ const updateVendor = async (request, response) => {
           throw error;
         }
         const contactId = await results.rows[0].contact_id;
-
         const { phone, address, city, state, zip, email } = contact;
         const contactSql = 'UPDATE contact SET phone = $1, address = $2, city = $3, state = $4, zip = $5, email = $6 WHERE id = $7';
 
@@ -95,6 +92,7 @@ const updateVendor = async (request, response) => {
   });
 };
 
+//delete a Vendor
 const deleteVendor = (request, response) => {
   const id = parseInt(request.params.id)
 

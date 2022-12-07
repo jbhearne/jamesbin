@@ -6,7 +6,6 @@ const findUserById = async (id) => {
   const user = results.rows[0]
   const contact = await pool.query('SELECT * FROM contact WHERE id = $1', [user.contact_id])
   const userObj = {
-    //DONE: //id: user.id,  //FIXME there is no user.id as the query is written, but did not trigger an error yet
     username: user.username,
     fullname: user.fullname,
     contact: contact.rows[0]
