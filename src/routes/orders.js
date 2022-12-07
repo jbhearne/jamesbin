@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { orders } = require('../models/index');
+const { orders, cart } = require('../models/index');
 const { loggedIn, isAdmin, adminOrCurrentUser } = require('./auth/ensure');
 
 router.get('/orders', isAdmin, orders.getOrders);
 router.post('/orders', loggedIn, orders.createOrder); //REVIEW: does authorization need to be more restricitve?
+router
 router.get('/orders/:id', isAdmin, orders.getOrderById); //REVIEW: needs to be admin or current user?
 router.put('/orders/:id', isAdmin, orders.updateOrder);
 router.delete('/orders/:id',  isAdmin, orders.deleteOrder);
@@ -12,5 +13,8 @@ router.delete('/orders/:id',  isAdmin, orders.deleteOrder);
 router.get('/orders/user/:id', adminOrCurrentUser, orders.getOrdersByUser); //LINK - ../models/orders.js:15
 //??? do I need more routes for alterering orders by user id?
 //do I add more state to the session? or create more SQL querying methods?
-
+//PASS: TODO: router.post('/checkout', loggedIn, ...);
+router.get('/checkout', loggedIn, cart.getCartForCheckout); 
+//PASS: TODO: router.get('/checkout', loggedIn, ...);
+router.post('/checkout', loggedIn, orders.checkout); 
 module.exports = router;

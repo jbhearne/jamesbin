@@ -4,7 +4,7 @@ const { cart } = require('../models/index');
 const { loggedIn, isAdmin, adminOrCurrentUser } = require('./auth/ensure');
 
 router.get('/cart', isAdmin, cart.getCart);
-router.post('/cart', loggedIn, cart.createCartItem);  
+router.post('/cart', loggedIn, cart.createCartItem);  //REVIEW: had to move some things up in the order for it to not parse as an :id. should review all routes
 router.get('/cart/:id', isAdmin, cart.getCartById);
 router.put('/cart/:id', isAdmin, cart.updateCart);//DONE: TODO: need to add a way for current user to update and delete cart.
 router.delete('/cart/:id', isAdmin, cart.deleteCart);//DONE: PASS: TODO need to apply similar logic as updateCartWithUser
@@ -18,5 +18,6 @@ router.post('/cart/order/:id', isAdmin, cart.createCartItemOnOrder); //DONE: PAS
 router.get('/cart/user/:id', adminOrCurrentUser, cart.getCartWithProductsByUser);
 router.put('/user/cart/:id', loggedIn, cart.updateCartWithUser); //LINK ../models/cart.js:97
 router.delete('/user/cart/:id', loggedIn, cart.deleteCartWithUser); //LINK ../models/cart.js#deleteCartWithUser
+
 
 module.exports = router;

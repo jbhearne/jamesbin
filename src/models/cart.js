@@ -2,9 +2,12 @@
 const pool = require('./util/pool');
 //GARBAGE: const { checkManyToOne } = require('./util/check-relation');
 const orderComplete = require('./util/orderCompleted');
+const { collectCart } = require('./util/findCart')
 const { cart } = require('.');
 //GARBAGE: const { response } = require('express');
 
+
+//TODO: rename appropiate functions to ...CartItem
 const getCart = (request, response) => {
   pool.query('SELECT * FROM cart ORDER BY id ASC', (error, results) => {
     if (error) {
@@ -35,18 +38,39 @@ const getCartById = (request, response) => {
   });
 };
 
+//REVIEW: these are simlar getCartWithProductsByUser and getCartForCheckout. But this can be used by admin to get any users cart
 const getCartWithProductsByUser = (request, response) => {
   const id = parseInt(request.params.id);
   const sql = 'SELECT cart.id, cart.order_id, cart.product_id, products.name, products.price, cart.quantity\
    FROM cart JOIN products ON cart.product_id = products.id JOIN orders ON cart.order_id = orders.id\
-   WHERE orders.user_id = $1 AND orders.date_completed IS NULL;'
+   WHERE orders.user_id = $1 AND orders.date_completed IS NULL;';
   
   pool.query(sql, [id], (error, results) => {
     if (error) {
       throw error;
     }
     response.status(200).json(results.rows);
-  })
+  });
+}
+
+const getCartForCheckout = async (request, response) => {
+  const user = request.user;
+  //TODO: add check constraint to database to ensure there is only one open order for a given user.
+  /*GARBAGE: const sql = "SELECT cart.order_id, cart.id, products.name, products.price, cart.quantity, (products.price * cart.quantity) AS qty_total\
+   FROM cart JOIN products ON cart.product_id = products.id JOIN orders ON cart.order_id = orders.id\
+   WHERE orders.user_id = $1 AND orders.date_completed IS NULL;"
+
+  pool.query(sql, [user.id], async(error, results) => {
+    if (error) {
+      throw error;
+    }
+    const rows = await results.rows;
+    const total = rows.reduce((sum, row) => sum + Number(row.qty_total.replace(/[^0-9.-]+/g,"")), 0); //DONE: PASS should convert dollar string to number.
+    const checkout = { rows, total }
+    response.status(200).send(checkout);
+  });*/
+  const checkout = await collectCart(user.id)
+  response.status(200).send(checkout);
 }
 
 const createCartItem = async (request, response) => { //DONE: TODO: rename to createCartItem
@@ -218,5 +242,6 @@ module.exports = {
     getCartWithProductsByUser,
     updateCartWithUser,
     createCartItemOnOrder,
-    deleteCartWithUser
+    deleteCartWithUser,
+    getCartForCheckout
 };
