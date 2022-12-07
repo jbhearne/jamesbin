@@ -94,35 +94,42 @@ const deleteOrder = (request, response) => {
   });
 };
 
-//PASS: the checkout function completes the order, but first checks tp see if the user wants to use the default delivery option or add new info
+//DONE: PASS: the checkout function completes the order, but first checks tp see if the user wants to use the default delivery option or add new info
 //REVIEW I am sure there is a less awkward way of doing this.
 const checkout = async (request, response) => {
   const body = request.body;
   const user = request.user;
-  const cart = await collectCart(user.id);
+  const cart = await collectCart(user.id);  
   const amount = cart.total;
+  console.log(amount)
   const isNotOneOrder = cart.items.some((item) => item.order_id !== cart.items[0].order_id);
   if (isNotOneOrder) {
     throw Error('Multiple orders!')
   }
+  console.log(body.useDefaultDelivery + 'deliv')
   const { delivery, billing } = cart
   if (!body.useDefaultDelivery){
     const deliveryContact = await formatNewContact(body.delivery.contact);
-    delivery = formatNewDelivery(delivery.id, body.delivery, deliveryContact);
-    updateDelivery(delivery.id, delivery, delivery.contact.id); //REVIEW shoud this be an await even though I don't need the results necessarily.
-  } else if (!body.useDefaultBilling) {
-    const billingContact = await formatNewContact(body.billing.contact);
-    billing = formatNewBilling(billing.id, body.billing, billingContact);
-    updateBilling(billing.id, billing, billing.contact.id); //REVIEW "
+    const newDelivery = formatNewDelivery(delivery.id, body.delivery, deliveryContact);
+    updateDelivery(delivery.id, newDelivery, newDelivery.contact.id); //REVIEW shoud this be an await even though I don't need the results necessarily.
   }
-  addCCToBilling(body.cc, billing.id) //REVIEW  "
-  const sql = 'UPDATE order SET date_completed = NOW(), amount = $1 WHERE id = $2 RETURNING *;'
-  pool.query = (sql, [amount, cart.items[0].order_id], (error, results) => {
+  if (!body.useDefaultBilling) {
+    const billingContact = await formatNewContact(body.billing.contact);
+    const newBilling = formatNewBilling(billing.id, body.billing, billingContact);
+    updateBilling(billing.id, newBilling, newBilling.contact.id); //REVIEW "
+  }
+  console.log('after conditional')
+  addCCToBilling(body.ccPlaceholder, billing.id) //REVIEW  "
+  const sql = 'UPDATE orders SET date_completed = NOW(), amount = $1 WHERE id = $2 RETURNING *;'
+  console.log('afterCC')
+  console.log(cart.items[0].order_id)
+  pool.query(sql, [amount, cart.items[0].order_id], (error, results) => {
     if (error) {
       throw error;
     }
-    
-    response.status(200).send(`Order #${results.rows[0].id} completed for ${results.rows[0].amount} `);
+    console.log('inside')
+    response.status(200).send(`Order #${results.rows[0].id} completed for ${results.rows[0].amount}`);
+    //response.status(200).send(`Order  completed for `);
   })
   
 

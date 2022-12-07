@@ -21,20 +21,20 @@ const defaultBillingAndDelivery = async (userId) => {
   [ fullname, defaultBillingMethod, contact_id, ]);
   const createdDelivery = await pool.query('INSERT INTO delivery (receiver_name, method, contact_id) VALUES ($1, $2, $3) RETURNING *;',
   [ fullname, defaultDeliveryMethod, contact_id, ]);
-  console.log(createdBilling.rows[0].id)
+  //console.log(createdBilling.rows[0].id)
   return {
     billingId: createdBilling.rows[0].id,
     deliveryId: createdDelivery.rows[0].id
   }
 }
 
-//PASS: 
+//DONE: PASS: 
 //SECTION crreated to restructure delivery and billing info for retreival and storage. I think i overdid this one. should be a simpler way.
 const findBillingInfo = async (orderId) => {
   const sql = 'SELECT orders.billing_id, billing.payer_name, billing.method, billing.contact_id, billing.cc_placeholder,\
    contact.phone, contact.address, contact.city, contact.state, contact.zip, contact.email\
-   FROM orders JOIN billing ON orders.billing_id = billing.id JOIN contact ON billing.contact_id = contact_id\
-    WHERE order.id = $1'
+   FROM orders JOIN billing ON orders.billing_id = billing.id JOIN contact ON billing.contact_id = contact.id\
+    WHERE orders.id = $1'
 
   const billing  = await pool.query(sql, [orderId]);
   const info = {
@@ -57,8 +57,8 @@ const findBillingInfo = async (orderId) => {
 const findDeliveryInfo = async (orderId) => {
   const sql = 'SELECT orders.delivery_id, delivery.receiver_name, delivery.method, delivery.contact_id, delivery.notes,\
    contact.phone, contact.address, contact.city, contact.state, contact.zip, contact.email\
-   FROM orders JOIN delivery ON orders.delivery_id = delivery.id JOIN contact ON delivery.contact_id = contact_id\
-    WHERE order.id = $1'
+   FROM orders JOIN delivery ON orders.delivery_id = delivery.id JOIN contact ON delivery.contact_id = contact.id\
+    WHERE orders.id = $1'
 
   const delivery  = await pool.query(sql, [orderId]);
   const info = {
@@ -81,7 +81,7 @@ const findDeliveryInfo = async (orderId) => {
 const formatNewContact = async (contactObj) => {
   newContact = await addContactInfo(contactObj) //REVIEW - if this should even be in a formatting function. probably not since it makes it different than the funcitons below.
   contact = {
-    id: newContact.contact_id,
+    id: newContact.id,
     phone: newContact.phone,
     address: newContact.address,
     city: newContact.city,
@@ -96,7 +96,7 @@ const formatNewDelivery =  (deliveryId, deliveryObj, contactObj) => {
   const delivery = {
     id: deliveryId,
     receiverName: deliveryObj.receiverName,
-    deliveryMethod: deliveryObj.method,
+    deliveryMethod: deliveryObj.deliveryMethod,
     notes: deliveryObj.notes,
     contact: contactObj
   }
@@ -106,8 +106,8 @@ const formatNewDelivery =  (deliveryId, deliveryObj, contactObj) => {
 const formatNewBilling =  (billingId, billingObj, contactObj) => {
   const billing = {
     id: billingId,
-    payerName: billingObj.receiverName,
-    paymentMethod: billingObj.method,
+    payerName: billingObj.payerName,
+    paymentMethod: billingObj.paymentMethod,
     contact: contactObj
   }
   return billing
@@ -122,13 +122,13 @@ const updateDelivery = async (deliveryId, updates, contactId) => {
 
 const updateBilling = async (billingId, updates, contactId) => {
   const { payerName, paymentMethod } = updates
-  const sql = 'UPDATE delivery SET payer_name = $1, method = $2, contact_id = $3 WHERE id = $4 RETURNING *;';
+  const sql = 'UPDATE billing SET payer_name = $1, method = $2, contact_id = $3 WHERE id = $4 RETURNING *;';
   const results = await pool.query(sql, [payerName, paymentMethod, contactId, billingId])
   return results.rows[0]
 }
 //!SECTION
 
-//PASS a way to add creditcard info, but not really. just a flourish in that direction.
+//DONE: PASS a way to add creditcard info, but not really. just a flourish in that direction.
 const addCCToBilling = async (cc, billingId) => {
   sql = 'UPDATE billing SET cc_placeholder = $1 WHERE id = $2'
   results = pool.query(sql, [cc, billingId]);

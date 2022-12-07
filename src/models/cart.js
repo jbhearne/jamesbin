@@ -2,8 +2,10 @@
 const pool = require('./util/pool');
 //GARBAGE: const { checkManyToOne } = require('./util/check-relation');
 const orderComplete = require('./util/orderCompleted');
-const { collectCart } = require('./util/findCart')
+const { collectCart } = require('./util/findCart');
+const { isProductExtant } = require('./util/findProduct')
 const { cart } = require('.');
+//const { checkout } = require('../routes/orders'); //NOTE VS code imported this with out me knowing and it broke my code for a bit. I should watch my naming better.
 //GARBAGE: const { response } = require('express');
 
 
@@ -53,7 +55,7 @@ const getCartWithProductsByUser = (request, response) => {
   });
 }
 
-const getCartForCheckout = async (request, response) => {
+const getCartForCheckout = async (request, response) => { 
   const user = request.user;
   //TODO: add check constraint to database to ensure there is only one open order for a given user.
   /*GARBAGE: const sql = "SELECT cart.order_id, cart.id, products.name, products.price, cart.quantity, (products.price * cart.quantity) AS qty_total\
@@ -69,8 +71,20 @@ const getCartForCheckout = async (request, response) => {
     const checkout = { rows, total }
     response.status(200).send(checkout);
   });*/
-  const checkout = await collectCart(user.id)
-  response.status(200).send(checkout);
+  
+  const checkoutCart = await collectCart(user.id)
+  console.log(checkoutCart)
+  /*try {
+    const checkoutCart = await collectCart(user.id) //DONE FIXME error when no open orders, must handle logic
+    console.log(checkoutCart)
+  } catch (error) {
+    response.status(400).send(`No order ${error}.`);
+  }*/
+  if (typeof checkoutCart === 'string') { //REVIEW: I know i need to work on this so that it works more through a traditional error handling
+    response.status(400).send(checkoutCart);
+  } else {
+  response.status(200).send(checkoutCart);
+  }
 }
 
 const createCartItem = async (request, response) => { //DONE: TODO: rename to createCartItem
@@ -81,16 +95,26 @@ const createCartItem = async (request, response) => { //DONE: TODO: rename to cr
  
   const { productId, quantity } = request.body;
   const userId =  request.user.id
-  const order = await pool.query('SELECT * FROM orders WHERE user_id = $1 AND date_completed IS NULL;', [userId])
-  const orderId = order.rows[0].id
-  pool.query('INSERT INTO cart (order_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *', 
-    [orderId, productId, quantity], 
-    (error, results) => {
-      if (error) {
-      throw error;
-      }
-      response.status(201).send(`Cart added with ID: ${results.rows[0].id}`);
-  });
+  const order = await pool.query('SELECT * FROM orders WHERE user_id = $1 AND date_completed IS NULL;', [userId]) //DONE: FIXME error when attempting to add to cart on nonexistant order need logic to handle this.
+  const isProduct = await isProductExtant(productId)
+  //console.log(order.rows)
+  console.log(!!!order.rows + ' order.rows')
+  console.log(isProduct)
+  if (order.rows.length === 0) {                      //NOTE: maybe not...LEARNED double exclamation forces a falsy/truthy to real boolean but, triple to negate truthy value,  single ! does not negate the value of an object or array.
+    response.status(400).send(`Must initialize order first.`);
+  } else if (!isProduct) {
+    response.status(400).send(`Product #${productId} does not exist.`);
+  } else {
+    const orderId = order.rows[0].id
+    pool.query('INSERT INTO cart (order_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *', //DONE: FIXME error happens when trying to add product that does not exist
+      [orderId, productId, quantity], 
+      (error, results) => {
+        if (error) {
+        throw error;
+        }
+        response.status(201).send(`Cart added with ID: ${results.rows[0].id}`);  
+    });
+  }
 };
 
 const createCartItemOnOrder = async (request, response) => { 

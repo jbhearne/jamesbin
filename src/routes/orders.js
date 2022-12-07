@@ -13,8 +13,8 @@ router.delete('/orders/:id',  isAdmin, orders.deleteOrder);
 router.get('/orders/user/:id', adminOrCurrentUser, orders.getOrdersByUser); //LINK - ../models/orders.js:15
 //??? do I need more routes for alterering orders by user id?
 //do I add more state to the session? or create more SQL querying methods?
-//PASS: TODO: router.post('/checkout', loggedIn, ...);
+//DONE: PASS: TODO: router.post('/checkout', loggedIn, ...);
 router.get('/checkout', loggedIn, cart.getCartForCheckout); 
-//PASS: TODO: router.get('/checkout', loggedIn, ...);
+//DONE: PASS: TODO: router.get('/checkout', loggedIn, ...);
 router.post('/checkout', loggedIn, orders.checkout); 
 module.exports = router;

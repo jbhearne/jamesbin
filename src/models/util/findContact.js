@@ -1,7 +1,7 @@
 const pool = require('./pool');
 
 
-//PASS created to help with contact info related to checkout, but probably should be used elsewhere too.
+//REVIEW: PASS created to help with contact info related to checkout, but probably should be used elsewhere too.
 const addContactInfo = async (contactObj) => {
   const { phone, address, city, state, zip, email } = contactObj;
   const sql = 'INSERT INTO contact (phone, address, city, state, zip, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
