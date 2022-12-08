@@ -1,8 +1,11 @@
+////////////////////////////////////////////////////////////
+///database funtions for interacting with users table///////
+
+//imports
 const pool = require('./util/pool');
-const updateColumns = require('./util/update-columns')
 const { findUserById, isUsernameUnique } = require('./util/findUser')
 
-
+//gets all users from the database and sends a response object
 const getUsers = (request, response) => {
   pool.query('SELECT * FROM users ORDER BY id ASC', async (error, results) => { //REVIEW probably should not return hashed password, even for admin.
     if (error) {
@@ -18,6 +21,7 @@ const getUsers = (request, response) => {
   });
 };
 
+//gets a user from the database using id parameter and sends a response object.
 const getUserById = (request, response) => {
   const id = parseInt(request.params.id);
 
@@ -37,7 +41,8 @@ const getUserById = (request, response) => {
   });
 };
 
-//LINK ../routes/auth/auth.js#register 
+//creates new new user in database, but does not send a response object. Currently that is handled in the register logic //LINK ../routes/auth/auth.js#register 
+//also creates a new contact entry in the contact table which due to forein key constraint must be created first
 const createUser = async (request, response) => {
   const { fullname, username, password, contact } = request.body;
   const { phone, address, city, state, zip, email } = contact;
@@ -66,6 +71,7 @@ const createUser = async (request, response) => {
   });
 };
 
+//updates user and contact databases. request body can be any combination of properties as long as it follows the correct user object structure
 const updateUser = async (request, response) => {
   const id = parseInt(request.params.id);
   const updates = request.body;
@@ -81,8 +87,6 @@ const updateUser = async (request, response) => {
   {
     if (updates.contact) {
       for (key in userObj.contact) {
-        //console.log(updates.contact[key])
-        //console.log(userObj.contact[key])
         if (updates.contact[key]) { userObj.contact[key] = updates.contact[key] }
       }
     }
@@ -117,6 +121,7 @@ const updateUser = async (request, response) => {
   }
 };
 
+//deletes a user and their coresponding contact info in database
 const deleteUser = (request, response) => {
   const id = parseInt(request.params.id);
 

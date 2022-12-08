@@ -3,6 +3,7 @@ const router = express.Router();
 const { products } = require('../models/index');
 const { loggedIn, isAdmin, adminOrCurrentUser } = require('./auth/ensure');
 
+//routes related to products
 router.get('/products', products.getProducts);
 router.post('/products', isAdmin, products.createProduct);
 router.get('/products/:id', products.getProductById);

@@ -3,6 +3,7 @@ const router = express.Router();
 const { cart } = require('../models/index');
 const { loggedIn, isAdmin, adminOrCurrentUser } = require('./auth/ensure');
 
+//routes related to shopping cart items
 router.get('/cart', isAdmin, cart.getCart);
 router.post('/cart', loggedIn, cart.createCartItem);  //REVIEW: had to move some things up in the order for it to not parse as an :id. should review all routes
 router.get('/cart/:id', isAdmin, cart.getCartById);

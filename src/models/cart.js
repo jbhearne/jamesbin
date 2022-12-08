@@ -1,4 +1,7 @@
+/////////////////////////////////////////////////////////
+////functions for accessing the cart table///////////////
 
+//inport
 const pool = require('./util/pool');
 const orderComplete = require('./util/orderCompleted');
 const { collectCart } = require('./util/findCart');
@@ -8,6 +11,7 @@ const { isProductExtant } = require('./util/findProduct');
 
 
 //TODO: rename appropiate functions to ...CartItem
+//gets all cart items sends a response object
 const getCart = (request, response) => {
   pool.query('SELECT * FROM cart ORDER BY id ASC', (error, results) => {
     if (error) {
@@ -17,6 +21,8 @@ const getCart = (request, response) => {
   });
 };
 
+
+//gets all cart items for a specidfied order. sends a response object.
 const getCartByOrder = (request, response) => {
   const id = parseInt(request.params.id);
   
@@ -28,6 +34,7 @@ const getCartByOrder = (request, response) => {
   });
 };
 
+//gets a cart item by its id. sends a response object
 const getCartById = (request, response) => {
   const id = parseInt(request.params.id);
 
@@ -39,6 +46,7 @@ const getCartById = (request, response) => {
   });
 };
 
+//gets all items on an order and the coresponding product info from products table. Sends a response object. this is what a "cart" is.
 const getCartWithProductsByUser = (request, response) => {
   const id = parseInt(request.params.id);
   const sql = 'SELECT cart.id, cart.order_id, cart.product_id, products.name, products.price, cart.quantity\
@@ -53,6 +61,7 @@ const getCartWithProductsByUser = (request, response) => {
   });
 }
 
+//similar to above with subtotals and total plus delivery and billing info
 const getCartForCheckout = async (request, response) => { 
   const user = request.user;
   //TODO: add check constraint to database to ensure there is only one open order for a given user.
@@ -65,7 +74,8 @@ const getCartForCheckout = async (request, response) => {
   }
 }
 
-const createCartItem = async (request, response) => { //DONE: TODO: rename to createCartItem
+//create a cart item on the current user's open order. expects a request.
+const createCartItem = async (request, response) => {
   const { productId, quantity } = request.body;
   const userId =  request.user.id
   const order = await pool.query('SELECT * FROM orders WHERE user_id = $1 AND date_completed IS NULL;', [userId])
@@ -88,6 +98,7 @@ const createCartItem = async (request, response) => { //DONE: TODO: rename to cr
   }
 };
 
+//create a cart item on an arbitary order as specified. send a response.
 const createCartItemOnOrder = async (request, response) => { 
   const id = parseInt(request.params.id);
   const { productId, quantity } = request.body;
@@ -107,6 +118,7 @@ const createCartItemOnOrder = async (request, response) => {
   }
 };
 
+//updates the quantity of an item in the cart as specified by cart id.
 const updateCart = async (request, response, next) => {
   console.log('\x1B[31mtest updateCart \x1B[37m')  //LEARNED how to color text in BASH console.
   const id = parseInt(request.params.id);
@@ -130,7 +142,7 @@ const updateCart = async (request, response, next) => {
   }
 };
 
-
+//similar to above, but checks if the cart belongs to current user and the order is still open.
 const updateCartWithUser = async (request, response, next) => {
   const id = parseInt(request.params.id);
   const { quantity } = request.body;
@@ -158,8 +170,6 @@ const updateCartWithUser = async (request, response, next) => {
           if (error) {
             throw error;
           }
-          console.log('8:: updated the cart qty')
-          setTimeout(() => {console.log('9:: ' + isComplete + ' has orderComplete resolved?')}, 1000 ) 
         response.status(200).send(`Cart modified with ID: ${id}`);
       });
     }
@@ -168,6 +178,7 @@ const updateCartWithUser = async (request, response, next) => {
   }
 };
 
+//deletes a cart item. 
 const deleteCart = (request, response) => {
   const id = parseInt(request.params.id);
 
@@ -180,6 +191,7 @@ const deleteCart = (request, response) => {
 };
 
 //ANCHOR[id=deleteCartWithUser] adding a method for removing cart items
+//same as above, but checks to make sure cart items belong to current user.
 const deleteCartWithUser = async (request, response, next) => {
   const id = parseInt(request.params.id);
   const userId = request.user.id
@@ -211,6 +223,7 @@ const deleteCartWithUser = async (request, response, next) => {
     response.status(400).send(`Cart id: ${id} does not belong to current user`);
   }
 };
+
 
 module.exports = {
     getCart,

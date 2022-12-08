@@ -1,5 +1,8 @@
+//////////////////////////////////////////////////////////////////
+///Database Server Functions for interacting with vendors table///
+
+//imports
 const pool = require('./util/pool');
-const updateColumns = require('./util/update-columns');
 const { findVendorById } = require('./util/findVendor')
 
 //get all vendors

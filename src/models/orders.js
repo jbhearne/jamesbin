@@ -1,5 +1,7 @@
+///////////////////////////////////////////////////
+///functions for accessing the orders table///////
 
-const { orders } = require('.');
+//import
 const pool = require('./util/pool');
 const { isOrderOpen, 
   defaultBillingAndDelivery,
@@ -10,8 +12,8 @@ const { isOrderOpen,
   updateBilling,
   addCCToBilling } = require('./util/findOrder');
 const { collectCart } = require('./util/findCart');
-const { response } = require('express');
 
+//get all orders and send response objects
 const getOrders = (request, response) => {
   pool.query('SELECT * FROM orders ORDER BY id ASC', (error, results) => {
     if (error) {
@@ -21,6 +23,7 @@ const getOrders = (request, response) => {
   });
 };
 
+//get all orders for a user specified by id parameter and sends response object.
 const getOrdersByUser = (request, response) => {
   const id = parseInt(request.params.id);
 
@@ -32,6 +35,7 @@ const getOrdersByUser = (request, response) => {
   });
 };
 
+//get an order from its id parameter and send a response object
 const getOrderById = (request, response) => {
   const id = parseInt(request.params.id);
 
@@ -43,7 +47,7 @@ const getOrderById = (request, response) => {
   });
 };
 
-
+//creates a new order but only if the user does not already have an open order. all the data is handled internally, no request object needed.
 const createOrder = async (request, response) => {
   const userId = request.user.id  //REVIEW: this should work if the user is creating an order, but would  not work if admin wanted to create an order for another user.
   const isOpen = await isOrderOpen(userId);
@@ -65,6 +69,8 @@ const createOrder = async (request, response) => {
 };
 
 //REVIEW add the ability to change delivery and billing info
+
+//for closing or opening an order. requires request objecct with date the order is closed or null for open.
 const updateOrder = (request, response) => {
   const id = parseInt(request.params.id);
   const { dateCompleted } = request.body;
@@ -80,6 +86,7 @@ const updateOrder = (request, response) => {
   });
 };
 
+//deletes an ordder
 const deleteOrder = (request, response) => {
   const id = parseInt(request.params.id);
 
@@ -91,7 +98,7 @@ const deleteOrder = (request, response) => {
   });
 };
 
-
+//checkout updates order table and alters other related tables. requires a request object.
 const checkout = async (request, response) => {
   const body = request.body;
   const user = request.user;

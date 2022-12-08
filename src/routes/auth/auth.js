@@ -4,7 +4,6 @@ const LocalStrategy = require('passport-local').Strategy;
 const pool = require('../../models/util/pool');
 const bcrypt = require('bcrypt');
 const { createUser } = require('../../models/users');
-const { useParams } = require('react-router-dom');
 const router = express.Router();
 
 //checks to see if username and password are in the database abd uses bcrypt.compare to rehash password.
@@ -20,11 +19,8 @@ passport.use(new LocalStrategy((username, password, cb) => {
     }
     const correctPassword = await bcrypt.compare(password, res.rows[0].password);
     if (!correctPassword) {
-      //console.log(correctPassword + ' wrong password ' + res.rows[0].password + ' not ' + password); 
       return cb(null, false, { message: 'Incorrect username or password.' })
     }
-    //for (col in res.rows[0]) {console.log(col)}
-    //console.log(res.rows[0].admin)
     return cb(null, res.rows[0]);
   })
 }))
@@ -48,12 +44,11 @@ router.get('/login', function(req, res, next) {
   res.send('login');
 });
 
-//route to send login info on
+//route used to login. a request body with username and password expected.
 router.post('/login/password', (req, res, next) => {console.log('howdy'); next()}, passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login'
 }));
-
 
 //??? do I need to make it that a user needs to logout before another logs in or does it matter?
 //route to logout
@@ -64,13 +59,14 @@ router.post('/logout', function(req, res, next) {
   });
 });
 
-
-//placehold route for a registration page
+//placeholder route for a registration page
 router.get('/register', function(req, res, next) {
   res.send('register');
 });
 
-//ANCHOR[id=register] uses createUser function originally created for POST-/user route. need to change this into a util function
+//ANCHOR[id=register] uses createUser function originally created for POST-/user route. createUser was originally intended to be a... 
+//...server function for sending response headers like the functions in the models directory, but I should move createUser to the util directory or better structure this project
+
 //route to create a new user, checks if there is already a username in the database, uses bcrypt to salt and hash password before adding it to the database.
 router.post("/register", async (req, res, next) => {
   const { username, password } = req.body
@@ -92,7 +88,5 @@ router.post("/register", async (req, res, next) => {
     res.redirect('/login')
   })
 })
-
-
 
 module.exports = router

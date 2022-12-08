@@ -3,6 +3,7 @@ const router = express.Router();
 const { vendors } = require('../models/index');
 const { loggedIn, isAdmin, adminOrCurrentUser } = require('./auth/ensure');
 
+//routes related to vendor operations
 router.get('/vendors', vendors.getVendors);
 router.post('/vendors', isAdmin, vendors.createVendor);
 router.get('/vendors/:id', vendors.getVendorById);

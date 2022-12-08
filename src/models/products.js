@@ -1,6 +1,11 @@
+////////////////////////////////////////////////////////////
+///functions for accessing the the products table//////////
+
+//imports
 const pool = require('./util/pool');
 const updateColumns = require('./util/update-columns');
 
+//gets all the products in the database and sends a response object
 const getProducts = (request, response) => {
   pool.query('SELECT * FROM products ORDER BY id ASC', (error, results) => {
     if (error) {
@@ -10,6 +15,7 @@ const getProducts = (request, response) => {
   });
 };
 
+//get all the products from a particular vender as specified in the parameter. sends a response object
 const getProductsByVendor = (request, response) => {
   const id = parseInt(request.params.id);
   pool.query('SELECT * FROM products WHERE vendor_id = $1', [id], (error, results) => {
@@ -20,6 +26,7 @@ const getProductsByVendor = (request, response) => {
   });
 };
 
+//get a product using id parameter sends a response object
 const getProductById = (request, response) => {
   const id = parseInt(request.params.id);
 
@@ -31,6 +38,7 @@ const getProductById = (request, response) => {
   });
 };
 
+//add a new product expects a request object
 const createProduct = (request, response) => {
   const { name, description, price, vendorId } = request.body;
 
@@ -45,6 +53,8 @@ const createProduct = (request, response) => {
   });
 };
 
+//FIXME still need to fix this use of template literals
+//update a product with the id parameter. expects a request object.
 const updateProduct = (request, response) => {
   const id = parseInt(request.params.id);
   const { name, description, price, vendorId } = request.body;
@@ -62,6 +72,7 @@ const updateProduct = (request, response) => {
   });
 };
 
+//deletes a product from the database. sends a response object
 const deleteProduct = (request, response) => {
   const id = parseInt(request.params.id);
 
