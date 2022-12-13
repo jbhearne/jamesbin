@@ -3,7 +3,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const pool = require('../../models/util/pool');
 const bcrypt = require('bcrypt');
-const { createUser } = require('../../models/users');
+//PASS
+const { createUser } = require('../../models/util/findUser');
 const router = express.Router();
 
 //checks to see if username and password are in the database abd uses bcrypt.compare to rehash password.

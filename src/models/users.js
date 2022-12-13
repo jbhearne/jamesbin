@@ -41,7 +41,9 @@ const getUserById = (request, response) => {
   });
 };
 
+//PASS 
 //REFACTOR[id=createuser] 
+/*
 //creates new new user in database, but does not send a response object. Currently that is handled in the register logic //LINK ../routes/auth/auth.js#register 
 //also creates a new contact entry in the contact table which due to forein key constraint must be created first
 const createUser = async (request, response) => {
@@ -71,6 +73,7 @@ const createUser = async (request, response) => {
     });
   });
 };
+*/
 //!REFACTOR
 
 //updates user and contact databases. request body can be any combination of properties as long as it follows the correct user object structure

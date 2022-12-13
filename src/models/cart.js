@@ -7,6 +7,7 @@ const { isItemOnCompleteOrder } = require('./util/findOrder');
 const { collectCart } = require('./util/findCart');
 const { isProductExtant } = require('./util/findProduct');
 
+//PASS
 //REFACTOR[id=additem] rename appropiate functions to ...CartItem
 //gets all cart items sends a response object
 const getCartItem = (request, response) => {
@@ -25,7 +26,7 @@ const getCartItemByOrderId = (request, response) => {
   
   pool.query('SELECT * FROM cart WHERE order_id = $1', [id], (error, results) => {
     if (error) {
-    throw error;
+    throw error;functions
     }
     response.status(200).json(results.rows);
   });

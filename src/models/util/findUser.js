@@ -4,6 +4,9 @@
 //import and create pool
 const pool = require('./pool');
 
+
+const { formatUserOutput } = require('./formatOutput')
+
 //queries user using user ID and returns a user object with contact info OR false if user not in database.
 const findUserById = async (id) => {
   const results = await pool.query('SELECT fullname, username, contact_id FROM users WHERE id = $1', [id])  //NOTE does not include password column
@@ -27,7 +30,31 @@ const isUsernameUnique = async (username) => {
   return results.rows.length === 0;
 }
 
+//PASS
+//creates new new user in database
+const createUser = async (newUser) => {
+  const { fullname, username, password, contact } = newUser.body;
+  const { phone, address, city, state, zip, email } = contact;
+  const contactSql = 'INSERT INTO contact (phone, address, city, state, zip, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
+
+  const contactRes = await pool.query(userSql, [phone, address, city, state, zip, email]);
+
+  const contactId = userRes.rows[0].id;
+
+  const userSql = 'INSERT INTO users (fullname, username, password, contact_id) VALUES ($1, $2, $3, $4) RETURNING *';
+  
+  const userRes = await pool.query(contactSql, [fullname, username, password, contactId]);
+
+  const userObj = userRes.rows[0];
+  const contactObj = contactRes.rows[0];
+  const user = formatUserOutput(userObj, contactObj);
+
+  return user;
+};
+
+
 module.exports = {
   findUserById,
-  isUsernameUnique
+  isUsernameUnique,
+  createUser
 }
