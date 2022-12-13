@@ -8,13 +8,13 @@ const { loggedIn, isAdmin, adminOrCurrentUser } = require('./auth/ensure');
 router.get('/cart', isAdmin, cart.getCartItem);
 router.post('/cart', loggedIn, cart.createCartItem);  //REVIEW: had to move some things up in the order for it to not parse as an :id. should review all routes
 router.get('/cart/:id', isAdmin, cart.getCartById);
-router.put('/cart/:id', isAdmin, cart.updateCart);
-router.delete('/cart/:id', isAdmin, cart.deleteCart);
-router.get('/cart/order/:id', isAdmin, cart.getCartByOrder);
+router.put('/cart/:id', isAdmin, cart.updateCartItem);
+router.delete('/cart/:id', isAdmin, cart.deleteCartItem);
+router.get('/cart/order/:id', isAdmin, cart.getCartItemByOrderId);
 router.post('/cart/order/:id', isAdmin, cart.createCartItemOnOrder);
 router.get('/cart/user/:id', adminOrCurrentUser, cart.getCartWithProductsByUser);
-router.put('/user/cart/:id', loggedIn, cart.updateCartWithUser); //LINK ../models/cart.js:97
-router.delete('/user/cart/:id', loggedIn, cart.deleteCartWithUser); //LINK ../models/cart.js#deleteCartWithUser
+router.put('/user/cart/:id', loggedIn, cart.updateCartItemIfUser); //LINK ../models/cart.js:97
+router.delete('/user/cart/:id', loggedIn, cart.deleteCartItemIfUser); //LINK ../models/cart.js#deleteCartItemIfUser
 
 
 module.exports = router;

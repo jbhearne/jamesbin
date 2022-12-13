@@ -20,7 +20,7 @@ const getCartItem = (request, response) => {
 
 
 //gets all cart items for a specidfied order. sends a response object.
-const getCartByOrder = (request, response) => {
+const getCartItemByOrderId = (request, response) => {
   const id = parseInt(request.params.id);
   
   pool.query('SELECT * FROM cart WHERE order_id = $1', [id], (error, results) => {
@@ -116,8 +116,8 @@ const createCartItemOnOrder = async (request, response) => {
 };
 
 //updates the quantity of an item in the cart as specified by cart id.
-const updateCart = async (request, response, next) => {
-  console.log('\x1B[31mtest updateCart \x1B[37m')  //LEARNED how to color text in BASH console.
+const updateCartItem = async (request, response, next) => {
+  //console.log('\x1B[31mtest updateCartItem \x1B[37m')  //LEARNED how to color text in BASH console.
   const id = parseInt(request.params.id);
   const { quantity } = request.body;
   const isComplete = await isItemOnCompleteOrder(id);
@@ -140,7 +140,7 @@ const updateCart = async (request, response, next) => {
 };
 
 //similar to above, but checks if the cart belongs to current user and the order is still open.
-const updateCartWithUser = async (request, response, next) => {
+const updateCartItemIfUser = async (request, response, next) => {
   const id = parseInt(request.params.id);
   const { quantity } = request.body;
   const userId = request.user.id
@@ -176,7 +176,7 @@ const updateCartWithUser = async (request, response, next) => {
 };
 
 //deletes a cart item. 
-const deleteCart = (request, response) => {
+const deleteCartItem = (request, response) => {
   const id = parseInt(request.params.id);
 
   pool.query('DELETE FROM cart WHERE id = $1', [id], (error, results) => {
@@ -187,9 +187,9 @@ const deleteCart = (request, response) => {
   });
 };
 
-//ANCHOR[id=deleteCartWithUser] adding a method for removing cart items
+//ANCHOR[id=deleteCartItemIfUser] adding a method for removing cart items
 //same as above, but checks to make sure cart items belong to current user.
-const deleteCartWithUser = async (request, response, next) => {
+const deleteCartItemIfUser = async (request, response, next) => {
   const id = parseInt(request.params.id);
   const userId = request.user.id
   const sql = 'SELECT cart.id FROM cart JOIN orders ON cart.order_id = orders.id WHERE orders.user_id = $1'
@@ -224,15 +224,15 @@ const deleteCartWithUser = async (request, response, next) => {
 
 module.exports = {
     getCartItem,
-    getCartByOrder,
+    getCartItemByOrderId,
     getCartById,
     createCartItem,
-    updateCart,
-    deleteCart,
+    updateCartItem,
+    deleteCartItem,
     getCartWithProductsByUser,
-    updateCartWithUser,
+    updateCartItemIfUser,
     createCartItemOnOrder,
-    deleteCartWithUser,
+    deleteCartItemIfUser,
     getCartForCheckout
 };
 //!REFACTOR
