@@ -3,15 +3,21 @@
 
 //import
 const pool = require('./util/pool');
-const { isOrderOpen, 
+const { 
+  isOrderOpen, 
   defaultBillingAndDelivery,
-  formatNewContact,
-  formatNewDelivery,
-  formatNewBilling,
   updateDelivery,
   updateBilling,
-  addCCToBilling } = require('./util/findOrder');
+  addCCToBilling 
+} = require('./util/findOrder');
+//PASS
+const { 
+  formatNewContact,
+  formatNewDelivery,
+  formatNewBilling 
+} = require('./util/formatOutput')
 const { collectCart } = require('./util/findCart');
+const { addContactInfo } =require('./util/findContact')
 
 //get all orders and send response objects
 const getOrders = (request, response) => {
@@ -98,6 +104,7 @@ const deleteOrder = (request, response) => {
   });
 };
 
+//PASS
 //checkout updates order table and alters other related tables. requires a request object.
 const checkout = async (request, response) => {
   const body = request.body;
@@ -109,22 +116,22 @@ const checkout = async (request, response) => {
   if (isNotOneOrder) {
     throw Error('Multiple orders!')
   }
-
-  const { delivery, billing } = cart
  
   if (!body.useDefaultDelivery){
-    const deliveryContact = await formatNewContact(body.delivery.contact);
-    const newDelivery = formatNewDelivery(delivery.id, body.delivery, deliveryContact);
-    updateDelivery(delivery.id, newDelivery, newDelivery.contact.id); //REVIEW shoud this be an await even though I don't need the results necessarily.
+    const newContactD = await addContactInfo(body.delivery.contact);
+    const deliveryContact = formatNewContact(newContactD);
+    const newDelivery = formatNewDelivery(cart.delivery.id, body.delivery, deliveryContact);
+    updateDelivery(cart.delivery.id, newDelivery, newDelivery.contact.id); //REVIEW shoud this be an await even though I don't need the results necessarily.
   }
   
   if (!body.useDefaultBilling) {
-    const billingContact = await formatNewContact(body.billing.contact);
-    const newBilling = formatNewBilling(billing.id, body.billing, billingContact);
-    updateBilling(billing.id, newBilling, newBilling.contact.id); //REVIEW "
+    const newContactB = await addContactInfo(body.billing.contact);
+    const billingContact = await formatNewContact(newContactB);
+    const newBilling = formatNewBilling(cart.billing.id, body.billing, billingContact);
+    updateBilling(cart.billing.id, newBilling, newBilling.contact.id); //REVIEW "
   }
   
-  addCCToBilling(body.ccPlaceholder, billing.id) //REVIEW  "
+  addCCToBilling(body.ccPlaceholder, cart.billing.id) //REVIEW  "
   
   const sql = 'UPDATE orders SET date_completed = NOW(), amount = $1 WHERE id = $2 RETURNING *;'
 
