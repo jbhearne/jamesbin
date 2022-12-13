@@ -1,3 +1,6 @@
+//////////////////////////////////////////////////////////////////
+//Unused module for templating SQL strings with dynamic columns//
+
 //WARN: this module is a flawed concept...
 //NOTE: FROM NODE-POSTGRES: "PostgreSQL does not support parameters for identifiers. If you need to have dynamic database, schema, table, or column names (e.g. in DDL statements) use pg-format package for handling escaping these values to ensure you do not have SQL injection!"
 //LINK - https://www.npmjs.com/package/pg-format

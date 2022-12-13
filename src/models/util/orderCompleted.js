@@ -1,5 +1,7 @@
-const pool = require('./pool');
+////////////////////////////////////////////////////////
+//Checks database to see if a given order is completed//
 
+const pool = require('./pool');
 
 const orderComplete = async id => {
   const result = await pool.query(

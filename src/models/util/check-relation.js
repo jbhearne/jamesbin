@@ -1,8 +1,12 @@
+///////////////////////////////////////////////////
+//Functions for checking relationships in a table//
+
 //WARN: this module is a flawed concept...
 //FROM NODE-POSTGRES: "PostgreSQL does not support parameters for identifiers. If you need to have dynamic database, schema, table, or column names (e.g. in DDL statements) use pg-format package for handling escaping these values to ensure you do not have SQL injection!"
 //columns/tables/schema cannot use numbered parameters, only values for searching, adding, updating.
 const pool = require('./pool');
 
+//Checks to make to makes sure the the primary key exists in the parent table
 const checkManyToOne = (columns, tableA, tableB, fkey, pkey, tableAid) => {
   console.log('test checkManyToOne ' + tableAid)
   console.log(columns + tableA + tableB + fkey + pkey + tableAid)

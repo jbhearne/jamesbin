@@ -1,7 +1,15 @@
+///////////////////////////////////////////////  
+//Functions related to querying cart table//
+
+//import and create pool
 const pool = require('./pool');
+
+//import functions related to the order
 const { findBillingInfo, findDeliveryInfo, isOrderOpen } = require('./findOrder')
 
-
+//gets all the info needed for to present the current user's open order (shopping cart)
+//Returns an object that includes an array of items in cart, a total price for all items/qty added together, a billing object, a delivery obj
+//OR returns a string stating that no order has been started.
 const collectCart = async (userId) => {
   const sql = "SELECT cart.order_id, cart.id, products.name, products.price, cart.quantity, (products.price * cart.quantity) AS qty_total\
   FROM cart JOIN products ON cart.product_id = products.id JOIN orders ON cart.order_id = orders.id\
@@ -32,8 +40,6 @@ const collectCart = async (userId) => {
   const checkout = { items, total, billing, delivery}
   return checkout;
 }
-
-
 
 module.exports = {
   collectCart

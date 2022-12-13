@@ -1,7 +1,11 @@
+///////////////////////////////////////////////  
+//Functions related to querying contact table//
+
+//import and create pool
 const pool = require('./pool');
 
-
 //REVIEW: created to help with contact info related to checkout, but probably should be used elsewhere too.
+//Creats a new contact using a conact object. Returns the new contact.
 const addContactInfo = async (contactObj) => {
   const { phone, address, city, state, zip, email } = contactObj;
   const sql = 'INSERT INTO contact (phone, address, city, state, zip, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
@@ -11,6 +15,7 @@ const addContactInfo = async (contactObj) => {
   return results.rows[0]
 }
 
+//changes an existing contact using a contact object (updates). returns the updated contact object.
 const updateContactInfo = async (updates, contactId) => {
   selectSql = 'SELECT * FROM contact WEHERE id = $1'
 
@@ -28,10 +33,6 @@ const updateContactInfo = async (updates, contactId) => {
 
   return results.rows[0]
 }
-
-
-
-
 
 module.exports = {
   addContactInfo,

@@ -1,14 +1,11 @@
-/////////////////////////////////////////////////////////
-////functions for accessing the cart table///////////////
+//////////////////////////////////////////////
+////functions for accessing the cart table///
 
 //inport
 const pool = require('./util/pool');
 const orderComplete = require('./util/orderCompleted');
 const { collectCart } = require('./util/findCart');
 const { isProductExtant } = require('./util/findProduct');
-
-
-
 
 //TODO: rename appropiate functions to ...CartItem
 //gets all cart items sends a response object

@@ -1,6 +1,14 @@
+///////////////////////////////////////////////  
+//Functions related to querying orders table//
+
+//import and create pool
 const pool = require('./pool');
+
+//import for accessing the contact table
 const { addContactInfo } = require('./findContact')
 
+//checks to see if the current user has order that has not yet been completed.
+//Returns false if they have no open order OR returns the order object if there is an open order.
 const isOrderOpen = async (userId) => {
   const orders = await pool.query('SELECT id FROM orders WHERE user_id = $1 AND date_completed IS NULL', [userId])
   if (orders.rows.length === 0) {
@@ -12,6 +20,8 @@ const isOrderOpen = async (userId) => {
   }
 }
 
+//sets default values for billing and delivery to the current users name, contact info and other preset values. 
+//Returns an object with the IDs for both delivery row and billing row.
 const defaultBillingAndDelivery = async (userId) => {
   const user =  await pool.query('SELECT * FROM users WHERE id = $1', [userId])
   const { fullname, contact_id } = user.rows[0]
@@ -31,6 +41,7 @@ const defaultBillingAndDelivery = async (userId) => {
   }
 }
 
+//queries billing and contact tables using the order ID. Returns object that contains billing/contact info.
 const findBillingInfo = async (orderId) => {
   const sql = 'SELECT orders.billing_id, billing.payer_name, billing.method, billing.contact_id, billing.cc_placeholder,\
    contact.phone, contact.address, contact.city, contact.state, contact.zip, contact.email\
@@ -56,6 +67,7 @@ const findBillingInfo = async (orderId) => {
   return info;
 }
 
+//queries delivery and contact tables using the order ID. Returns object that contains delivery/contact info.
 const findDeliveryInfo = async (orderId) => {
   const sql = 'SELECT orders.delivery_id, delivery.receiver_name, delivery.method, delivery.contact_id, delivery.notes,\
    contact.phone, contact.address, contact.city, contact.state, contact.zip, contact.email\
@@ -81,6 +93,7 @@ const findDeliveryInfo = async (orderId) => {
   return info;
 }
 
+//creates a new contact in the contact table. Returns a contact object.
 const formatNewContact = async (contactObj) => {
   newContact = await addContactInfo(contactObj) //REVIEW - if this should even be in a formatting function. probably not since it makes it different than the funcitons below.
   
@@ -96,6 +109,7 @@ const formatNewContact = async (contactObj) => {
   return contact
 }
 
+//formats a delivery object with specified ID, a previous or requested delivery object, and a contact object. No queries. Returns the object.
 const formatNewDelivery =  (deliveryId, deliveryObj, contactObj) => {
   const delivery = {
     id: deliveryId,
@@ -107,6 +121,7 @@ const formatNewDelivery =  (deliveryId, deliveryObj, contactObj) => {
   return delivery
 }
 
+//formats a billing object with specified ID, a previous or requested billing object, and a contact object. No queries. Returns the object.
 const formatNewBilling =  (billingId, billingObj, contactObj) => {
   const billing = {
     id: billingId,
@@ -117,6 +132,9 @@ const formatNewBilling =  (billingId, billingObj, contactObj) => {
   return billing
 }
 
+//change the values of the delivery table entry as specified by the delivery ID.
+//values are determined by a delivery object (updates) and the contact ID.
+//returns the updated delivery object.
 const updateDelivery = async (deliveryId, updates, contactId) => {
   const { receiverName, deliveryMethod, notes } = updates
   const sql = 'UPDATE delivery SET receiver_name = $1, method = $2, notes = $3, contact_id = $4 WHERE id = $5 RETURNING *;';
@@ -126,6 +144,9 @@ const updateDelivery = async (deliveryId, updates, contactId) => {
   return results.rows[0]
 }
 
+//change the values of the billing table entry as specified by the billing ID.
+//values are determined by a billing object (updates) and the contact ID.
+//returns the updated billing object.
 const updateBilling = async (billingId, updates, contactId) => {
   const { payerName, paymentMethod } = updates
   const sql = 'UPDATE billing SET payer_name = $1, method = $2, contact_id = $3 WHERE id = $4 RETURNING *;';
@@ -136,7 +157,7 @@ const updateBilling = async (billingId, updates, contactId) => {
 }
 
 
-// a way to add creditcard info, but not really. just a flourish in that direction.
+//a way to add creditcard info, but not really. just a flourish in that direction.
 const addCCToBilling = async (cc, billingId) => {
   sql = 'UPDATE billing SET cc_placeholder = $1 WHERE id = $2'
 

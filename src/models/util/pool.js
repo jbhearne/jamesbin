@@ -1,3 +1,6 @@
+//////////////////////////////////////////////////////
+//Creates a pool that is used to access the database//
+
 require('dotenv/config')
 const Pool = require('pg').Pool
 
