@@ -3,13 +3,13 @@
 
 //inport
 const pool = require('./util/pool');
-const orderComplete = require('./util/orderCompleted');
+const { isItemOnCompleteOrder } = require('./util/findOrder');
 const { collectCart } = require('./util/findCart');
 const { isProductExtant } = require('./util/findProduct');
 
 //REFACTOR[id=additem] rename appropiate functions to ...CartItem
 //gets all cart items sends a response object
-const getCart = (request, response) => {
+const getCartItem = (request, response) => {
   pool.query('SELECT * FROM cart ORDER BY id ASC', (error, results) => {
     if (error) {
     throw error;
@@ -120,7 +120,7 @@ const updateCart = async (request, response, next) => {
   console.log('\x1B[31mtest updateCart \x1B[37m')  //LEARNED how to color text in BASH console.
   const id = parseInt(request.params.id);
   const { quantity } = request.body;
-  const isComplete = await orderComplete(id);
+  const isComplete = await isItemOnCompleteOrder(id);
 
   if (isComplete) {
     response.status(400).send(`Cart id: ${id} belongs to order that is already complete`);
@@ -154,7 +154,7 @@ const updateCartWithUser = async (request, response, next) => {
   }
   console.log(carts)
   if (carts.includes(id)) {
-    const isComplete = await orderComplete(id)
+    const isComplete = await isItemOnCompleteOrder(id)
     if (isComplete) {
       response.status(400).send(`Cart id: ${id} belongs to order that is already complete`);
       next();
@@ -201,7 +201,7 @@ const deleteCartWithUser = async (request, response, next) => {
   }
 
   if (carts.includes(id)) {
-    const isComplete = await orderComplete(id)
+    const isComplete = await isItemOnCompleteOrder(id)
     if (isComplete) {
       response.status(400).send(`Cart id: ${id} belongs to order that is already complete`);
       next();
@@ -223,7 +223,7 @@ const deleteCartWithUser = async (request, response, next) => {
 
 
 module.exports = {
-    getCart,
+    getCartItem,
     getCartByOrder,
     getCartById,
     createCartItem,

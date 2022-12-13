@@ -20,6 +20,23 @@ const isOrderOpen = async (userId) => {
   }
 }
 
+//checks if the specified cart (ID) belongs to a complete order. Returns true if it does and false if it does not. 
+const isItemOnCompleteOrder = async id => {
+  const result = await pool.query(
+    'SELECT orders.date_completed FROM cart JOIN orders ON cart.order_id = orders.id WHERE cart.id = $1',
+    [id]); ////LEARNED:  no callback... pool.query returns the results and can be used with async/await to create asyncronous functions/modules.
+  let notNull = false;
+  if (result.rows.length === 1) {
+    if (result.rows[0].date_completed) {
+      notNull = true;
+      console.log(result.rows[0].date_completed);
+    } else if (result.rows.length > 1) {
+      throw Error('Multiple Rows.');
+    }
+  }
+  return notNull;
+}
+
 //sets default values for billing and delivery to the current users name, contact info and other preset values. 
 //Returns an object with the IDs for both delivery row and billing row.
 const defaultBillingAndDelivery = async (userId) => {
@@ -177,5 +194,6 @@ module.exports = {
   formatNewBilling,
   updateDelivery,
   updateBilling,
-  addCCToBilling
+  addCCToBilling,
+  isItemOnCompleteOrder
 }

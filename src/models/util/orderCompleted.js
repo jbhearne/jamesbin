@@ -1,5 +1,6 @@
 ////////////////////////////////////////////////////////
 //Checks database to see if a given order is completed//
+//PASS
 //REFACTOR[id=ordercomplete] move to find order
 const pool = require('./pool');
 

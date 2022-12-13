@@ -5,7 +5,7 @@ const { loggedIn, isAdmin, adminOrCurrentUser } = require('./auth/ensure');
 
 //routes related to shopping cart items
 //LINK ../models/cart.js#additem
-router.get('/cart', isAdmin, cart.getCart);
+router.get('/cart', isAdmin, cart.getCartItem);
 router.post('/cart', loggedIn, cart.createCartItem);  //REVIEW: had to move some things up in the order for it to not parse as an :id. should review all routes
 router.get('/cart/:id', isAdmin, cart.getCartById);
 router.put('/cart/:id', isAdmin, cart.updateCart);
