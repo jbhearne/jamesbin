@@ -7,7 +7,7 @@ const orderComplete = require('./util/orderCompleted');
 const { collectCart } = require('./util/findCart');
 const { isProductExtant } = require('./util/findProduct');
 
-//TODO: rename appropiate functions to ...CartItem
+//REFACTOR[id=additem] rename appropiate functions to ...CartItem
 //gets all cart items sends a response object
 const getCart = (request, response) => {
   pool.query('SELECT * FROM cart ORDER BY id ASC', (error, results) => {
@@ -235,3 +235,4 @@ module.exports = {
     deleteCartWithUser,
     getCartForCheckout
 };
+//!REFACTOR

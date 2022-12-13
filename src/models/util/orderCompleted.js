@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////
 //Checks database to see if a given order is completed//
-
+//REFACTOR[id=ordercomplete] move to find order
 const pool = require('./pool');
 
 const orderComplete = async id => {
@@ -21,3 +21,4 @@ const orderComplete = async id => {
 
 
 module.exports = orderComplete;
+//REFACTOR - 

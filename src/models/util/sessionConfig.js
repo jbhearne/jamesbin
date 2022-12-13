@@ -5,6 +5,7 @@
 //GARBAGE - ?
 require('dotenv/config')
 
+//LINK - ../../app.js#session
 const sessionDBaccess = new sessionPool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,

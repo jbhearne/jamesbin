@@ -92,7 +92,7 @@ const findDeliveryInfo = async (orderId) => {
   }
   return info;
 }
-
+//REFACTOR create a formatting module
 //creates a new contact in the contact table. Returns a contact object.
 const formatNewContact = async (contactObj) => {
   newContact = await addContactInfo(contactObj) //REVIEW - if this should even be in a formatting function. probably not since it makes it different than the funcitons below.
@@ -131,6 +131,7 @@ const formatNewBilling =  (billingId, billingObj, contactObj) => {
   }
   return billing
 }
+//!REFACTOR
 
 //change the values of the delivery table entry as specified by the delivery ID.
 //values are determined by a delivery object (updates) and the contact ID.

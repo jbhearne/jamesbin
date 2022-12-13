@@ -68,8 +68,8 @@ const createOrder = async (request, response) => {
   }
 };
 
-//REVIEW add the ability to change delivery and billing info
 
+//REVIEW add the ability to change delivery and billing info
 //for closing or opening an order. requires request objecct with date the order is closed or null for open.
 const updateOrder = (request, response) => {
   const id = parseInt(request.params.id);
@@ -136,7 +136,6 @@ const checkout = async (request, response) => {
     response.status(200).send(`Order #${results.rows[0].id} completed for ${results.rows[0].amount}`);
   })
 }
-
 
 module.exports = {
   getOrders,

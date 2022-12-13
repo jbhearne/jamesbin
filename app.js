@@ -19,7 +19,7 @@ app.use(
     extended: true,
   })
 )
-
+//REFACTOR[id=session]
 //Session setup
 //??? should i move this to another file?
 const sessionDBaccess = sessionPool;
@@ -40,6 +40,7 @@ const sessionConfig = {
       aameSite: true,
       secure: false // ENABLE ONLY ON HTTPS
   }}
+//!REFACTOR
 
 //start session and passport
 app.use(passport.initialize())
