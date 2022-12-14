@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////
-///database funtions for interacting with users table///////
+///HTTP requests/response for RESTful API///////
 
 //imports
 const pool = require('./util/pool');
