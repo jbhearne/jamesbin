@@ -155,7 +155,6 @@ const deleteUser = (request, response) => {
 module.exports = {
   getUsers,
   getUserById,
-  createUser,
   updateUser,
   deleteUser
 };

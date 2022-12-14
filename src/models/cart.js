@@ -10,7 +10,7 @@ const { isProductExtant } = require('./util/findProduct');
 //PASS
 //REFACTOR[id=additem] rename appropiate functions to ...CartItem
 //gets all cart items sends a response object
-const getCartItem = (request, response) => {
+const getCartItems = (request, response) => {
   pool.query('SELECT * FROM cart ORDER BY id ASC', (error, results) => {
     if (error) {
     throw error;
@@ -21,7 +21,7 @@ const getCartItem = (request, response) => {
 
 
 //gets all cart items for a specidfied order. sends a response object.
-const getCartItemByOrderId = (request, response) => {
+const getCartByOrderId = (request, response) => {
   const id = parseInt(request.params.id);
   
   pool.query('SELECT * FROM cart WHERE order_id = $1', [id], (error, results) => {
@@ -33,7 +33,7 @@ const getCartItemByOrderId = (request, response) => {
 };
 
 //gets a cart item by its id. sends a response object
-const getCartById = (request, response) => {
+const getCartItemById = (request, response) => {
   const id = parseInt(request.params.id);
 
   pool.query('SELECT * FROM cart WHERE id = $1', [id], (error, results) => {
@@ -224,9 +224,9 @@ const deleteCartItemIfUser = async (request, response, next) => {
 
 
 module.exports = {
-    getCartItem,
-    getCartItemByOrderId,
-    getCartById,
+    getCartItems,
+    getCartByOrderId,
+    getCartItemById,
     createCartItem,
     updateCartItem,
     deleteCartItem,
