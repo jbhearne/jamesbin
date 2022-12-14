@@ -30,20 +30,20 @@ const isUsernameUnique = async (username) => {
   return results.rows.length === 0;
 }
 
-//PASS
+//DONE PASS
 //creates new new user in database
 const createUser = async (newUser) => {
   const { fullname, username, password, contact } = newUser.body;
   const { phone, address, city, state, zip, email } = contact;
   const contactSql = 'INSERT INTO contact (phone, address, city, state, zip, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
 
-  const contactRes = await pool.query(userSql, [phone, address, city, state, zip, email]);
+  const contactRes = await pool.query(contactSql, [phone, address, city, state, zip, email]);
 
-  const contactId = userRes.rows[0].id;
+  const contactId = contactRes.rows[0].id;
 
   const userSql = 'INSERT INTO users (fullname, username, password, contact_id) VALUES ($1, $2, $3, $4) RETURNING *';
   
-  const userRes = await pool.query(contactSql, [fullname, username, password, contactId]);
+  const userRes = await pool.query(userSql, [fullname, username, password, contactId]);
 
   const userObj = userRes.rows[0];
   const contactObj = contactRes.rows[0];
