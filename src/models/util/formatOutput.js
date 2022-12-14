@@ -36,11 +36,10 @@ const formatVendorOutput = (vendor, contact) => {
   return vendorObj
 }
 
-//creates a new contact in the contact table. Returns a contact object.
-const formatNewContact = (newContact) => {
-  //newContact = await addContactInfo(contactObj) 
-  
-  contact = {
+//formats a contact object
+const formatContactOutput = (newContact, contactId) => {
+  newContact.id = contactId ? contactId : newContact.id;
+  const contact = {
     id: newContact.id,
     phone: newContact.phone,
     address: newContact.address,
@@ -77,7 +76,7 @@ const formatNewBilling =  (billingId, billingObj, contactObj) => {
 
 module.exports = {
   formatUserOutput,
-  formatNewContact,
+  formatContactOutput,
   formatNewDelivery,
   formatNewBilling,
   formatVendorOutput

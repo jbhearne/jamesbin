@@ -3,11 +3,19 @@
 
 //imports
 const pool = require('./util/pool');
-const { findUserById, isUsernameUnique } = require('./util/findUser')
+const { 
+  findUserById,
+   isUsernameUnique,
+    findAllUsers,
+    changeUser,
+    removeUser
+   } = require('./util/findUser')
 
 //gets all users from the database and sends a response object
-const getUsers = (request, response) => {
-  pool.query('SELECT * FROM users ORDER BY id ASC', async (error, results) => { //REVIEW probably should not return hashed password, even for admin.
+const getUsers = async (request, response) => {
+  const users = await findAllUsers();
+  response.status(200).json(users)
+  /*pool.query('SELECT * FROM users ORDER BY id ASC', async (error, results) => { //REVIEW probably should not return hashed password, even for admin.
     if (error) {
       throw error;
     }
@@ -18,14 +26,20 @@ const getUsers = (request, response) => {
       users[idx].contact = contact.rows[0]
     }
     response.status(200).json(users); 
-  });
+  });*/
 };
 
 //gets a user from the database using id parameter and sends a response object.
-const getUserById = (request, response) => {
+const getUserById = async (request, response) => {
   const id = parseInt(request.params.id);
+  const user = await findUserById(id);
+  if (user) {
+    response.status(200).json(user)
+  } else {
+    response.status(400).send(`no such user.`);
+  }
 
-  pool.query('SELECT * FROM users WHERE id = $1', [id], async (error, results) => {
+  /*pool.query('SELECT * FROM users WHERE id = $1', [id], async (error, results) => {
     if (error) {
       throw error;
     }
@@ -38,7 +52,7 @@ const getUserById = (request, response) => {
       contact: contact.rows[0]
     }
     response.status(200).json(userObj); 
-  });
+  });*/
 };
 
 //DONE PASS 
@@ -79,7 +93,15 @@ const createUser = async (request, response) => {
 const updateUser = async (request, response) => {
   const id = parseInt(request.params.id);
   const updates = request.body;
-  const userObj = await findUserById(id);
+  const updatedUser = await changeUser(id, updates)
+  if (typeof updatedUser === 'object') {  //IDEA create an error checking function that makes sure user object conforms to spec.
+    response.status(200).send(`User modified with ID: ${id}`);
+  } else if (typeof updatedUser === 'string') {
+    response.status(400).send(updatedUser);
+  } else {
+    throw Error(`updatedUser = ${updatedUser}`)
+  }
+  /*const userObj = await findUserById(id);
   const isUnique = await isUsernameUnique(updates.username);
   
   if (!userObj) {
@@ -122,14 +144,21 @@ const updateUser = async (request, response) => {
             response.status(200).send(`User modified with ID: ${id}`); 
         });
     });
-  }
+  }*/
 };
 
 //deletes a user and their coresponding contact info in database
-const deleteUser = (request, response) => {
+const deleteUser = async (request, response) => {
   const id = parseInt(request.params.id);
-
-  pool.query('DELETE FROM users WHERE id = $1 RETURNING *', 
+  const deletedUser = await removeUser(id);
+  if (typeof deletedUser === 'object') {  //IDEA create an error checking function that makes sure user object conforms to spec.
+    response.status(200).send(`User deleted with ID: ${id}`);
+  } else if (typeof deletedUser === 'string') {
+    response.status(400).send(deletedUser);
+  } else {
+    throw Error(`deletedUser = ${deletedUser}`);
+  }
+  /*pool.query('DELETE FROM users WHERE id = $1 RETURNING *', 
   [id],
   async (error, results) => {
     if (error) {
@@ -148,7 +177,7 @@ const deleteUser = (request, response) => {
       }
       response.status(200).send(`User deleted with ID: ${id}`); 
     });
-  }); 
+  }); */
 };
 
 module.exports = {

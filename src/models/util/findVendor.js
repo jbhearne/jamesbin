@@ -29,16 +29,13 @@ const findAllVendors = async () => {
 
 const addVendor = async (newVendor) => {
   const { name, description, contact } = newVendor;
+  
   const { phone, address, city, state, zip, email } = contact;
-
   const contactSql = 'INSERT INTO contact (phone, address, city, state, zip, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
-
   const contactRes = await pool.query(contactSql, [phone, address, city, state, zip, email]);
 
   const contactId = contactRes.rows[0].id;
-
   const vendorSql = 'INSERT INTO users (fullname, username, password, contact_id) VALUES ($1, $2, $3, $4) RETURNING *';
-  
   const vendorRes = await pool.query(vendorSql, [name, description, contactId]);
 
   const vendorObj = vendorRes.rows[0];
@@ -49,30 +46,29 @@ const addVendor = async (newVendor) => {
 };
 
 const changeVendor = async (id, updates) => {
-  const vendorObj = await findVendorById(id);
+  const existingVendor = await findVendorById(id);
 
   if (updates.contact) {
-    for (key in vendorObj.contact) {
-      if (updates.contact[key]) { vendorObj.contact[key] = updates.contact[key] }
+    for (key in existingVendor.contact) {
+      if (updates.contact[key]) { existingVendor.contact[key] = updates.contact[key] }
     }
   }
-
-  for (key in vendorObj) {
-    if (updates[key] && typeof updates[key] !== 'object') { vendorObj[key] = updates[key] }
+  for (key in existingVendor) {
+    if (updates[key] && typeof updates[key] !== 'object') { existingVendor[key] = updates[key] }
   }
 
-  const { name, description } = vendorObj;
+  const { name, description } = existingVendor;
   const vendorSql = 'UPDATE vendors SET name = $1, description = $2 WHERE id = $3 RETURNING *' 
+  const vendorRes = await pool.query(vendorSql, [name, description, id]);
 
-  const vendor = await pool.query(vendorSql, [name, description, id]);
-
-  const contactId = vendor.contact_id;
-  const { phone, address, city, state, zip, email } = vendor.contact;
+  const contactId = vendorRes.contact_id;
+  const { phone, address, city, state, zip, email } = existingVendor.contact;
   const contactSql = 'UPDATE contact SET phone = $1, address = $2, city = $3, state = $4, zip = $5, email = $6 WHERE id = $7';
+  const contactRes = await pool.query(contactSql, [phone, address, city, state, zip, email, contactId]);
 
-  const contact = await pool.query(contactSql, [phone, address, city, state, zip, email, contactId]);
-
-  const updatedVendor = formatVendorOutput(vendor.rows[0], contact.rows[0]);
+  const vendorObj = vendorRes.rows[0];
+  const contactObj = contactRes.rows[0];
+  const updatedVendor = formatVendorOutput(vendorObj, contactObj);
   return updatedVendor;
 };
 

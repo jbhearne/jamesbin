@@ -4,7 +4,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const pool = require('../../models/util/pool');
 const bcrypt = require('bcrypt');
 //DONE PASS
-const { createUser } = require('../../models/util/findUser');
+const { addUser } = require('../../models/util/findUser');
 const router = express.Router();
 
 //checks to see if username and password are in the database abd uses bcrypt.compare to rehash password.
@@ -83,7 +83,7 @@ router.post("/register", async (req, res, next) => {
     const hash = await bcrypt.hash(password, salt);
 
     req.body.password = hash;
-    await createUser(req, res, next);
+    await addUser(req.body);
     console.log(`created user${await req.body.id}`)
     res.redirect('/login')
   })

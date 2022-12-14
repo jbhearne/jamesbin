@@ -12,7 +12,7 @@ const {
 } = require('./util/findOrder');
 //DONE PASS
 const { 
-  formatNewContact,
+  formatContactOutput,
   formatNewDelivery,
   formatNewBilling 
 } = require('./util/formatOutput')
@@ -119,14 +119,14 @@ const checkout = async (request, response) => {
  
   if (!body.useDefaultDelivery){
     const newContactD = await addContactInfo(body.delivery.contact);
-    const deliveryContact = formatNewContact(newContactD);
+    const deliveryContact = formatContactOutput(newContactD);
     const newDelivery = formatNewDelivery(cart.delivery.id, body.delivery, deliveryContact);
     updateDelivery(cart.delivery.id, newDelivery, newDelivery.contact.id); //REVIEW shoud this be an await even though I don't need the results necessarily.
   }
   
   if (!body.useDefaultBilling) {
     const newContactB = await addContactInfo(body.billing.contact);
-    const billingContact = await formatNewContact(newContactB);
+    const billingContact = formatContactOutput(newContactB);
     const newBilling = formatNewBilling(cart.billing.id, body.billing, billingContact);
     updateBilling(cart.billing.id, newBilling, newBilling.contact.id); //REVIEW "
   }
