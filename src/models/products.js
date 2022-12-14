@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////
-///functions for accessing the the products table//////////
+///Product based HTTP requests/response for RESTful API///////
 
 //imports
 const pool = require('./util/pool');

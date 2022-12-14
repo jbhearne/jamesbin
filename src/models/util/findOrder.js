@@ -4,8 +4,7 @@
 //import and create pool
 const pool = require('./pool');
 
-//import for accessing the contact table
-//const { addContactInfo } = require('./findContact')
+
 
 //checks to see if the current user has order that has not yet been completed.
 //Returns false if they have no open order OR returns the order object if there is an open order.
@@ -188,6 +187,86 @@ const addCCToBilling = async (cc, billingId) => {
   return results;
 }
 
+const findAllOrders = async () => {
+  sql = 'SELECT * FROM orders ORDER BY id ASC';
+  const results = await pool.query(sql)
+  return results.rows
+}
+
+const findOrderById = async (id) => {
+  sql = 'SELECT * FROM orders WHERE id = $1';
+  const results = await pool.query(sql, [id]);
+  orderObj = results.rows[0];
+  return orderObj;
+}
+
+const findOrderByUserId = async (id) => {
+  sql = 'SELECT * FROM orders WHERE user_id = $1';
+  const results = await pool.query(sql, [id]);
+  orderObj = results.rows[0];
+  return orderObj;
+}
+
+const addOrder = async (newOrder) => {
+  const { user_id, billing_id, delivery_id } = newOrder //TODO: clarifiy snake case vs camel case
+  const sql = 'INSERT INTO orders (user_id, date_started, billing_id, delivery_id) VALUES ($1, NOW(), $2, $3) RETURNING *'
+  const results = await pool.query(sql, [user_id, billing_id, delivery_id]);
+  orderObj = results.rows[0];
+  return orderObj;
+}
+
+const addOrderOnUser = async (userId) => {
+  const isOpen = await isOrderOpen(userId);
+  if (isOpen) {
+    return `This user already has an order open. Open order ID: ${isOpen}`
+    } else {
+    const { billingId, deliveryId } = await defaultBillingAndDelivery(userId); //DONE: PASS should create rows with primary keys in the new tables: 'billing' and 'delivery'
+    const newOrder = {
+      user_id: userId,
+      billing_id: billingId,
+      delivery_id: deliveryId
+    }
+    const orderObj = await addOrder(newOrder);
+    return orderObj;
+  }
+}
+
+const changeOrder = async (id, updates) => {
+  const existingOrder = await findOrderById(id);
+
+  for (key in existingOrder) {
+    if (updates[key]) { existingOrder[key] = updates[key] }
+  }
+
+  const { user_id, date_started, date_completed, billing_id, delivery_id } = existingOrder;
+  const sql = 'UPDATE products SET user_id = $1, date_started = $2, billing_id = $3, vendor_Id = $4, delivery_id = $5 \
+    WHERE id = $6 RETURNING *';
+  const results = await pool.query(sql, [user_id, date_started, date_completed, billing_id, delivery_id, id]);
+
+  const orderObj = results.rows[0];
+  return orderObj;
+}
+
+const completeOrderNow = async (amount, orderId) => {
+  const sql = 'UPDATE orders SET date_completed = NOW(), amount = $1 WHERE id = $2 RETURNING *;'
+  results = await pool.query(sql, [amount, orderId]);
+  orderObj = results.rows[0];
+  return orderObj;
+}
+
+const removeOrder = async (id) => {
+  const sql = 'DELETE FROM orders WHERE id = $1';
+  const results = await pool.query(sql, [id]);
+  const deletedOrderObj = results.rows[0]
+
+  return deletedOrderObj;
+}
+
+
+
+
+
+
 module.exports = {
   isOrderOpen,
   defaultBillingAndDelivery,
@@ -196,5 +275,13 @@ module.exports = {
   updateDelivery,
   updateBilling,
   addCCToBilling,
-  isItemOnCompleteOrder
+  isItemOnCompleteOrder,
+  findAllOrders,
+  findOrderById,
+  findOrderByUserId,
+  addOrder,
+  addOrderOnUser,
+  changeOrder,
+  removeOrder,
+  completeOrderNow
 }
