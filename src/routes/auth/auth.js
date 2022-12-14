@@ -3,7 +3,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const pool = require('../../models/util/pool');
 const bcrypt = require('bcrypt');
-//PASS
+//DONE PASS
 const { createUser } = require('../../models/util/findUser');
 const router = express.Router();
 
@@ -26,7 +26,7 @@ passport.use(new LocalStrategy((username, password, cb) => {
   })
 }))
 
-//save user object with specified data, stores the data in non-human readable form on the cookie?//???
+//save user object with specified data, stores the data in non-human readable form 
 passport.serializeUser(function(user, cb) {
   process.nextTick(function() {
     cb(null, { id: user.id, username: user.username, isAdmin: user.admin });
@@ -51,7 +51,6 @@ router.post('/login/password', (req, res, next) => {console.log('howdy'); next()
   failureRedirect: '/login'
 }));
 
-//??? do I need to make it that a user needs to logout before another logs in or does it matter?
 //route to logout
 router.post('/logout', function(req, res, next) {
   req.logout(function(err) {

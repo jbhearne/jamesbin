@@ -3,7 +3,7 @@ require('dotenv/config')
 const express = require('express')
 const bodyParser = require('body-parser')
 const passport = require('passport');
-//PASS
+//DONE PASS
 //const session = require('express-session');
 //const pgSession = require('connect-pg-simple')(session);
 //const randomString = require('randomstring')
@@ -21,10 +21,9 @@ app.use(
     extended: true,
   })
 )
-//PASS
+//DONE PASS
 //REFACTOR[id=session]
 //Session setup
-//??? should i move this to another file?
 /*const sessionDBaccess = sessionPool;
 const sessionConfig = {
   store: new pgSession({
@@ -63,7 +62,7 @@ app.use(routes.vendorRoutes);
 app.use(routes.productRoutes);
 app.use(routes.cartRoutes);
 
-//Home route //REVIEW: add more home routes
+//Home route
 app.get('/', (req, res) => {
   res.send('home')
 })

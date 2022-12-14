@@ -19,7 +19,7 @@ const formatUserOutput = (user, contact) => {
 
 //creates a new contact in the contact table. Returns a contact object.
 const formatNewContact = (newContact) => {
-  //newContact = await addContactInfo(contactObj) //REVIEW - if this should even be in a formatting function. probably not since it makes it different than the funcitons below.
+  //newContact = await addContactInfo(contactObj) 
   
   contact = {
     id: newContact.id,

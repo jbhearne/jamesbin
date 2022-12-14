@@ -5,7 +5,7 @@
 const pool = require('./pool');
 
 //import for accessing the contact table
-const { addContactInfo } = require('./findContact')
+//const { addContactInfo } = require('./findContact')
 
 //checks to see if the current user has order that has not yet been completed.
 //Returns false if they have no open order OR returns the order object if there is an open order.
@@ -110,12 +110,12 @@ const findDeliveryInfo = async (orderId) => {
   return info;
 }
 
-//PASS
+//DONE PASS
 //REFACTOR create a formatting module
 /*
 //creates a new contact in the contact table. Returns a contact object.
 const formatNewContact = (newContact) => {
-  //newContact = await addContactInfo(contactObj) //REVIEW - if this should even be in a formatting function. probably not since it makes it different than the funcitons below.
+  //newContact = await addContactInfo(contactObj)
   
   contact = {
     id: newContact.id,

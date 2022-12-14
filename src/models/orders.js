@@ -10,7 +10,7 @@ const {
   updateBilling,
   addCCToBilling 
 } = require('./util/findOrder');
-//PASS
+//DONE PASS
 const { 
   formatNewContact,
   formatNewDelivery,
@@ -104,7 +104,7 @@ const deleteOrder = (request, response) => {
   });
 };
 
-//PASS
+//DONE PASS
 //checkout updates order table and alters other related tables. requires a request object.
 const checkout = async (request, response) => {
   const body = request.body;

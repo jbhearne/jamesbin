@@ -17,7 +17,7 @@ const getUsers = (request, response) => {
       const contact = await pool.query('SELECT * FROM contact WHERE id = $1', [users[idx].contact_id]) //REVIEW this queries for every user. this is a not a great idea.
       users[idx].contact = contact.rows[0]
     }
-    response.status(200).json(users); //??? should all responses be moved to routes? no, but I do need to move more of the logic out of here and reclassify this folder from models to soemthing else
+    response.status(200).json(users); 
   });
 };
 
@@ -41,10 +41,10 @@ const getUserById = (request, response) => {
   });
 };
 
-//PASS 
+//DONE PASS 
 //REFACTOR[id=createuser] 
 /*
-//creates new new user in database, but does not send a response object. Currently that is handled in the register logic //LINK ../routes/auth/auth.js#register 
+//creates new new user in database, but does not send a response object. Currently that is handled in the register logic 
 //also creates a new contact entry in the contact table which due to forein key constraint must be created first
 const createUser = async (request, response) => {
   const { fullname, username, password, contact } = request.body;
@@ -60,7 +60,6 @@ const createUser = async (request, response) => {
     console.log(contactId);
     //NOTE: nest calls to pool and use an async function due to the foreign key constraint in users table. 
     //the contact_id must exist in contact table BEFORE it can be created in users table.
-    //REVIEW I ended up finding different ways of doing this. I should probably find a way of making it consistent.
     pool.query(
       'INSERT INTO users (fullname, username, password, contact_id) VALUES ($1, $2, $3, $4) RETURNING *',
       [fullname, username, password, contactId],

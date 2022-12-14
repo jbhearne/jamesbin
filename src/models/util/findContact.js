@@ -4,7 +4,6 @@
 //import and create pool
 const pool = require('./pool');
 
-//REVIEW: created to help with contact info related to checkout, but probably should be used elsewhere too.
 //Creats a new contact using a conact object. Returns the new contact.
 const addContactInfo = async (contactObj) => {
   const { phone, address, city, state, zip, email } = contactObj;

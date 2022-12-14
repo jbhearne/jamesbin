@@ -7,7 +7,7 @@ const { isItemOnCompleteOrder } = require('./util/findOrder');
 const { collectCart } = require('./util/findCart');
 const { isProductExtant } = require('./util/findProduct');
 
-//PASS
+//DONE PASS
 //REFACTOR[id=additem] rename appropiate functions to ...CartItem
 //gets all cart items sends a response object
 const getCartItems = (request, response) => {
@@ -188,7 +188,6 @@ const deleteCartItem = (request, response) => {
   });
 };
 
-//ANCHOR[id=deleteCartItemIfUser] adding a method for removing cart items
 //same as above, but checks to make sure cart items belong to current user.
 const deleteCartItemIfUser = async (request, response, next) => {
   const id = parseInt(request.params.id);
