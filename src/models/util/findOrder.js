@@ -197,7 +197,11 @@ const findOrderById = async (id) => {
   sql = 'SELECT * FROM orders WHERE id = $1';
   const results = await pool.query(sql, [id]);
   orderObj = results.rows[0];
-  return orderObj;
+  if (results.rows.length === 0) {
+    return 'No orders started';
+  } else {
+    return results.rows[0];
+  }
 }
 
 const findOrderByUserId = async (id) => {
@@ -205,6 +209,16 @@ const findOrderByUserId = async (id) => {
   const results = await pool.query(sql, [id]);
   orderObj = results.rows[0];
   return orderObj;
+}
+
+const findOpenOrderByUserId = async (userId) => {
+  const sql = 'SELECT * FROM orders WHERE user_id = $1 AND date_completed IS NULL;';
+  const results = await pool.query(sql, [userId]);
+  if (results.rows.length === 0) {
+    return 'No orders started';
+  } else {
+    return results.rows[0];
+  }
 }
 
 const addOrder = async (newOrder) => {
@@ -279,6 +293,7 @@ module.exports = {
   findAllOrders,
   findOrderById,
   findOrderByUserId,
+  findOpenOrderByUserId,
   addOrder,
   addOrderOnUser,
   changeOrder,

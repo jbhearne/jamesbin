@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////
-///functions for accessing the orders table///////
+///Order based HTTP requests/response for RESTful API///////
 
 //import
 const pool = require('./util/pool');
