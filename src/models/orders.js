@@ -17,7 +17,7 @@ const {
   removeOrder,
   completeOrderNow
 } = require('./util/findOrder');
-//DONE PASS
+
 const { 
   formatContactOutput,
   formatNewDelivery,
@@ -30,39 +30,21 @@ const { addContactInfo } =require('./util/findContact')
 const getOrders = async (request, response) => {
   const orders = await findAllOrders();
   response.status(200).json(orders);
-  /*pool.query('SELECT * FROM orders ORDER BY id ASC', (error, results) => {
-    if (error) {
-      throw error;
-    }
-    response.status(200).json(results.rows);
-  });*/
-};
+}
 
 //get all orders for a user specified by id parameter and sends response object.
 const getOrdersByUser = async (request, response) => {
   const id = parseInt(request.params.id);
   const order = await findOrderByUserId(id);
   response.status(200).json(order);
-  /*pool.query('SELECT * FROM orders WHERE user_id = $1', [id], (error, results) => {
-    if (error) {
-    throw error;
-    }
-    response.status(200).json(results.rows);
-  });*/
-};
+}
 
 //get an order from its id parameter and send a response object
 const getOrderById = async (request, response) => {
   const id = parseInt(request.params.id);
   const order = await findOrderById(id);
   response.status(200).json(order);
-  /*pool.query('SELECT * FROM orders WHERE id = $1', [id], (error, results) => {
-    if (error) {
-      throw error;
-    }
-    response.status(200).json(results.rows);
-  });*/
-};
+}
 
 //creates a new order but only if the user does not already have an open order. all the data is handled internally, no request object needed.
 const createOrder = async (request, response) => {
@@ -75,24 +57,7 @@ const createOrder = async (request, response) => {
   } else {
     throw Error(`deletedUser = ${order}`);
   }
-  /*const isOpen = await isOrderOpen(userId);
-
-  if (isOpen) {
-    response.status(400).send(`This user already has an order open. Open order ID: ${isOpen}`);
-    } else {
-    const { billingId, deliveryId } = await defaultBillingAndDelivery(userId); //DONE: PASS should create rows with primary keys in the new tables: 'billing' and 'delivery'
-    
-    pool.query('INSERT INTO orders (user_id, date_started, billing_id, delivery_id) VALUES ($1, NOW(), $2, $3) RETURNING *', 
-      [userId, billingId, deliveryId], 
-      (error, results) => {
-        if (error) {
-          throw error;
-        }
-        response.status(201).send(`Order added with ID: ${results.rows[0].id}`);
-    });
-  }*/
-};
-
+}
 
 //REVIEW add the ability to change delivery and billing info
 //for closing or opening an order. requires request objecct with date the order is closed or null for open.
@@ -101,34 +66,15 @@ const updateOrder = async (request, response) => {
   const updates = request.body;
   const order = await changeOrder(id, updates);
   response.status(200).send(`Order modified with ID: ${order.id}`);
-
-  /*const { dateCompleted } = request.body;
-
-  pool.query(
-    'UPDATE orders SET date_completed = $1 WHERE id = $2',
-    [dateCompleted, id],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-    response.status(200).send(`Order modified with ID: ${id}`);
-  });*/
-};
+}
 
 //deletes an ordder
 const deleteOrder = async (request, response) => {
   const id = parseInt(request.params.id);
   const order = await removeOrder(id)
   response.status(200).send(`Order deleted with ID: ${order.id}`);
-  /*pool.query('DELETE FROM orders WHERE id = $1', [id], (error, results) => {
-    if (error) {
-      throw error;
-    }
-    response.status(204).send(`Order deleted with ID: ${id}`);
-  });*/
-};
+}
 
-//DONE PASS
 //checkout updates order table and alters other related tables. requires a request object.
 const checkout = async (request, response) => {
   const body = request.body;
@@ -162,15 +108,6 @@ const checkout = async (request, response) => {
   //TODO add a format function to display order/cart/billing/delivery info
   
   response.status(200).send(`Order #${finishedOrder.id} completed for ${finishedOrder.amount}`);
-  /*const sql = 'UPDATE orders SET date_completed = NOW(), amount = $1 WHERE id = $2 RETURNING *;'
-
-  pool.query(sql, [amount, cart.items[0].order_id], (error, results) => {
-    if (error) {
-      throw error;
-    }
-    console.log('inside')
-    response.status(200).send(`Order #${results.rows[0].id} completed for ${results.rows[0].amount}`);
-  })*/
 }
 
 module.exports = {

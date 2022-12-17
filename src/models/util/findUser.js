@@ -51,7 +51,6 @@ const isUsernameUnique = async (username) => {
   return results.rows.length === 0;
 }
 
-//DONE PASS
 //creates new new user in database
 const addUser = async (newUser) => {
   const { fullname, username, password, contact } = newUser;

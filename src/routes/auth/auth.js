@@ -3,7 +3,6 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const pool = require('../../models/util/pool');
 const bcrypt = require('bcrypt');
-//DONE PASS
 const { addUser } = require('../../models/util/findUser');
 const router = express.Router();
 
@@ -63,9 +62,6 @@ router.post('/logout', function(req, res, next) {
 router.get('/register', function(req, res, next) {
   res.send('register');
 });
-
-//ANCHOR[id=register] uses createUser function originally created for POST-/user route. createUser was originally intended to be a... 
-//...server function for sending response headers like the functions in the models directory, but I should move createUser to the util directory or better structure this project
 
 //route to create a new user, checks if there is already a username in the database, uses bcrypt to salt and hash password before adding it to the database.
 router.post("/register", async (req, res, next) => {

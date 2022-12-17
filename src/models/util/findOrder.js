@@ -4,8 +4,6 @@
 //import and create pool
 const pool = require('./pool');
 
-
-
 //checks to see if the current user has order that has not yet been completed.
 //Returns false if they have no open order OR returns the order object if there is an open order.
 const isOrderOpen = async (userId) => {
@@ -109,50 +107,6 @@ const findDeliveryInfo = async (orderId) => {
   return info;
 }
 
-//DONE PASS
-//REFACTOR create a formatting module
-/*
-//creates a new contact in the contact table. Returns a contact object.
-const formatNewContact = (newContact) => {
-  //newContact = await addContactInfo(contactObj)
-  
-  contact = {
-    id: newContact.id,
-    phone: newContact.phone,
-    address: newContact.address,
-    city: newContact.city,
-    state: newContact.state,
-    zip: newContact.zip,
-    email: newContact.email
-  }
-  return contact
-}
-
-//formats a delivery object with specified ID, a previous or requested delivery object, and a contact object. No queries. Returns the object.
-const formatNewDelivery =  (deliveryId, deliveryObj, contactObj) => {
-  const delivery = {
-    id: deliveryId,
-    receiverName: deliveryObj.receiverName,
-    deliveryMethod: deliveryObj.deliveryMethod,
-    notes: deliveryObj.notes,
-    contact: contactObj
-  }
-  return delivery
-}
-
-//formats a billing object with specified ID, a previous or requested billing object, and a contact object. No queries. Returns the object.
-const formatNewBilling =  (billingId, billingObj, contactObj) => {
-  const billing = {
-    id: billingId,
-    payerName: billingObj.payerName,
-    paymentMethod: billingObj.paymentMethod,
-    contact: contactObj
-  }
-  return billing
-}
-*/
-//!REFACTOR
-
 //change the values of the delivery table entry as specified by the delivery ID.
 //values are determined by a delivery object (updates) and the contact ID.
 //returns the updated delivery object.
@@ -176,7 +130,6 @@ const updateBilling = async (billingId, updates, contactId) => {
 
   return results.rows[0]
 }
-
 
 //a way to add creditcard info, but not really. just a flourish in that direction.
 const addCCToBilling = async (cc, billingId) => {
@@ -203,8 +156,6 @@ const findOrderById = async (id) => {
     return results.rows[0];
   }
 }
-
-
 
 const findOrderByUserId = async (id) => {
   const  sql = 'SELECT * FROM orders WHERE user_id = $1';
@@ -246,6 +197,7 @@ const addOrderOnUser = async (userId) => {
     return orderObj;
   }
 }
+
 //TODO check for consistency with column name variables.
 const changeOrder = async (id, updates) => {
   const existingOrder = await findOrderById(id);
@@ -277,11 +229,6 @@ const removeOrder = async (id) => {
 
   return deletedOrderObj;
 }
-
-
-
-
-
 
 module.exports = {
   isOrderOpen,

@@ -3,11 +3,6 @@ require('dotenv/config')
 const express = require('express')
 const bodyParser = require('body-parser')
 const passport = require('passport');
-//DONE PASS
-//const session = require('express-session');
-//const pgSession = require('connect-pg-simple')(session);
-//const randomString = require('randomstring')
-//const sessionPool = require('./src/models/util/pool')
 const { sessionConfig, session } = require('./src/models/util/sessionConfig')
 
 //create server
@@ -21,28 +16,6 @@ app.use(
     extended: true,
   })
 )
-//DONE PASS
-//REFACTOR[id=session]
-//Session setup
-/*const sessionDBaccess = sessionPool;
-const sessionConfig = {
-  store: new pgSession({
-      pool: sessionDBaccess,
-      tableName: 'session'
-  }),
-  name: 'SID',
-  secret: randomString.generate({
-      length: 14,
-      charset: 'alphanumeric'
-  }),
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-      aameSite: true,
-      secure: false // ENABLE ONLY ON HTTPS
-  }}*/
-//!REFACTOR
 
 //start session and passport
 app.use(passport.initialize())
