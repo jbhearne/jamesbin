@@ -12,6 +12,7 @@ const {
   findAllOrders,
   findOrderById,
   findOrderByUserId,
+  addOrderOnUser,
   changeOrder,
   removeOrder,
   completeOrderNow
@@ -68,7 +69,7 @@ const createOrder = async (request, response) => {
   const userId = request.user.id
   const order = await addOrderOnUser(userId)
   if (typeof order === 'object') {  //IDEA create an error checking function that makes sure user object conforms to spec.
-    response.status(201).send(`User created with ID: ${order.id}`);
+    response.status(201).send(`Order created with ID: ${order.id}`);
   } else if (typeof order === 'string') {
     response.status(400).send(order);
   } else {
@@ -118,7 +119,7 @@ const updateOrder = async (request, response) => {
 const deleteOrder = async (request, response) => {
   const id = parseInt(request.params.id);
   const order = await removeOrder(id)
-  response.status(204).send(`Order deleted with ID: ${order.id}`);
+  response.status(200).send(`Order deleted with ID: ${order.id}`);
   /*pool.query('DELETE FROM orders WHERE id = $1', [id], (error, results) => {
     if (error) {
       throw error;

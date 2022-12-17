@@ -35,7 +35,7 @@ const addVendor = async (newVendor) => {
   const contactRes = await pool.query(contactSql, [phone, address, city, state, zip, email]);
 
   const contactId = contactRes.rows[0].id;
-  const vendorSql = 'INSERT INTO users (fullname, username, password, contact_id) VALUES ($1, $2, $3, $4) RETURNING *';
+  const vendorSql = 'INSERT INTO vendors (name, description, contact_id) VALUES ($1, $2, $3) RETURNING *';
   const vendorRes = await pool.query(vendorSql, [name, description, contactId]);
 
   const vendorObj = vendorRes.rows[0];
@@ -61,13 +61,16 @@ const changeVendor = async (id, updates) => {
   const vendorSql = 'UPDATE vendors SET name = $1, description = $2 WHERE id = $3 RETURNING *' 
   const vendorRes = await pool.query(vendorSql, [name, description, id]);
 
-  const contactId = vendorRes.contact_id;
+  const contactId = vendorRes.rows[0].contact_id;
+  console.log(contactId)
   const { phone, address, city, state, zip, email } = existingVendor.contact;
-  const contactSql = 'UPDATE contact SET phone = $1, address = $2, city = $3, state = $4, zip = $5, email = $6 WHERE id = $7';
+  const contactSql = 'UPDATE contact SET phone = $1, address = $2, city = $3, state = $4, zip = $5, email = $6 WHERE id = $7 RETURNING *';
   const contactRes = await pool.query(contactSql, [phone, address, city, state, zip, email, contactId]);
 
   const vendorObj = vendorRes.rows[0];
   const contactObj = contactRes.rows[0];
+  console.log(vendorObj)
+  console.log(contactObj)
   const updatedVendor = formatVendorOutput(vendorObj, contactObj);
   return updatedVendor;
 };

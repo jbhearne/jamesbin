@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////
 //Checks database to see if a given order is completed//
 
-//GARBAGE
+//GARBAGE moved to find order
 //REFACTOR[id=ordercomplete] move to find order
 const pool = require('./pool');
 

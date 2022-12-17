@@ -23,7 +23,7 @@ const { isProductExtant } = require('./util/findProduct');
 //REFACTOR[id=additem] rename appropiate functions to ...CartItem
 //gets all cart items sends a response object
 const getCartItems = async (request, response) => {
-  const cartItems = findAllCartItems();
+  const cartItems = await findAllCartItems();
   response.status(200).json(cartItems);
   /*pool.query('SELECT * FROM cart ORDER BY id ASC', (error, results) => {
     if (error) {
@@ -226,7 +226,7 @@ const deleteCartItem = async (request, response) => {
   if (typeof cartItem === 'string') {
     response.status(400).send(cartItem);
   } else {
-    response.status(204).send(`Cart item ID: ${cartItem.id} deleted.`);
+    response.status(200).send(`Cart item ID: ${cartItem.id} deleted.`);
   }
   /*pool.query('DELETE FROM cart WHERE id = $1', [id], (error, results) => {
     if (error) {
@@ -244,7 +244,7 @@ const deleteCartItemIfUser = async (request, response, next) => {
   if (typeof cartItem === 'string') {
     response.status(400).send(cartItem);
   } else {
-    response.status(204).send(`Cart item ID: ${cartItem.id} deleted.`);
+    response.status(200).send(`Cart item ID: ${cartItem.id} deleted.`);
   }
   /*const sql = 'SELECT cart.id FROM cart JOIN orders ON cart.order_id = orders.id WHERE orders.user_id = $1'
   const userCart = await pool.query(sql, [userId])

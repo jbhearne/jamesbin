@@ -50,7 +50,7 @@ const collectCart = async (userId) => {
 }
 
 const findAllCartItems = async () => {
-  const sql = 'SELECT * FROM cart WHERE order_id = $1';
+  const sql = 'SELECT * FROM cart';
   const results = await pool.query(sql);
   const cartItems = results.rows;
   return cartItems;
@@ -158,7 +158,7 @@ const changeCartItemQuantityIfUser = async (cartId, quantity, userId) => {
 
 const removeCartItem = async (id) => {
   const sql = 'DELETE FROM cart WHERE id = $1 RETURNING *';
-  const results = pool.query(sql, [id]);
+  const results = await pool.query(sql, [id]);
   return results.rows[0]
 }
 

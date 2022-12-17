@@ -93,16 +93,16 @@ const changeUser = async (id, updates) => {
 
     const { fullname, username } = existingUser;
     const userSql = 'UPDATE users SET fullname = $1, username = $2 WHERE id = $3 RETURNING *' 
-    const userRes = await pool.query(vendorSql, [fullname, username, id]);
+    const userRes = await pool.query(userSql, [fullname, username, id]);
 
-    const contactId = userRes.contact_id;
+    const contactId = userRes.rows[0].contact_id;
     const { phone, address, city, state, zip, email } = existingUser.contact;
-    const contactSql = 'UPDATE contact SET phone = $1, address = $2, city = $3, state = $4, zip = $5, email = $6 WHERE id = $7';
+    const contactSql = 'UPDATE contact SET phone = $1, address = $2, city = $3, state = $4, zip = $5, email = $6 WHERE id = $7 RETURNING *';
     const contactRes = await pool.query(contactSql, [phone, address, city, state, zip, email, contactId]);
 
     const userObj = userRes.rows[0];
     const contactObj = contactRes.rows[0];
-    const updatedUser = formatUserOutput(vendorObj, contactObj);
+    const updatedUser = formatUserOutput(userObj, contactObj);
     return updatedUser;
   }
 }

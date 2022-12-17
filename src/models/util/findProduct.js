@@ -12,25 +12,29 @@ const isProductExtant = async (id) => {
 };
 
 const findAllProducts = async () => {
-  sql = 'SELECT * FROM products ORDER BY id ASC';
+  const sql = 'SELECT * FROM products ORDER BY id ASC';
   const results = await pool.query(sql)
   return results.rows
 }
 
+
+//TODO need to add conditional for handling no existing product
 const findProductById = async (id) => {
-  sql = 'SELECT * FROM products WHERE vendor_id = $1';
+  const sql = 'SELECT * FROM products WHERE id = $1';
   const results = await pool.query(sql, [id]);
-  productObj = results.rows[0];
+  const productObj = results.rows[0];
+  console.log(productObj)
   return productObj;
 }
 
 const addProduct = async (newProduct) => {
   const { name, description, price, vendorId } = newProduct;
   const sql = 'INSERT INTO products (name, description, price, vendor_id) VALUES ($1, $2, $3, $4) RETURNING *';
-  const results = pool.query(sql, [name, description, price, vendorId]);
-  productObj = results.rows[0];
+  const results = await pool.query(sql, [name, description, price, vendorId]);
+  const productObj = results.rows[0];
   return productObj;
 }
+
 
 const changeProduct = async (id, updates) => {
   const existingProduct = await findProductById(id);
@@ -48,9 +52,9 @@ const changeProduct = async (id, updates) => {
 };
 
 const removeProduct = async (id) => {
-  const sql = 'DELETE FROM products WHERE id = $1';
+  const sql = 'DELETE FROM products WHERE id = $1 RETURNING *';
   const results = await pool.query(sql, [id]);
-  const deletedProductObj = results.rows[0]
+  const deletedProductObj = results.rows[0];
 
   return deletedProductObj;
 }

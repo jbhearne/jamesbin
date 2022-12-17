@@ -13,8 +13,8 @@ const {
 } = require('./util/findProduct');
 
 //gets all the products in the database and sends a response object
-const getProducts = (request, response) => {
-  const products = findAllProducts();
+const getProducts = async (request, response) => {
+  const products = await findAllProducts();
   response.status(200).json(products);
   /*pool.query('SELECT * FROM products ORDER BY id ASC', (error, results) => {
     if (error) {
@@ -24,6 +24,7 @@ const getProducts = (request, response) => {
   });*/
 };
 
+//TODO forgot to move this one to findProduct.js
 //get all the products from a particular vender as specified in the parameter. sends a response object
 const getProductsByVendor = (request, response) => {
   const id = parseInt(request.params.id);
@@ -68,10 +69,10 @@ const createProduct = async (request, response) => {
 
 //DONE FIXME still need to fix this use of template literals
 //update a product with the id parameter. expects a request object.
-const updateProduct = (request, response) => {
+const updateProduct = async (request, response) => {
   const id = parseInt(request.params.id);
   const updates = request.body;
-  const product = changeProduct(id, updates);
+  const product = await changeProduct(id, updates);
   response.status(200).send(`Product modified with ID: ${product.id}`)
 
   /*
@@ -94,7 +95,7 @@ const updateProduct = (request, response) => {
 const deleteProduct = async (request, response) => {
   const id = parseInt(request.params.id);
   const product = await removeProduct(id);
-  response.status(204).send(`Product modified with ID: ${product.id}`)
+  response.status(200).send(`Product deleted with ID: ${product.id}`)
   /*pool.query('DELETE FROM products WHERE id = $1', [id], (error, results) => {
     if (error) {
       throw error;

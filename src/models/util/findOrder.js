@@ -180,23 +180,23 @@ const updateBilling = async (billingId, updates, contactId) => {
 
 //a way to add creditcard info, but not really. just a flourish in that direction.
 const addCCToBilling = async (cc, billingId) => {
-  sql = 'UPDATE billing SET cc_placeholder = $1 WHERE id = $2'
+  const sql = 'UPDATE billing SET cc_placeholder = $1 WHERE id = $2'
 
-  results = pool.query(sql, [cc, billingId]);
+  const  results = pool.query(sql, [cc, billingId]);
   
   return results;
 }
 
 const findAllOrders = async () => {
-  sql = 'SELECT * FROM orders ORDER BY id ASC';
+  const sql = 'SELECT * FROM orders ORDER BY id ASC';
   const results = await pool.query(sql)
   return results.rows
 }
 
 const findOrderById = async (id) => {
-  sql = 'SELECT * FROM orders WHERE id = $1';
+  const sql = 'SELECT * FROM orders WHERE id = $1';
   const results = await pool.query(sql, [id]);
-  orderObj = results.rows[0];
+  const orderObj = results.rows[0];
   if (results.rows.length === 0) {
     return 'No orders started';
   } else {
@@ -204,10 +204,12 @@ const findOrderById = async (id) => {
   }
 }
 
+
+
 const findOrderByUserId = async (id) => {
-  sql = 'SELECT * FROM orders WHERE user_id = $1';
+  const  sql = 'SELECT * FROM orders WHERE user_id = $1';
   const results = await pool.query(sql, [id]);
-  orderObj = results.rows[0];
+  const  orderObj = results.rows[0]; //TODO only returns the first order, What is the point of this?
   return orderObj;
 }
 
@@ -225,7 +227,7 @@ const addOrder = async (newOrder) => {
   const { user_id, billing_id, delivery_id } = newOrder //TODO: clarifiy snake case vs camel case
   const sql = 'INSERT INTO orders (user_id, date_started, billing_id, delivery_id) VALUES ($1, NOW(), $2, $3) RETURNING *'
   const results = await pool.query(sql, [user_id, billing_id, delivery_id]);
-  orderObj = results.rows[0];
+  const orderObj = results.rows[0];
   return orderObj;
 }
 
@@ -244,7 +246,7 @@ const addOrderOnUser = async (userId) => {
     return orderObj;
   }
 }
-
+//TODO check for consistency with column name variables.
 const changeOrder = async (id, updates) => {
   const existingOrder = await findOrderById(id);
 
@@ -253,7 +255,7 @@ const changeOrder = async (id, updates) => {
   }
 
   const { user_id, date_started, date_completed, billing_id, delivery_id } = existingOrder;
-  const sql = 'UPDATE products SET user_id = $1, date_started = $2, billing_id = $3, vendor_Id = $4, delivery_id = $5 \
+  const sql = 'UPDATE orders SET user_id = $1, date_started = $2, date_completed = $3, billing_id = $4, delivery_id = $5 \
     WHERE id = $6 RETURNING *';
   const results = await pool.query(sql, [user_id, date_started, date_completed, billing_id, delivery_id, id]);
 
@@ -263,15 +265,15 @@ const changeOrder = async (id, updates) => {
 
 const completeOrderNow = async (amount, orderId) => {
   const sql = 'UPDATE orders SET date_completed = NOW(), amount = $1 WHERE id = $2 RETURNING *;'
-  results = await pool.query(sql, [amount, orderId]);
-  orderObj = results.rows[0];
+  const results = await pool.query(sql, [amount, orderId]);
+  const orderObj = results.rows[0];
   return orderObj;
 }
 
 const removeOrder = async (id) => {
-  const sql = 'DELETE FROM orders WHERE id = $1';
+  const sql = 'DELETE FROM orders WHERE id = $1 RETURNING *';
   const results = await pool.query(sql, [id]);
-  const deletedOrderObj = results.rows[0]
+  const deletedOrderObj = results.rows[0];
 
   return deletedOrderObj;
 }

@@ -3,7 +3,7 @@ const formatUserOutput = (user, contact) => {
     id: user.id,
     fullname: user.fullname,
     username: user.username,
-    Contact: {
+    contact: {
       id: contact.id,
       phone: contact.phone,
       address: contact.address,

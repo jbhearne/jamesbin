@@ -69,7 +69,7 @@ const createVendor = async (request, response) => {
 const updateVendor = async (request, response) => {
     const id = parseInt(request.params.id);
     const vendor = await changeVendor(id, request.body);
-    response.status(200).send(`User modified with ID: ${vendor.id}`); 
+    response.status(200).send(`Vendor modified with ID: ${vendor.id}`); 
     /*const updates = request.body
     const vendorObj = await findVendorById(id);
 
