@@ -23,8 +23,14 @@ const findProductById = async (id) => {
   const sql = 'SELECT * FROM products WHERE id = $1';
   const results = await pool.query(sql, [id]);
   const productObj = results.rows[0];
-  console.log(productObj)
   return productObj;
+}
+//TODO need to add conditional for handling no existing vendor
+const findProductsByVendor = async (id) => {
+  const sql = 'SELECT * FROM products WHERE vendor_id = $1';
+  const results = await pool.query(sql, [id]);
+  const productArr = results.rows[0];
+  return productArr;
 }
 
 const addProduct = async (newProduct) => {
@@ -63,6 +69,7 @@ module.exports = {
   isProductExtant,
   findAllProducts,
   findProductById,
+  findProductsByVendor,
   addProduct,
   changeProduct,
   removeProduct

@@ -2,11 +2,10 @@
 ///Product based HTTP requests/response for RESTful API///////
 
 //imports
-const pool = require('./util/pool');
-const updateColumns = require('./util/update-columns');
 const { 
   findAllProducts,
   findProductById,
+  findProductsByVendor,
   addProduct,
   changeProduct,
   removeProduct
@@ -18,16 +17,12 @@ const getProducts = async (request, response) => {
   response.status(200).json(products);
 }
 
-//TODO forgot to move this one to findProduct.js
+//PASS TODO forgot to move this one to findProduct.js
 //get all the products from a particular vender as specified in the parameter. sends a response object
-const getProductsByVendor = (request, response) => {
+const getProductsByVendor = async (request, response) => {
   const id = parseInt(request.params.id);
-  pool.query('SELECT * FROM products WHERE vendor_id = $1', [id], (error, results) => {
-    if (error) {
-      throw error;
-    }
-    response.status(200).json(results.rows);
-  });
+  const products = await findProductsByVendor(id);
+  response.status(200).json(products);
 }
 
 //get a product using id parameter sends a response object

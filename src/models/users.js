@@ -2,7 +2,6 @@
 ///User based HTTP requests/response for RESTful API///////
 
 //imports
-const pool = require('./util/pool');
 const { 
   findUserById,
    isUsernameUnique,

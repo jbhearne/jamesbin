@@ -2,10 +2,7 @@
 ///Order based HTTP requests/response for RESTful API///////
 
 //import
-const pool = require('./util/pool');
 const { 
-  isOrderOpen, 
-  defaultBillingAndDelivery,
   updateDelivery,
   updateBilling,
   addCCToBilling,
@@ -91,17 +88,17 @@ const checkout = async (request, response) => {
     const newContactD = await addContactInfo(body.delivery.contact);
     const deliveryContact = formatContactOutput(newContactD);
     const newDelivery = formatNewDelivery(cart.delivery.id, body.delivery, deliveryContact);
-    updateDelivery(cart.delivery.id, newDelivery, newDelivery.contact.id); //REVIEW shoud this be an await even though I don't need the results necessarily.
+    await updateDelivery(cart.delivery.id, newDelivery, newDelivery.contact.id);
   }
   
   if (!body.useDefaultBilling) {
     const newContactB = await addContactInfo(body.billing.contact);
     const billingContact = formatContactOutput(newContactB);
     const newBilling = formatNewBilling(cart.billing.id, body.billing, billingContact);
-    updateBilling(cart.billing.id, newBilling, newBilling.contact.id); //REVIEW "
+    await updateBilling(cart.billing.id, newBilling, newBilling.contact.id);
   }
   
-  addCCToBilling(body.ccPlaceholder, cart.billing.id) //REVIEW  "
+  addCCToBilling(body.ccPlaceholder, cart.billing.id)
   
   const finishedOrder = await completeOrderNow(amount, cart.items[0].order_id);
 

@@ -2,8 +2,6 @@
 ////functions for accessing the cart table///
 
 //inport
-const pool = require('./util/pool');
-const { isItemOnCompleteOrder } = require('./util/findOrder');
 const { 
   collectCart,
   findAllCartItems,
@@ -17,7 +15,6 @@ const {
   removeCartItem,
   removeCartItemIfUser
 } = require('./util/findCart');
-const { isProductExtant } = require('./util/findProduct');
 
 //gets all cart items sends a response object
 const getCartItems = async (request, response) => {
