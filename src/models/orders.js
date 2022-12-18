@@ -32,8 +32,8 @@ const getOrders = async (request, response) => {
 //get all orders for a user specified by id parameter and sends response object.
 const getOrdersByUser = async (request, response) => {
   const id = parseInt(request.params.id);
-  const order = await findOrderByUserId(id);
-  response.status(200).json(order);
+  const orders = await findOrderByUserId(id);
+  response.status(200).json(orders);
 }
 
 //get an order from its id parameter and send a response object

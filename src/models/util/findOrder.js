@@ -160,8 +160,8 @@ const findOrderById = async (id) => {
 const findOrderByUserId = async (id) => {
   const  sql = 'SELECT * FROM orders WHERE user_id = $1';
   const results = await pool.query(sql, [id]);
-  const  orderObj = results.rows[0]; //TODO only returns the first order, What is the point of this?
-  return orderObj;
+  const  orderArr = results.rows; 
+  return orderArr;
 }
 
 const findOpenOrderByUserId = async (userId) => {

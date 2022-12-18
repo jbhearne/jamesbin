@@ -17,7 +17,6 @@ const getProducts = async (request, response) => {
   response.status(200).json(products);
 }
 
-//PASS TODO forgot to move this one to findProduct.js
 //get all the products from a particular vender as specified in the parameter. sends a response object
 const getProductsByVendor = async (request, response) => {
   const id = parseInt(request.params.id);

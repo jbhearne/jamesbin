@@ -34,11 +34,7 @@ const findUserById = async (id) => {
   const contactRes = await pool.query('SELECT * FROM contact WHERE id = $1', [userObj.contact_id])
   const contactObj = contactRes.rows[0]
   const user = formatUserOutput(userObj, contactObj);
-  /*const userObj = {
-    username: user.username,
-    fullname: user.fullname,
-    contact: contact.rows[0]
-  }*/
+
   return user;
 } else {
   return false;
