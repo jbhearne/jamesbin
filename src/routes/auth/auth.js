@@ -5,6 +5,7 @@ const pool = require('../../models/util/pool');
 const bcrypt = require('bcrypt');
 const { addUser } = require('../../models/util/findUser');
 const router = express.Router();
+const { loggedIn } = require('./ensure')
 
 //checks to see if username and password are in the database abd uses bcrypt.compare to rehash password.
 passport.use(new LocalStrategy((username, password, cb) => {
@@ -82,6 +83,18 @@ router.post("/register", async (req, res, next) => {
     await addUser(req.body);
     console.log(`created user${await req.body.id}`)
     res.redirect('/login')
+  })
+})
+
+router.put('/user/password', loggedIn, async (req, res, next) => {
+  const { password } = req.body;
+  const userId = req.user.id;
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password, salt);
+  const sql = 'UPDATE users SET password = $1 WHERE id = $2'
+  pool.query(sql, [hash, userId], (error, results) => {
+    if (error) { next(error) };
+    res.status(200).send('Password updated.')
   })
 })
 
