@@ -1,5 +1,5 @@
 //////////////////////////////////////////////
-////functions for accessing the cart table///
+////Order based HTTP requests/response for RESTful API///
 
 //inport
 const { 

@@ -22,11 +22,13 @@ const findVendorById = async (id) => {
   return vendorObj
 }
 
+//gets all vendor objects from the database
 const findAllVendors = async () => {
    results = await pool.query('SELECT * FROM vendors ORDER BY id ASC');
    return results.rows;
 }
 
+//takes a vendor object from the request body and adds it to the database
 const addVendor = async (newVendor) => {
   const { name, description, contact } = newVendor;
   
@@ -45,6 +47,7 @@ const addVendor = async (newVendor) => {
   return vendor;
 };
 
+//takes a vendor id and a partial or full vendor object and updates the the vendor in the database
 const changeVendor = async (id, updates) => {
   const existingVendor = await findVendorById(id);
 
@@ -75,6 +78,7 @@ const changeVendor = async (id, updates) => {
   return updatedVendor;
 };
 
+//delete a vendor based on the vendor id
 const removeVendor = async (id) => {
   const deletedVendor = await pool.query('DELETE FROM vendors WHERE id = $1 RETURNING *', [id]);
   const contactId = deletedVendor.contactId;

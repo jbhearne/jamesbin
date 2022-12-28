@@ -8,7 +8,7 @@ const {
   addCCToBilling,
   findAllOrders,
   findOrderById,
-  findOrderByUserId,
+  findOrdersByUserId,
   addOrderOnUser,
   changeOrder,
   removeOrder,
@@ -32,7 +32,7 @@ const getOrders = async (request, response) => {
 //get all orders for a user specified by id parameter and sends response object.
 const getOrdersByUser = async (request, response) => {
   const id = parseInt(request.params.id);
-  const orders = await findOrderByUserId(id);
+  const orders = await findOrdersByUserId(id);
   response.status(200).json(orders);
 }
 

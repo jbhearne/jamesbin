@@ -11,13 +11,14 @@ const isProductExtant = async (id) => {
   return results.rows.length === 1;// ? true : false;
 };
 
+//returns an array of all products from the database
 const findAllProducts = async () => {
   const sql = 'SELECT * FROM products ORDER BY id ASC';
   const results = await pool.query(sql)
   return results.rows
 }
 
-
+//returns a product object from the database as specified by the product id
 //TODO need to add conditional for handling no existing product
 const findProductById = async (id) => {
   const sql = 'SELECT * FROM products WHERE id = $1';
@@ -25,6 +26,9 @@ const findProductById = async (id) => {
   const productObj = results.rows[0];
   return productObj;
 }
+
+
+//returns an array of all products from a single vendor as specified by the vendor id
 //TODO need to add conditional for handling no existing vendor
 const findProductsByVendor = async (id) => {
   const sql = 'SELECT * FROM products WHERE vendor_id = $1';
@@ -33,6 +37,7 @@ const findProductsByVendor = async (id) => {
   return productArr;
 }
 
+//takes a new product object and inserts it into the products table.
 const addProduct = async (newProduct) => {
   const { name, description, price, vendorId } = newProduct;
   const sql = 'INSERT INTO products (name, description, price, vendor_id) VALUES ($1, $2, $3, $4) RETURNING *';
@@ -41,7 +46,7 @@ const addProduct = async (newProduct) => {
   return productObj;
 }
 
-
+//takes an product object (with partial or complete properties) and updates the row indicated by the product id.
 const changeProduct = async (id, updates) => {
   const existingProduct = await findProductById(id);
 
@@ -57,6 +62,7 @@ const changeProduct = async (id, updates) => {
   return productObj;
 };
 
+//deletes the product indicated by the product id from the database.
 const removeProduct = async (id) => {
   const sql = 'DELETE FROM products WHERE id = $1 RETURNING *';
   const results = await pool.query(sql, [id]);

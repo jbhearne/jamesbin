@@ -49,6 +49,7 @@ const collectCart = async (userId) => {
   return checkout;
 }
 
+//returns an array of all cart items from the database
 const findAllCartItems = async () => {
   const sql = 'SELECT * FROM cart';
   const results = await pool.query(sql);
@@ -56,6 +57,7 @@ const findAllCartItems = async () => {
   return cartItems;
 }
 
+//returns a cart item object from the database as specified by the cart id
 const findCartItemById = async (id) => {
   const sql = 'SELECT * FROM cart WHERE id = $1';
   const results = await pool.query(sql, [id]);
@@ -63,6 +65,7 @@ const findCartItemById = async (id) => {
   return cartItem;
 }
 
+//returns an array of all cart items from a single order as specified by the order id
 const findCartByOrderId = async (orderId) => {
   const sql = 'SELECT * FROM cart WHERE order_id = $1';
   const results = await pool.query(sql, [orderId]);
@@ -70,15 +73,16 @@ const findCartByOrderId = async (orderId) => {
   return cart;
 }
 
+//returns an array of all cart items that are on open orders
 const findAllCurrentCartItemsWithProducts = async () => {
   const sql = 'SELECT cart.id, cart.order_id, cart.product_id, products.name, products.price, cart.quantity\
    FROM cart JOIN products ON cart.product_id = products.id JOIN orders ON cart.order_id = orders.id\
-   WHERE orders.user_id = $1 AND orders.date_completed IS NULL;';
+   WHERE orders.date_completed IS NULL;';
   const results = await pool.query(sql);
   const cartItems = results.rows;
   return cartItems;
 }
-
+//returns an array of all cart items that are on open orders the belong to the specified user id.
 const findAllCurrentCartItemsWithProductsByUser = async (userId) => {
   const sql = 'SELECT cart.id, cart.order_id, cart.product_id, products.name, products.price, cart.quantity\
    FROM cart JOIN products ON cart.product_id = products.id JOIN orders ON cart.order_id = orders.id\
@@ -88,6 +92,7 @@ const findAllCurrentCartItemsWithProductsByUser = async (userId) => {
   return cartItems;
 }
 
+//takes a new cart item object with the odrder id determined by the open order that belongs to the specified user id and inserts into the cart table.
 const addCartItemToUserOrder = async (userId, newCartItem) => {
   const { productId, quantity } = newCartItem;
   const order = await findOpenOrderByUserId(userId);
@@ -105,6 +110,7 @@ const addCartItemToUserOrder = async (userId, newCartItem) => {
   }
 }
 
+//takes a new cart item object and order id if the order is open it inserts the new cart item into the cart table.
 const addCartItemOnOrder = async (orderId, newCartItem) => {
   const { productId, quantity } = newCartItem;
   const order = await findOrderById(orderId);
@@ -124,6 +130,8 @@ const addCartItemOnOrder = async (orderId, newCartItem) => {
   }
 }
 
+
+//udpates the cart item quantity of the specified cart id.
 const changeCartItemQuantity = async (id, quantity) => {
   const isComplete = await isItemOnCompleteOrder(id);
   if (isComplete) {
@@ -135,6 +143,7 @@ const changeCartItemQuantity = async (id, quantity) => {
   }
 }
 
+//returns a cart item object if it belongs to the specified user id.
 const findCartItemIfUser = async (cartId, userId) => {
   const sql = 'SELECT cart.id FROM cart JOIN orders ON cart.order_id = orders.id \
    WHERE orders.user_id = $1 AND cart.id = $2';
@@ -146,6 +155,7 @@ const findCartItemIfUser = async (cartId, userId) => {
   }
 }
 
+//udpates the cart item quantity of the specified cart id if it belongs to the specified id.
 const changeCartItemQuantityIfUser = async (cartId, quantity, userId) => {
   const searchItem = await findCartItemIfUser(cartId, userId);
   if (typeof searchItem === 'string') {
@@ -156,12 +166,14 @@ const changeCartItemQuantityIfUser = async (cartId, quantity, userId) => {
   }
 }
 
+//deletes the cart item indicated by the cart item id from the database.
 const removeCartItem = async (id) => {
   const sql = 'DELETE FROM cart WHERE id = $1 RETURNING *';
   const results = await pool.query(sql, [id]);
   return results.rows[0]
 }
 
+//deletes the cart item indicated by the cart item id if it belongs to the current user.
 const removeCartItemIfUser = async (cartId, userId) => {
   const searchItem = await findCartItemIfUser(cartId, userId);
   if (typeof searchItem === 'string') {

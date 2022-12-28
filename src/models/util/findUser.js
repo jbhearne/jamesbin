@@ -7,6 +7,7 @@ const pool = require('./pool');
 
 const { formatUserOutput, formatContactOutput } = require('./formatOutput')
 
+//gets all user objects from the database
 const findAllUsers = async () => {
   const sql = 'SELECT users.id, users.fullname, users.username, users.contact_id, \
     contact.phone, contact.address, contact.city, contact.state, contact.zip, contact.email \
@@ -47,7 +48,7 @@ const isUsernameUnique = async (username) => {
   return results.rows.length === 0;
 }
 
-//creates new new user in database
+//creates new user in database
 const addUser = async (newUser) => {
   const { fullname, username, password, contact } = newUser;
   
@@ -66,6 +67,7 @@ const addUser = async (newUser) => {
   return user;
 };
 
+//takes a user ID and a user update object that may or may not include properties: fullname, username, contect 
 const changeUser = async (id, updates) => {
   const existingUser = await findUserById(id);
   const isUnique = await isUsernameUnique(updates.username);
@@ -102,6 +104,7 @@ const changeUser = async (id, updates) => {
   }
 }
 
+//removes a user from the database
 const removeUser = async (id) => {
   const existingUser = await findUserById(id);
   if (!existingUser) {

@@ -133,19 +133,21 @@ const updateBilling = async (billingId, updates, contactId) => {
 
 //a way to add creditcard info, but not really. just a flourish in that direction.
 const addCCToBilling = async (cc, billingId) => {
-  const sql = 'UPDATE billing SET cc_placeholder = $1 WHERE id = $2'
+  const sql = 'UPDATE billing SET cc_placeholder = $1 WHERE id = $2';
 
   const  results = pool.query(sql, [cc, billingId]);
   
   return results;
 }
 
+//returns an array of all orders from the database
 const findAllOrders = async () => {
   const sql = 'SELECT * FROM orders ORDER BY id ASC';
   const results = await pool.query(sql)
   return results.rows
 }
 
+//returns a order object from the database as specified by the orders id
 const findOrderById = async (id) => {
   const sql = 'SELECT * FROM orders WHERE id = $1';
   const results = await pool.query(sql, [id]);
@@ -157,13 +159,15 @@ const findOrderById = async (id) => {
   }
 }
 
-const findOrderByUserId = async (id) => {
+//returns an array of all orders from a single user as specified by the user id.
+const findOrdersByUserId = async (id) => {
   const  sql = 'SELECT * FROM orders WHERE user_id = $1';
   const results = await pool.query(sql, [id]);
   const  orderArr = results.rows; 
   return orderArr;
 }
 
+//returns an order object that has not been completed from a single user as specified by the user id.
 const findOpenOrderByUserId = async (userId) => {
   const sql = 'SELECT * FROM orders WHERE user_id = $1 AND date_completed IS NULL;';
   const results = await pool.query(sql, [userId]);
@@ -174,6 +178,7 @@ const findOpenOrderByUserId = async (userId) => {
   }
 }
 
+//takes a new order object and inserts it into the orders table.
 const addOrder = async (newOrder) => {
   const { user_id, billing_id, delivery_id } = newOrder //TODO: clarifiy snake case vs camel case
   const sql = 'INSERT INTO orders (user_id, date_started, billing_id, delivery_id) VALUES ($1, NOW(), $2, $3) RETURNING *'
@@ -182,12 +187,13 @@ const addOrder = async (newOrder) => {
   return orderObj;
 }
 
+//constructs a new order object with the specified user id and inserts it into the orders table
 const addOrderOnUser = async (userId) => {
   const isOpen = await isOrderOpen(userId);
   if (isOpen) {
     return `This user already has an order open. Open order ID: ${isOpen}`
     } else {
-    const { billingId, deliveryId } = await defaultBillingAndDelivery(userId); //DONE: PASS should create rows with primary keys in the new tables: 'billing' and 'delivery'
+    const { billingId, deliveryId } = await defaultBillingAndDelivery(userId);
     const newOrder = {
       user_id: userId,
       billing_id: billingId,
@@ -198,6 +204,7 @@ const addOrderOnUser = async (userId) => {
   }
 }
 
+//takes an order object (with partial or complete properties) and updates the row indicated by the orders id.
 //TODO check for consistency with column name variables.
 const changeOrder = async (id, updates) => {
   const existingOrder = await findOrderById(id);
@@ -215,6 +222,7 @@ const changeOrder = async (id, updates) => {
   return orderObj;
 }
 
+//takes a monetary value and updates the date completed with the current datetime on the row specified by the order id.
 const completeOrderNow = async (amount, orderId) => {
   const sql = 'UPDATE orders SET date_completed = NOW(), amount = $1 WHERE id = $2 RETURNING *;'
   const results = await pool.query(sql, [amount, orderId]);
@@ -222,6 +230,7 @@ const completeOrderNow = async (amount, orderId) => {
   return orderObj;
 }
 
+//deletes the product indicated by the product id from the database.
 const removeOrder = async (id) => {
   const sql = 'DELETE FROM orders WHERE id = $1 RETURNING *';
   const results = await pool.query(sql, [id]);
@@ -241,7 +250,7 @@ module.exports = {
   isItemOnCompleteOrder,
   findAllOrders,
   findOrderById,
-  findOrderByUserId,
+  findOrdersByUserId,
   findOpenOrderByUserId,
   addOrder,
   addOrderOnUser,
