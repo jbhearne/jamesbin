@@ -2,7 +2,7 @@
 //Functions related to querying cart table//
 
 //import and create pool
-const pool = require('./pool');
+const pool = require('./util/pool');
 
 //import functions related to the order
 const { 

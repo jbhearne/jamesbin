@@ -8,7 +8,7 @@ const {
     findAllUsers,
     changeUser,
     removeUser
-   } = require('./util/findUser')
+   } = require('../models/findUser')
 
 //gets all users from the database and sends a response object
 const getUsers = async (request, response) => {

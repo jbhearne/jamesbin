@@ -2,7 +2,7 @@
 //Functions related to querying contact table//
 
 //import and create pool
-const pool = require('./pool');
+const pool = require('./util/pool');
 
 //Creats a new contact using a conact object. Returns the new contact.
 const addContactInfo = async (contactObj) => {

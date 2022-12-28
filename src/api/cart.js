@@ -14,7 +14,7 @@ const {
   changeCartItemQuantityIfUser,
   removeCartItem,
   removeCartItemIfUser
-} = require('./util/findCart');
+} = require('../models/findCart');
 
 //gets all cart items sends a response object
 const getCartItems = async (request, response) => {

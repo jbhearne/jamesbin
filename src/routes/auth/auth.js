@@ -3,7 +3,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const pool = require('../../models/util/pool');
 const bcrypt = require('bcrypt');
-const { addUser } = require('../../models/util/findUser');
+const { addUser } = require('../../models/findUser');
 const router = express.Router();
 const { loggedIn } = require('./ensure')
 

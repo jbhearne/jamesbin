@@ -2,7 +2,7 @@
 //Functions related to querying products table//
 
 //import and create pool
-const pool = require('./pool');
+const pool = require('./util/pool');
 
 //queries products using product ID to see if a product exists. Returns true if it does OR false if not.
 const isProductExtant = async (id) => {

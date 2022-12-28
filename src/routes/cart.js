@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { cart } = require('../models/index');
+const { cart } = require('../api/index');
 const { loggedIn, isAdmin, adminOrCurrentUser } = require('./auth/ensure');
 
 //routes related to shopping cart items

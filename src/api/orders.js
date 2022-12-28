@@ -13,15 +13,15 @@ const {
   changeOrder,
   removeOrder,
   completeOrderNow
-} = require('./util/findOrder');
+} = require('../models/findOrder');
 
 const { 
   formatContactOutput,
   formatNewDelivery,
   formatNewBilling 
-} = require('./util/formatOutput')
-const { collectCart } = require('./util/findCart');
-const { addContactInfo } =require('./util/findContact')
+} = require('../models/util/formatOutput')
+const { collectCart } = require('../models/findCart');
+const { addContactInfo } =require('../models/findContact')
 
 //get all orders and send response objects
 const getOrders = async (request, response) => {

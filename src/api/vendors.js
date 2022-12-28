@@ -8,7 +8,7 @@ const {
   addVendor,
   changeVendor,
   removeVendor
-} = require('./util/findVendor')
+} = require('../models/findVendor')
 
 //get all vendors
 const getVendors = async (request, response) => {

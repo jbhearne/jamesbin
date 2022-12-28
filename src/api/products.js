@@ -9,7 +9,7 @@ const {
   addProduct,
   changeProduct,
   removeProduct
-} = require('./util/findProduct');
+} = require('../models/findProduct');
 
 //gets all the products in the database and sends a response object
 const getProducts = async (request, response) => {

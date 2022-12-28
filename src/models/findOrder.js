@@ -2,7 +2,7 @@
 //Functions related to querying orders table//
 
 //import and create pool
-const pool = require('./pool');
+const pool = require('./util/pool');
 
 //checks to see if the current user has order that has not yet been completed.
 //Returns false if they have no open order OR returns the order object if there is an open order.

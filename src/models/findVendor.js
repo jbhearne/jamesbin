@@ -2,9 +2,9 @@
 //Functions related to querying vendors table//
 
 //import and create pool
-const pool = require('./pool');
+const pool = require('./util/pool');
 
-const { formatVendorOutput } = require('./formatOutput')
+const { formatVendorOutput } = require('./util/formatOutput')
 
 /** Gets a vendor using the vedor's ID
  * @param  {number}  id  [Vendor ID]

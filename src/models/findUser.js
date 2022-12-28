@@ -2,10 +2,10 @@
 //Functions related to querying users table//
 
 //import and create pool
-const pool = require('./pool');
+const pool = require('./util/pool');
 
 
-const { formatUserOutput, formatContactOutput } = require('./formatOutput')
+const { formatUserOutput, formatContactOutput } = require('./util/formatOutput')
 
 //gets all user objects from the database
 const findAllUsers = async () => {
