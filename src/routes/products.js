@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { products } = require('../models/index');
+const { products } = require('../api/index');
 const { loggedIn, isAdmin, adminOrCurrentUser } = require('./auth/ensure');
 
 //routes related to products

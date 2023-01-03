@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { users } = require('../models/index');
+const { users } = require('../api/index');
 const { loggedIn, isAdmin, adminOrCurrentUser } = require('./auth/ensure')
 
 

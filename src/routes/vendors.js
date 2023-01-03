@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { vendors } = require('../models/index');
+const { vendors } = require('../api/index');
 const { loggedIn, isAdmin, adminOrCurrentUser } = require('./auth/ensure');
 
 //routes related to vendor operations
