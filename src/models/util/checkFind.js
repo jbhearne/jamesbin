@@ -52,8 +52,22 @@ const checkNoResults = results => {
   return false;
 }
 
+const messageNoResults = results => {
+  if (!results) {
+    return 'Query failed.'
+    //throw Error('Query failed.')
+  } else if (!results.rows) {
+    return 'No object found.'
+    //throw Error(`No rows in: ${results}`)
+  } else if (!results.rows.length) {
+    return 'No items found.'
+  }
+  return false;
+}
+
 module.exports = {
   checkForFoundRowObj,
   checkForFoundRowsArr,
-  checkNoResults
+  checkNoResults,
+  messageNoResults
 }

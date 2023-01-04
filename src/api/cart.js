@@ -73,16 +73,9 @@ const getCartWithProductsByUser = async (request, response) => {
 const getCartForCheckout = async (request, response) => { 
   const user = request.user;
   //TODO: add check constraint to database to ensure there is only one open order for a given user.
-  const checkoutCart = await collectCart(user.id)
-
-  if (typeof checkoutCart === 'string') { //REVIEW: I know i need to work on this so that it works more through a traditional error handling
-    response.status(400).send(checkoutCart);
-  } else {
-  response.status(200).send(checkoutCart);
-  }
   try {
     const checkoutCart = await collectCart(user.id);
-    const check = checkForFoundRowsArr(checkoutCart);
+    const check = checkForFoundRowObj(checkoutCart); //collectCart returns an object not an array
     response.status(check.status).json(check.results);
   } catch (err) {
     console.error(err);

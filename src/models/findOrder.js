@@ -3,6 +3,7 @@
 
 //import and create pool
 const pool = require('./util/pool');
+const { messageNoResults } = require('./util/checkFind')
 
 //checks to see if the current user has order that has not yet been completed.
 //Returns false if they have no open order OR returns the order object if there is an open order.
@@ -26,10 +27,10 @@ const isItemOnCompleteOrder = async id => {
   if (result.rows.length === 1) {
     if (result.rows[0].date_completed) {
       notNull = true;
-      console.log(result.rows[0].date_completed);
-    } else if (result.rows.length > 1) {
-      throw Error('Multiple Rows.');
-    }
+      //console.log(result.rows[0].date_completed);
+    } 
+  } else if (result.rows.length > 1) {
+    throw Error('Multiple Rows.');
   }
   return notNull;
 }
@@ -37,18 +38,22 @@ const isItemOnCompleteOrder = async id => {
 //sets default values for billing and delivery to the current users name, contact info and other preset values. 
 //Returns an object with the IDs for both delivery row and billing row.
 const defaultBillingAndDelivery = async (userId) => {
-  const user =  await pool.query('SELECT * FROM users WHERE id = $1', [userId])
-  const { fullname, contact_id } = user.rows[0]
+  const results =  await pool.query('SELECT * FROM users WHERE id = $1', [userId])
+  const noResults = messageNoResults(results);
+  if (noResults) throw Error('User query failed: ' + noResults);
+  const { fullname, contact_id } = results.rows[0]
 
   const defaultBillingMethod = 'credit card'
   const defaultDeliveryMethod = 'standard shipping' //ANCHOR[id=defaultMethod] - change some other selection method.
-
+  
   const createdBilling = await pool.query('INSERT INTO billing (payer_name, method, contact_id) VALUES ($1, $2, $3) RETURNING *;',
   [ fullname, defaultBillingMethod, contact_id, ]);
-
+  const billingResults = messageNoResults(createdBilling);
+  if (billingResults) throw Error('Did not return billing info: ' + noResults);
   const createdDelivery = await pool.query('INSERT INTO delivery (receiver_name, method, contact_id) VALUES ($1, $2, $3) RETURNING *;',
   [ fullname, defaultDeliveryMethod, contact_id, ]);
-
+  const deliveryResults = messageNoResults(createdDelivery);
+  if (deliveryResults) throw Error('Did not return delivery info: ' + noResults);
   return {
     billingId: createdBilling.rows[0].id,
     deliveryId: createdDelivery.rows[0].id
@@ -62,20 +67,23 @@ const findBillingInfo = async (orderId) => {
    FROM orders JOIN billing ON orders.billing_id = billing.id JOIN contact ON billing.contact_id = contact.id\
     WHERE orders.id = $1'
 
-  const billing  = await pool.query(sql, [orderId]);
+  const results  = await pool.query(sql, [orderId]);
+  const noResults = messageNoResults(results);
+  if (noResults) throw Error('Did not return billing info: ' + noResults);
+  const billing = results.rows[0];
 
   const info = {
-    id: billing.rows[0].billing_id,
-    payerName: billing.rows[0].payer_name,
-    paymentMethod: billing.rows[0].method,
+    id: billing.billing_id,
+    payerName: billing.payer_name,
+    paymentMethod: billing.method,
     contact: {
-      id: billing.rows[0].contact_id,
-      phone: billing.rows[0].phone,
-      address: billing.rows[0].address,
-      city: billing.rows[0].city,
-      state: billing.rows[0].state,
-      zip: billing.rows[0].zip,
-      email: billing.rows[0].email
+      id: billing.contact_id,
+      phone: billing.phone,
+      address: billing.address,
+      city: billing.city,
+      state: billing.state,
+      zip: billing.zip,
+      email: billing.email
     }
   }
   return info;
@@ -88,20 +96,23 @@ const findDeliveryInfo = async (orderId) => {
    FROM orders JOIN delivery ON orders.delivery_id = delivery.id JOIN contact ON delivery.contact_id = contact.id\
     WHERE orders.id = $1'
 
-  const delivery  = await pool.query(sql, [orderId]);
+  const results  = await pool.query(sql, [orderId]);
+  const noResults = messageNoResults(results);
+  if (noResults) throw Error('Did not return delivery info: ' + noResults);
+  const delivery = results.rows[0];
 
   const info = {
-    id: delivery.rows[0].delivery_id,
-    receiverName: delivery.rows[0].receiver_name,
-    deliveryMethod: delivery.rows[0].method,
+    id: delivery.delivery_id,
+    receiverName: delivery.receiver_name,
+    deliveryMethod: delivery.method,
     contact: {
-      id: delivery.rows[0].contact_id,
-      phone: delivery.rows[0].phone,
-      address: delivery.rows[0].address,
-      city: delivery.rows[0].city,
-      state: delivery.rows[0].state,
-      zip: delivery.rows[0].zip,
-      email: delivery.rows[0].email
+      id: delivery.contact_id,
+      phone: delivery.phone,
+      address: delivery.address,
+      city: delivery.city,
+      state: delivery.state,
+      zip: delivery.zip,
+      email: delivery.email
     }
   }
   return info;
@@ -115,6 +126,8 @@ const updateDelivery = async (deliveryId, updates, contactId) => {
   const sql = 'UPDATE delivery SET receiver_name = $1, method = $2, notes = $3, contact_id = $4 WHERE id = $5 RETURNING *;';
 
   const results = await pool.query(sql, [receiverName, deliveryMethod, notes, contactId, deliveryId])
+  const noResults = messageNoResults(results);
+  if (noResults) throw Error('Did not return delivery info: ' + noResults);
 
   return results.rows[0]
 }
@@ -127,16 +140,18 @@ const updateBilling = async (billingId, updates, contactId) => {
   const sql = 'UPDATE billing SET payer_name = $1, method = $2, contact_id = $3 WHERE id = $4 RETURNING *;';
 
   const results = await pool.query(sql, [payerName, paymentMethod, contactId, billingId])
+  const noResults = messageNoResults(results);
+  if (noResults) throw Error('Did not return billing info: ' + noResults);
 
   return results.rows[0]
 }
 
 //a way to add creditcard info, but not really. just a flourish in that direction.
 const addCCToBilling = async (cc, billingId) => {
-  const sql = 'UPDATE billing SET cc_placeholder = $1 WHERE id = $2';
-
+  const sql = 'UPDATE billing SET cc_placeholder = $1 WHERE id = $2 RETURNING *';
   const  results = pool.query(sql, [cc, billingId]);
-  
+  const noResults = messageNoResults(results);
+  if (noResults) throw Error('Did not return billing/CC info: ' + noResults);
   return results;
 }
 
@@ -144,6 +159,8 @@ const addCCToBilling = async (cc, billingId) => {
 const findAllOrders = async () => {
   const sql = 'SELECT * FROM orders ORDER BY id ASC';
   const results = await pool.query(sql)
+  const noResults = checkNoResults(results);
+  if (noResults) return noResults;
   return results.rows
 }
 
@@ -151,10 +168,11 @@ const findAllOrders = async () => {
 const findOrderById = async (id) => {
   const sql = 'SELECT * FROM orders WHERE id = $1';
   const results = await pool.query(sql, [id]);
-  const orderObj = results.rows[0];
   if (results.rows.length === 0) {
     return 'No orders started';
   } else {
+    const noResults = checkNoResults(results);
+    if (noResults) return noResults;
     return results.rows[0];
   }
 }
@@ -163,6 +181,8 @@ const findOrderById = async (id) => {
 const findOrdersByUserId = async (id) => {
   const  sql = 'SELECT * FROM orders WHERE user_id = $1';
   const results = await pool.query(sql, [id]);
+  const noResults = checkNoResults(results);
+  if (noResults) return noResults;
   const  orderArr = results.rows; 
   return orderArr;
 }
@@ -174,6 +194,8 @@ const findOpenOrderByUserId = async (userId) => {
   if (results.rows.length === 0) {
     return 'No orders started';
   } else {
+    const noResults = checkNoResults(results);
+    if (noResults) return noResults;
     return results.rows[0];
   }
 }
@@ -181,8 +203,10 @@ const findOpenOrderByUserId = async (userId) => {
 //takes a new order object and inserts it into the orders table.
 const addOrder = async (newOrder) => {
   const { user_id, billing_id, delivery_id } = newOrder //TODO: clarifiy snake case vs camel case
-  const sql = 'INSERT INTO orders (user_id, date_started, billing_id, delivery_id) VALUES ($1, NOW(), $2, $3) RETURNING *'
+  const sql = 'INSERT INTO orders (user_id, date_started, billing_id, delivery_id) VALUES ($1, NOW(), $2, $3) RETURNING *'; //uses Postgres NOW() built-in function.
   const results = await pool.query(sql, [user_id, billing_id, delivery_id]);
+  const noResults = checkNoResults(results);
+  if (noResults) return noResults;
   const orderObj = results.rows[0];
   return orderObj;
 }
@@ -210,14 +234,15 @@ const changeOrder = async (id, updates) => {
   const existingOrder = await findOrderById(id);
 
   for (key in existingOrder) {
-    if (updates[key]) { existingOrder[key] = updates[key] }
+    if (updates[key]) { existingOrder[key] = updates[key] } //checks if updated value is present on request body and updates that value, keeps old values.
   }
 
   const { user_id, date_started, date_completed, billing_id, delivery_id } = existingOrder;
   const sql = 'UPDATE orders SET user_id = $1, date_started = $2, date_completed = $3, billing_id = $4, delivery_id = $5 \
     WHERE id = $6 RETURNING *';
   const results = await pool.query(sql, [user_id, date_started, date_completed, billing_id, delivery_id, id]);
-
+  const noResults = checkNoResults(results);
+  if (noResults) return noResults;
   const orderObj = results.rows[0];
   return orderObj;
 }
@@ -226,6 +251,8 @@ const changeOrder = async (id, updates) => {
 const completeOrderNow = async (amount, orderId) => {
   const sql = 'UPDATE orders SET date_completed = NOW(), amount = $1 WHERE id = $2 RETURNING *;'
   const results = await pool.query(sql, [amount, orderId]);
+  const noResults = checkNoResults(results);
+  if (noResults) return noResults;
   const orderObj = results.rows[0];
   return orderObj;
 }
@@ -234,6 +261,8 @@ const completeOrderNow = async (amount, orderId) => {
 const removeOrder = async (id) => {
   const sql = 'DELETE FROM orders WHERE id = $1 RETURNING *';
   const results = await pool.query(sql, [id]);
+  const noResults = checkNoResults(results);
+  if (noResults) return noResults;
   const deletedOrderObj = results.rows[0];
 
   return deletedOrderObj;
