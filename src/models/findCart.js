@@ -5,6 +5,7 @@
 const pool = require('./util/pool');
 
 //import functions related to the order
+const { checkNoResults } = require('./util/checkFind')
 const { 
   findBillingInfo, 
   findDeliveryInfo, 
@@ -51,16 +52,21 @@ const collectCart = async (userId) => {
 
 //returns an array of all cart items from the database
 const findAllCartItems = async () => {
-  const sql = 'SELECT * FROM cart';
-  const results = await pool.query(sql);
-  const cartItems = results.rows;
-  return cartItems;
+    const sql = 'SELECT * FROM cart';
+    const results = await pool.query(sql);
+    //if (!results || !results.rows || !results.rows.length) return null;
+    const noResults = checkNoResults(results);
+    if (noResults) return noResults;
+    const cartItems = results.rows;
+    return cartItems;
 }
 
 //returns a cart item object from the database as specified by the cart id
 const findCartItemById = async (id) => {
   const sql = 'SELECT * FROM cart WHERE id = $1';
   const results = await pool.query(sql, [id]);
+  const noResults = checkNoResults(results);
+  if (noResults) return noResults;
   const cartItem = results.rows[0];
   return cartItem;
 }
@@ -69,6 +75,8 @@ const findCartItemById = async (id) => {
 const findCartByOrderId = async (orderId) => {
   const sql = 'SELECT * FROM cart WHERE order_id = $1';
   const results = await pool.query(sql, [orderId]);
+  const noResults = checkNoResults(results);
+  if (noResults) return noResults;
   const cart = results.rows;
   return cart;
 }
@@ -79,6 +87,8 @@ const findAllCurrentCartItemsWithProducts = async () => {
    FROM cart JOIN products ON cart.product_id = products.id JOIN orders ON cart.order_id = orders.id\
    WHERE orders.date_completed IS NULL;';
   const results = await pool.query(sql);
+  const noResults = checkNoResults(results);
+  if (noResults) return noResults;
   const cartItems = results.rows;
   return cartItems;
 }
@@ -88,6 +98,8 @@ const findAllCurrentCartItemsWithProductsByUser = async (userId) => {
    FROM cart JOIN products ON cart.product_id = products.id JOIN orders ON cart.order_id = orders.id\
    WHERE orders.user_id = $1 AND orders.date_completed IS NULL;';
   const results = await pool.query(sql, [userId]);
+  const noResults = checkNoResults(results);
+  if (noResults) return noResults;
   const cartItems = results.rows;
   return cartItems;
 }
@@ -105,6 +117,8 @@ const addCartItemToUserOrder = async (userId, newCartItem) => {
   } else {
     const sql = 'INSERT INTO cart (order_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *';
     const results = await pool.query(sql, [order.id, productId, quantity]);
+    const noResults = checkNoResults(results);
+    if (noResults) return noResults;
     const cartItem = results.rows[0];
     return cartItem;
   }
@@ -125,6 +139,8 @@ const addCartItemOnOrder = async (orderId, newCartItem) => {
   } else {
     const sql = 'INSERT INTO cart (order_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *';
     const results = await pool.query(sql, [order.id, productId, quantity]);
+    const noResults = checkNoResults(results);
+    if (noResults) return noResults;
     const cartItem = results.rows[0];
     return cartItem;
   }
@@ -139,6 +155,8 @@ const changeCartItemQuantity = async (id, quantity) => {
   } else {
     const sql = 'UPDATE cart SET quantity = $1 WHERE id = $2 RETURNING *';
     const results = await pool.query(sql, [quantity, id]);
+    const noResults = checkNoResults(results);
+    if (noResults) return noResults;
     return results.rows[0];
   }
 }
@@ -149,8 +167,10 @@ const findCartItemIfUser = async (cartId, userId) => {
    WHERE orders.user_id = $1 AND cart.id = $2';
   const results = await pool.query(sql, [userId, cartId]);
   if (results.rows.length === 0) {
-    return `User has no cart item id ${cartId}`;
+    return `User has no cart item id ${cartId}`;  //REVIEW Keep because less generic?
   } else {
+    const noResults = checkNoResults(results);
+    if (noResults) return noResults;
     return results.rows[0];
   }
 }
@@ -170,6 +190,8 @@ const changeCartItemQuantityIfUser = async (cartId, quantity, userId) => {
 const removeCartItem = async (id) => {
   const sql = 'DELETE FROM cart WHERE id = $1 RETURNING *';
   const results = await pool.query(sql, [id]);
+  const noResults = checkNoResults(results);
+  if (noResults) return noResults;
   return results.rows[0]
 }
 
