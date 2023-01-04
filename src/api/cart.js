@@ -2,7 +2,7 @@
 ////Order based HTTP requests/response for RESTful API///
 
 //import
-const { checkForFoundRowObj, checkForFoundRowsArr } = require('../models/util/checkFind')
+const { checkForFoundRowObj, checkForFoundRowsArr } = require('../models/util/checkFind');
 const { 
   collectCart,
   findAllCartItems,
