@@ -127,14 +127,18 @@ const checkout = async (request, response) => {
   
     if (!body.useDefaultDelivery){
       const newContactD = await addContactInfo(body.delivery.contact);
-      const deliveryContact = formatContactOutput(newContactD);
+      const checknewContactD = checkForFoundRowObj(newContactD);
+      if (checknewContactD.status >= 400 && checknewContactD.status < 500) throw Error(checknewContactD.results)
+      const deliveryContact = formatContactOutput(checknewContactD.results);
       const newDelivery = formatNewDelivery(cart.delivery.id, body.delivery, deliveryContact);
       await updateDelivery(cart.delivery.id, newDelivery, newDelivery.contact.id);
     }
     
     if (!body.useDefaultBilling) {
       const newContactB = await addContactInfo(body.billing.contact);
-      const billingContact = formatContactOutput(newContactB);
+      const checknewContactB = checkForFoundRowObj(newContactB);
+      if (checknewContactB.status >= 400 && checknewContactB.status < 500) throw Error(checknewContactB.results)
+      const billingContact = formatContactOutput(checknewContactB.results);
       const newBilling = formatNewBilling(cart.billing.id, body.billing, billingContact);
       await updateBilling(cart.billing.id, newBilling, newBilling.contact.id);
     }
