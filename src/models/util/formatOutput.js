@@ -1,3 +1,5 @@
+
+//formats a user object with contact
 const formatUserOutput = (user, contact) => {
   userObj = {
     id: user.id,
@@ -17,6 +19,7 @@ const formatUserOutput = (user, contact) => {
   return userObj
 }
 
+//formats a vendor object with contact
 const formatVendorOutput = (vendor, contact) => {
   vendorObj = {
     id: vendor.id,

@@ -1,5 +1,8 @@
-const checkForFoundRowObj = (finding) => {
+/////////////////////////////////////////////////////
+///Functions for checking sql results and error handling
 
+//used to check if the result of a function is an object(success) or a string(failure)
+const checkForFoundRowObj = (finding) => {
   if (typeof finding === 'string') {
     return {
       results: finding,
@@ -19,6 +22,7 @@ const checkForFoundRowObj = (finding) => {
   }
 }
 
+//used to check if the result of a function is an array(success) or a string(failure)
 const checkForFoundRowsArr = (finding) => {
   if (typeof finding === 'string') {
     return {
@@ -39,6 +43,8 @@ const checkForFoundRowsArr = (finding) => {
   }
 }
 
+//used to check if a pool.query has returned anything, throws errors if there are there is no rows array.
+//returns a message string if the array is empty and returns false if there are returned rows.
 const checkNoResults = results => {
   if (!results) {
     //return 'Query failed.'
@@ -52,6 +58,8 @@ const checkNoResults = results => {
   return false;
 }
 
+//used to check if a pool.query has returned anything, returns message strings if there are there is no rows array.
+//returns a message string if the array is empty and returns false if there are returned rows.
 const messageNoResults = results => {
   if (!results) {
     return 'Query failed.'
