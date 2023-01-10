@@ -6,7 +6,7 @@ This is an API for on online storefront that I created it as part of the Full-St
 
 ### API Endpoints
 
-Basic API user endpoints for displaying products, adding them to a cart and checking out. Additional endpoints for admin editting users, products, vendors and ordrs.
+Basic API user endpoints for displaying products, adding them to a cart and checking out. Additional endpoints for admin editing users, products, vendors and orders.
 
 ### Authorization and Authentication
 
@@ -18,7 +18,7 @@ The openapi.yml describers the api, and a swagger generated html API documentati
 
 ### PostgreSQL Database 
 
-The files used to create a Postgres database are included in the database_creation folder. Running dataApp.js will delete/drop all tables used in this project if they are already created, then it create the database tables, finially it populates the database with some examples. If you do not wish to pre-populate the database comment-out the two functions used to do that.
+The files used to create a Postgres database are included in the database_creation folder. Running dataApp.js will delete/drop all tables used in this project if they are already created, then it create the database tables, finally it populates the database with some examples. If you do not wish to pre-populate the database comment-out the two functions used to do that.
 
 ## Technologies used
 
