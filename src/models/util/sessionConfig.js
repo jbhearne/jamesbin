@@ -1,13 +1,12 @@
-//REVIEW: for now we will assume it is better to put it in the main app. TODO: either connect this to app.js or detete it.
-//GARBAGE - ?
-require('dotenv/config')
+////////////////////////////////////////
+//Session Configuration //
 
-const sessionDBaccess = new sessionPool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DATABASE,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT})
+const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
+const randomString = require('randomstring')
+const sessionPool = require('./pool')
+
+const sessionDBaccess = sessionPool;
 
 const sessionConfig = {
   store: new pgSession({
@@ -27,3 +26,7 @@ const sessionConfig = {
       secure: false // ENABLE ONLY ON HTTPS
   }}
 
+module.exports = {
+  sessionConfig: sessionConfig,
+  session: session
+}
