@@ -3,7 +3,6 @@ require('dotenv/config')
 const express = require('express')
 const bodyParser = require('body-parser')
 const passport = require('passport');
-//const { sessionConfig, session } = require('../src/models/util/sessionConfig')
 const { popPasswords } = require('./populate/hashmake')
 const { createDatabase } = require('./create_database')
 const { clearDatabase } = require('./clear_database')
@@ -21,11 +20,8 @@ app.use(
   })
 )
 
-//start session and passport
 app.use(passport.initialize())
-//app.use(session(sessionConfi
 
-//app.use(passport.authenticate('session'));
 
 //Home route
 app.get('/', (req, res) => {
@@ -37,8 +33,13 @@ app.listen(PORT, async () => {
     console.log(`App running on port ${PORT}.`)
     console.log(process.env.MY_SECRET)
     console.log(process.env.DATABASE)
+    
+    //Clears out the database that may have already been created.
     await clearDatabase();
+    //Creates or recreates the database for the project.
     await createDatabase();
+
+    //Comment out the next two lines if you do not want to prepopulate the database with some starting rows.
     await popDatabase();
     await popPasswords('password', 10);
   })
