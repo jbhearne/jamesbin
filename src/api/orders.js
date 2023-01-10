@@ -68,7 +68,7 @@ const getOrderById = async (request, response) => {
 const createOrder = async (request, response) => {
   const userId = request.user.id
   try {
-    const order = await addOrderOnUser(userId)
+    const order = await addOrderOnUser(userId);
     const check = checkForFoundRowObj(order);
     if (check.status >= 400 && check.status < 500) response.status(check.status).json(check.results);
     if (check.status >= 200 && check.status < 300) response.status(check.status).json(`Order created with ID: ${check.results.id}`);
@@ -83,8 +83,6 @@ const createOrder = async (request, response) => {
 const updateOrder = async (request, response) => {
   const id = parseInt(request.params.id);
   const updates = request.body;
-  const order = await changeOrder(id, updates);
-  response.status(200).send(`Order modified with ID: ${order.id}`);
   try {
     const order = await changeOrder(id, updates);
     const check = checkForFoundRowObj(order);

@@ -46,7 +46,7 @@ router.get('/login', function(req, res, next) {
 });
 
 //route used to login. a request body with username and password expected.
-router.post('/login/password', (req, res, next) => {console.log('howdy'); next()}, passport.authenticate('local', {
+router.post('/login', (req, res, next) => {console.log('howdy'); next()}, passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login'
 }));

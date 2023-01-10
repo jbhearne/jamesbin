@@ -1,0 +1,1147 @@
+openapi: 3.0.1
+info:
+  title: James' Bin
+  version: '1'
+  description: An e-commerce website for spy craft goods.
+paths:
+  /login:
+    post:
+      summary: Login.
+      description: Login using username and password.
+      operationId: post_login
+      requestBody:
+        description: login object with username and password.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login'
+      responses:
+        '200':
+          description: Success. Redirect.
+        default:
+          description: Default error sample response
+      tags:
+        - Authentication
+  /logout:
+    post:
+      summary: Logout.
+      description: Logout. No input required.
+      operationId: post_logout
+      responses:
+        '200':
+          description: Success. Redirect.
+        default:
+          description: Default error sample response
+      tags:
+        - Authentication
+  /register:
+    post:
+      summary: Creates a new user.
+      description: Creats a new user using a request object. Hashes and salts the password in the object.
+      operationId: register
+      requestBody:
+        description: User object.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/register'
+      responses:
+        '200':
+          description: Success. Redirect.
+        default:
+          description: Default error sample response
+      tags:
+        - Authentication
+  /user/password:
+    put:
+      summary: Change password.
+      description: Change password with hash and salt.
+      operationId: put_user_password
+      requestBody:
+        description: Object with password.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/password'
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                users_id:
+                  value: Password updated.
+          description: Success. Redirect.
+        default:
+          description: Default error sample response
+      tags:
+        - Authentication
+  /users:
+    summary: Actions relating to all users.
+    description: >-
+      For operations related to all users with proper authorization.
+    get:
+      summary: 'Gets current or all user(s). '
+      description: >-
+        Gets all users if user has proper authorization.
+      operationId: get_users
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                users:
+                  value: |-
+                    [
+                      { "id": 1, "name":"Carey Maynard", "username":"hapdude", "password":"hapdude123", "contact":
+                        {"phone":"816-816-8166", "address":"123 fake st.", "city":"Metropolis", "state":"MO", "zip":"64565", "email":"hapdud@hermit.com"}
+                      },
+                      { "id": 2, "name":"Bob Ard", "username":"happy", "password":"hapdu", "contact":
+                        {"phone":"888-555-8166", "address":"321 fake st.", "city":"Gotham", "state":"MO", "zip":"64565", "email":"hap@hermit.com"}
+                      },
+                      { "id": 3, "name":"Rey Mayn", "username":"dude", "password":"ude123", "contact":
+                        {"phone":"757-666-8166", "address":"666 fake st.", "city":"Metropolis", "state":"MO", "zip":"64565", "email":"dud@hermit.com"}
+                      },
+                      { "id": 4, "name":"Car Nard", "username":"pdud", "password":"e123", "contact":
+                        {"phone":"654-777-8166", "address":"987 fake st.", "city":"Gotham", "state":"MO", "zip":"64565", "email":"pdud@hermit.com"}
+                      }
+                    ]
+
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Users
+  /users/{id}:
+    summary: For operations involving specific users.
+    description: For operations involving specific users as identified by id.
+    get:
+      summary: Gets a user's info.
+      description: Gets a specific user's info as identified by id.
+      operationId: get_users_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the user.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                users_id:
+                  value: >-
+                    { 
+                      "id": 1, "name":"Carey Maynard", "username":"hapdude", "contact":
+                        {
+                          "phone":"816-816-8166", "address":"123 fake st.", "city":"Metropolis", "state":"MO", "zip":"64565", "email":"hapdud@hermit.com"
+                        }
+                    }
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Users
+    put:
+      summary: For updating an existing user.
+      description: For updating an existing user as identified by id. Any user if Admin or only current user otherwise.
+      operationId: put_users_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the user.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: An updated user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                users_id:
+                  value: User updated
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Users
+    delete:
+      summary: Deletes an user.
+      description: Deletes a single user as identified by id. Admin only.
+      operationId: delete_users_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the user.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                users_id:
+                  value: User deleted
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Users
+  /orders:
+    summary: For operations on orders.
+    description: For operations on non-specific orders and adding new non-existing orders.
+    get:
+      summary: Gets all orders.
+      description: >-
+        Gets all orders based on authorization. Admin Only.
+      operationId: get_orders
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                orders:
+                  value: 
+                    [
+                      { "id": 1, "user": 1, "date_started": "2022-11-22", "date_completed": "2022-11-22", "delivery_id": 1,
+                        "billing_id": 1, "amount": "$1.22"},
+                      { "id": 2, "user": 4, "date_started": "2022-11-20", "date_completed": "2022-11-21", "delivery_id": 5,
+                        "billing_id": 5, "amount": "$4.22" },
+                      { "id": 3, "user": 1, "date_started": "2022-11-22", "date_completed": "2022-11-22", "delivery_id": 2,
+                        "billing_id": 1, "amount": "$1.42" },
+                    ]
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+    post:
+      summary: Creates a new order.
+      description: Creates a new order on the current user if there is not already and open order. Does not require any input. Automatically set all values based on current user.
+      operationId: post_orders
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                orders:
+                  value: Order created with ID
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+  /orders/{id}:
+    summary: For operations on specific orders.
+    description: For operations on specific orders as identified by id.
+    get:
+      summary: Gets order info.
+      description: Gets info on specific order as identified by id.
+      operationId: get_orders_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the order.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                orders_id:
+                  value: >-
+                    { "id": 1, "user_id": 1, "date_started": "2022-11-22",
+                    "date_completed": "2022-11-22", "delivery_id": 1,
+                        "billing_id": 1, "amount": "$1.22" }
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+    put:
+      summary: Updates an order.
+      description: Updates a specific order based on the id param. Admin only.
+      operationId: put_orders_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the order.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: An updated order object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/order'
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                orders_id:
+                  value: Order updated
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+    delete:
+      summary: Deletes an order.
+      description: Deletes a specific order based on id param.
+      operationId: delete_orders_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the order.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                orders_id:
+                  value: Order deleted
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+  /orders/user/{id}:
+    summary: For operations on orders that belong to the current user.
+    description: For operations on all orders belonging to current user.
+    get:
+      summary: Gets all orders that belong to the current user.
+      description: >-
+        Gets all orders for the current user.
+      operationId: get_orders_user_id
+      parameters:
+        - name: id
+          in: path
+          description: The id of the user.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                orders:
+                  value:
+                    [
+                      { "id": 1, "user_id": 1, "date_started": "2022-11-22", "date_completed": "2022-11-22", "delivery_id": 1,
+                        "billing_id": 1, "amount": "$1.22"},
+                      { "id": 2, "user_id": 1, "date_started": "2022-11-20", "date_completed": "2022-11-21", "delivery_id": 5,
+                        "billing_id": 5, "amount": "$4.22" },
+                      { "id": 3, "user_id": 1, "date_started": "2022-11-22", "date_completed": "2022-11-22", "delivery_id": 2,
+                        "billing_id": 1, "amount": "$1.42" },
+                    ]
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+  /checkout:
+    summary: For operations related to checking out.
+    description: For operations related to checking out.
+    get:
+      summary: Gets all relevant information prior to checkout.
+      description: Gets the cart for checkout, caluculates the total amount, and provides delivery and billing info.
+      operationId: get_checkout
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                orders_id:
+                  value:
+                    {
+                      "items": [
+                        { "order_id": 1, "id": 3, "name": "Smoke Bomb", "price": "$1.22", "quantity": 2, "qty_total": "$2.44" }, 
+                        { "order_id": 1, "id": 4, "name": "Spy Glass", "price": "$40.00", "quantity": 1, "qty_total": "$40.00" }
+                      ],
+                      "total": "$42.44",
+                      "billing": { "id": 1, "payerName": "Bob Evans", "paymentMethod": "Credit Card", "contact": {
+                          "phone":"816-816-8166", "address":"123 fake st.", "city":"Metropolis", "state":"MO", "zip":"64565", "email":"hapdud@hermit.com"
+                        }
+                      },
+                      "delivery": {
+                        "id": 1, "receiverName": "Bob Evans", "deliveryMethod": "Ground", "contact": {
+                          "phone":"816-816-8166", "address":"123 fake st.", "city":"Metropolis", "state":"MO", "zip":"64565", "email":"hapdud@hermit.com"
+                        }
+                      }
+                    }
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+    post:
+      summary: For checking out.
+      description: >- 
+        Completes the open order for the current user, tallies up a total of all items in the cart and confirms delivery and billing info, if different from the users default info. This is where credit card info would be collected.
+      operationId: post_checkout
+      requestBody:
+        description: A new checkout object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/checkout'
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                orders:
+                  value: |-
+                    { "id": 1, "user_id": 1, "date_started": "2022-11-22", "date_completed": "2022-11-22", "delivery_id": 1,
+                        "billing_id": 1, "amount": "$1.22"}
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+  /cart:
+    summary: For operations on the cart
+    description: 'For operations on cart items.'
+    get:
+      summary: Gets all cart items.
+      description: >-
+        Gets all shopping cart items for
+        admin.
+      operationId: get_cart
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                cart:
+                  value: |-
+                    [
+                      { "id": 1, "order_id": 1, "product_id": 1, "quantity": 1 },
+                      { "id": 2, "order_id": 3, "product_id": 1, "quantity": 1 },
+                      { "id": 3, "order_id": 2, "product_id": 2, "quantity": 5 }
+                    ]
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Cart
+    post:
+      summary: Creates a new cart item.
+      description: 'Creates a new item in the shopping cart for current user.'
+      operationId: post_cart
+      requestBody:
+        description: A new cart object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/post_cart'
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                cart:
+                  value: Item added to cart
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Cart
+  /cart/{id}:
+    summary: For operations on a cart item.
+    description: >-
+      For operations on a specific item in a shopping cart based on the id
+      param.
+    get:
+      summary: Gets a cart item.
+      description: Gets the info for a specific cart item as identified by the id param. Admin only.
+      operationId: get_cart_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the cart item.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                cart_id:
+                  value: '{ "id": 1, "order": 1, "product": 1, "quantity": 1 }'
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Cart
+    put:
+      summary: Updates a cart item.
+      description: Updates an item in the shopping cart based on id param. Admin only.
+      operationId: put_cart_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the cart item.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: An updated cart object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/put_cart'
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                cart_id:
+                  value: Item in cart has been updated
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Cart
+    delete:
+      summary: Deletes a cart item.
+      description: Removes an item from the shopping cart based on the id param. Admin only.
+      operationId: delete_cart_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the cart item.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                cart_id:
+                  value: Item removed from cart
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Cart
+  /cart/order/{id}:
+    summary: For operations on the cart for a given order.
+    description: >-
+      For operations on the cart for a given order based on the id
+      param.
+    get:
+      summary: Gets a cart.
+      description: Gets a cart as identified by the order id param. Admin only.
+      operationId: get_cart_order_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the order.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                cart_id:
+                  value: [
+                      { "id": 1, "order_id": 1, "product_id": 1, "quantity": 1 },
+                      { "id": 2, "order_id": 3, "product_id": 1, "quantity": 1 },
+                      { "id": 3, "order_id": 2, "product_id": 2, "quantity": 5 }
+                      ]
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Cart
+    post:
+      summary: Creates a new cart item.
+      description: 'Creates a new item in the shopping cart of any given order. Admin only.'
+      operationId: post_cart_order_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the order.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: A new cart object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/post_cart'
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                cart:
+                  value: Item added to cart
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Cart
+  /cart/user/{id}:
+    summary: For operations on the active cart.
+    description: >-
+      For operations on the active cart of a given user based on the id
+      param. Any user for admin or current user only otherwise.
+    get:
+      summary: Gets a cart.
+      description: Gets a cart as identified by the order id param. Admin only.
+      operationId: get_cart_user_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the user.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                cart_id:
+                  value: [
+                        { "order_id": 1, "id": 3, "name": "Smoke Bomb", "price": "$1.22", "quantity": 2, "qty_total": "$2.44" }, 
+                        { "order_id": 1, "id": 4, "name": "Spy Glass", "price": "$40.00", "quantity": 1, "qty_total": "$40.00" }
+                      ]
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Cart
+  /user/cart/{id}:
+    put:
+      summary: Updates a cart item.
+      description: Updates an item in the shopping cart of the current user based on cart id param.
+      operationId: put_user_cart_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the cart item.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: An updated cart object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/put_cart'
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                cart_id:
+                  value: Item in cart has been updated
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Cart
+    delete:
+      summary: Deletes a cart item.
+      description: Deletes an item in the shopping cart of the current user based on cart id param.
+      operationId: delete_user_cart_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the cart item.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                cart_id:
+                  value: Item removed from cart
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Cart
+  /vendors:
+    summary: For operations on vendors
+    description: For operations on non-specific vendors.
+    get:
+      summary: Gets all vendors.
+      description: Gets all vendors and their info.
+      operationId: get_vendors
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                vendors:
+                  value: |-
+                    [
+                      { "id": 1, "name":"Corpo Corp", "description":"blah blah blah", "contact":
+                        {"phone":"999-888-7777", "address":"123 real pl.", "city":"Metropolis", "state":"MO", "zip":"78974", "email":"hapdud@hermit.com"}
+                      },
+                      { "id": 2, "name":"Inky Inc", "description":"yada yada yada", "contact":
+                        {"phone":"999-111-2222", "address":"444 donkey st.", "city":"New Fruit", "state":"IL", "zip":"49038", "email":"hapdud@hermit.com"}
+                      },
+                      { "id": 3, "name":"Limit Ltd", "description":"yak yak yak", "contact":
+                        {"phone":"888-123-4567", "address":"222 poor blvd.", "city":"Appleville", "state":"NY", "zip":"43898", "email":"hapdud@hermit.com"}
+                      }
+                    ]
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Vendors
+    post:
+      summary: Creates a new vendor.
+      description: Creates a new vendor based on request object. Admin only.
+      operationId: post_vendors
+      requestBody:
+        description: A new vendor object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/vendor'
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                vendors:
+                  value: Vendor created
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Vendors
+  /vendors/{id}:
+    summary: For operations a vendor.
+    description: For operations on specific vendors.
+    get:
+      summary: Gets a vendor.
+      description: Gets a specific vendor info based on id param.
+      operationId: get_vendors_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the vendor.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                vendors_id:
+                  value:
+                    { 
+                      "id": 1, "name":"Corpo Corp", "description":"blah blah blah", "contact":
+                        {
+                          "phone":"999-888-7777", "address":"123 real pl.", "city":"Metropolis", "state":"MO", "zip" :"78974", "email":"hapdud@hermit.com"
+                          
+                        }
+                    }
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Vendors
+    put:
+      summary: Update a vendor.
+      description: Update a specific vendor based on id param. Admin only.
+      operationId: put_vendors_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the vendor.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: An updated vendor object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/vendor'
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                vendors_id:
+                  value: Vendor has been updated
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Vendors
+    delete:
+      summary: Deletes a vendor.
+      description: Deletes a  specific vendor based on id param. Admin only.
+      operationId: delete_vendors_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the vendor.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                vendors_id:
+                  value: Vendor has been deleted
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Vendors
+  /products:
+    summary: For operations on products
+    description: For operations on non-specific products.
+    get:
+      summary: Gets all products.
+      description: Gets info on all products in the database.
+      operationId: get_products
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                products:
+                  value:
+                    [
+                      { "id": 1, "name": "Umbrella Gun", "description": "Blah Blah", "price": "$121.99", "vendor_id": 1 },
+                      { "id": 2, "name": "Knockout Gas", "description": "Yak Yak", "price": "$32.99", "vendor_id": 2 },
+                      { "id": 3, "name": "Cufflink Bomb", "description": "Chitter Chitter", "price": "$234.99", "vendor_id": 1 },
+                    ]
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Products
+    post:
+      summary: Creates a new product.
+      description: Adds a new product to the database. Admin only.
+      operationId: post_products
+      requestBody:
+        description: A new product object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product'
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                products:
+                  value: Product created
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Products
+  /products/{id}:
+    summary: For operations on a product.
+    description: >-
+      For operations on a specific product from the database based on the id
+      param.
+    get:
+      summary: Gets a product.
+      description: Gets the info on a specific product based on the id param.
+      operationId: get_products_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the product.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                products_id:
+                  value: 
+                    { 
+                      "id": 1, "name": "Umbrella Gun", "description": "Blah Blah", "price": "$121.99", "vendor_id": 1 
+                    }
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Products
+    put:
+      summary: Updates a product.
+      description: Updates a specific product in the database using the id param. Admin only.
+      operationId: put_products_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the product.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: An updated product object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product'
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                products_id:
+                  value: Product has been updated
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Products
+    delete:
+      summary: Deletes a product.
+      description: Removes a specific product from the database using the id param. Admin only.
+      operationId: delete_products_{id}
+      parameters:
+        - name: id
+          in: path
+          description: The id of the product.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                products_id:
+                  value: Product has been deleted
+          description: Success
+        default:
+          description: Default error sample response
+      tags:
+        - Products
+components:
+  schemas:
+    login:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      xml:
+        name: login
+    register:
+      type: object
+      properties:
+        fullname:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        contact:
+          type: object
+          properties:
+            phone:
+              type: string
+            address:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            zip:
+              type: string
+            email:
+              type: string
+      xml:
+        name: user
+    password:
+      type: object
+      properties:
+        password:
+          type: string
+      xml:
+        name: password
+    user:
+      type: object
+      properties:
+        fullname:
+          type: string
+        username:
+          type: string
+        contact:
+          type: object
+          properties:
+            phone:
+              type: string
+            address:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            zip:
+              type: string
+            email:
+              type: string
+      xml:
+        name: user
+    order:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        date_started:
+          type: string
+        date_completed:
+          type: string
+        billing_id:
+          type: integer
+        delivery_id:
+          type: integer
+      xml:
+        name: order
+    checkout:
+      type: object
+      properties:
+        useDefaultDelivery:
+          type: boolean
+        useDefaultBilling:
+          type: boolean
+        ccPlaceholder:
+          type: integer
+        delivery:
+          type: object
+          properties:
+            receiverName:
+              type: string
+            deliveryMethod:
+              type: string
+            contact:
+              type: object
+              properties:
+                phone:
+                  type: string
+                address:
+                  type: string
+                city:
+                  type: string
+                state:
+                  type: string
+                zip:
+                  type: string
+                email:
+                  type: string
+        billing:
+          type: object
+          properties:
+            payerName:
+              type: string
+            paymentMethod:
+              type: string
+            contact:
+                type: object
+                properties:
+                  phone:
+                    type: string
+                  address:
+                    type: string
+                  city:
+                    type: string
+                  state:
+                    type: string
+                  zip:
+                    type: string
+                  email:
+                    type: string
+    post_cart:
+      type: object
+      properties:
+        product:
+          type: integer
+        quantity:
+          type: integer
+      xml:
+        name: cart
+    put_cart:
+      type: object
+      properties:
+        quantity:
+          type: integer
+      xml:
+        name: cart
+    vendor:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        contact:
+          type: object
+          properties:
+            phone:
+              type: string
+            address:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            zip:
+              type: string
+            email:
+              type: string
+      xml:
+        name: vendor
+    product:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: string
+        vendor_id:
+          type: integer
+      xml:
+        name: product

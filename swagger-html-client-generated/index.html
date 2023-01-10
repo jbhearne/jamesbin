@@ -1,0 +1,1962 @@
+<!doctype html>
+<html>
+  <head>
+    <title>James' Bin</title>
+    <style type="text/css">
+      body {
+      	font-family: Trebuchet MS, sans-serif;
+      	font-size: 15px;
+      	color: #444;
+      	margin-right: 24px;
+      }
+      
+      h1	{
+      	font-size: 25px;
+      }
+      h2	{
+      	font-size: 20px;
+      }
+      h3	{
+      	font-size: 16px;
+      	font-weight: bold;
+      }
+      hr	{
+      	height: 1px;
+      	border: 0;
+      	color: #ddd;
+      	background-color: #ddd;
+      }
+      
+      .app-desc {
+        clear: both;
+        margin-left: 20px;
+      }
+      .param-name {
+        width: 100%;
+      }
+      .license-info {
+        margin-left: 20px;
+      }
+      
+      .license-url {
+        margin-left: 20px;
+      }
+      
+      .model {
+        margin: 0 0 0px 20px;
+      }
+      
+      .method {
+        margin-left: 20px;
+      }
+      
+      .method-notes	{
+      	margin: 10px 0 20px 0;
+      	font-size: 90%;
+      	color: #555;
+      }
+      
+      pre {
+        padding: 10px;
+        margin-bottom: 2px;
+      }
+      
+      .http-method {
+       text-transform: uppercase;
+      }
+      
+      pre.get {
+        background-color: #0f6ab4;
+      }
+      
+      pre.post {
+        background-color: #10a54a;
+      }
+      
+      pre.put {
+        background-color: #c5862b;
+      }
+      
+      pre.delete {
+        background-color: #a41e22;
+      }
+      
+      .huge	{
+      	color: #fff;
+      }
+      
+      pre.example {
+        background-color: #f3f3f3;
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+      
+      code {
+        white-space: pre;
+      }
+      
+      .nickname {
+        font-weight: bold;
+      }
+      
+      .method-path {
+        font-size: 1.5em;
+        background-color: #0f6ab4;
+      }
+      
+      .up {
+        float:right;
+      }
+      
+      .parameter {
+        width: 500px;
+      }
+      
+      .param {
+        width: 500px;
+        padding: 10px 0 0 20px;
+        font-weight: bold;
+      }
+      
+      .param-desc {
+        width: 700px;
+        padding: 0 0 0 20px;
+        color: #777;
+      }
+      
+      .param-type {
+        font-style: italic;
+      }
+      
+      .param-enum-header {
+      width: 700px;
+      padding: 0 0 0 60px;
+      color: #777;
+      font-weight: bold;
+      }
+      
+      .param-enum {
+      width: 700px;
+      padding: 0 0 0 80px;
+      color: #777;
+      font-style: italic;
+      }
+      
+      .field-label {
+        padding: 0;
+        margin: 0;
+        clear: both;
+      }
+      
+      .field-items	{
+      	padding: 0 0 15px 0;
+      	margin-bottom: 15px;
+      }
+      
+      .return-type {
+        clear: both;
+        padding-bottom: 10px;
+      }
+      
+      .param-header {
+        font-weight: bold;
+      }
+      
+      .method-tags {
+        text-align: right;
+      }
+      
+      .method-tag {
+        background: none repeat scroll 0% 0% #24A600;
+        border-radius: 3px;
+        padding: 2px 10px;
+        margin: 2px;
+        color: #FFF;
+        display: inline-block;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+  <h1>James' Bin</h1>
+    <div class="app-desc">An e-commerce website for spy craft goods.</div>
+    <div class="app-desc">More information: <a href="https://helloreverb.com">https://helloreverb.com</a></div>
+    <div class="app-desc">Contact Info: <a href="hello@helloreverb.com">hello@helloreverb.com</a></div>
+    <div class="app-desc">Version: 1</div>
+    
+    <div class="license-info">All rights reserved</div>
+    <div class="license-url">http://apache.org/licenses/LICENSE-2.0.html</div>
+  <h2>Access</h2>
+
+  <h2><a name="__Methods">Methods</a></h2>
+  [ Jump to <a href="#__Models">Models</a> ]
+
+  <h3>Table of Contents </h3>
+  <div class="method-summary"></div>
+  <h4><a href="#Authentication">Authentication</a></h4>
+  <ul>
+  <li><a href="#postLogin"><code><span class="http-method">post</span> /login</code></a></li>
+  <li><a href="#postLogout"><code><span class="http-method">post</span> /logout</code></a></li>
+  <li><a href="#putUserPassword"><code><span class="http-method">put</span> /user/password</code></a></li>
+  <li><a href="#register"><code><span class="http-method">post</span> /register</code></a></li>
+  </ul>
+  <h4><a href="#Cart">Cart</a></h4>
+  <ul>
+  <li><a href="#deleteCart{id}"><code><span class="http-method">delete</span> /cart/{id}</code></a></li>
+  <li><a href="#deleteUserCart{id}"><code><span class="http-method">delete</span> /user/cart/{id}</code></a></li>
+  <li><a href="#getCart"><code><span class="http-method">get</span> /cart</code></a></li>
+  <li><a href="#getCartOrder{id}"><code><span class="http-method">get</span> /cart/order/{id}</code></a></li>
+  <li><a href="#getCartUser{id}"><code><span class="http-method">get</span> /cart/user/{id}</code></a></li>
+  <li><a href="#getCart{id}"><code><span class="http-method">get</span> /cart/{id}</code></a></li>
+  <li><a href="#postCart"><code><span class="http-method">post</span> /cart</code></a></li>
+  <li><a href="#postCartOrder{id}"><code><span class="http-method">post</span> /cart/order/{id}</code></a></li>
+  <li><a href="#putCart{id}"><code><span class="http-method">put</span> /cart/{id}</code></a></li>
+  <li><a href="#putUserCart{id}"><code><span class="http-method">put</span> /user/cart/{id}</code></a></li>
+  </ul>
+  <h4><a href="#Orders">Orders</a></h4>
+  <ul>
+  <li><a href="#deleteOrders{id}"><code><span class="http-method">delete</span> /orders/{id}</code></a></li>
+  <li><a href="#getCheckout"><code><span class="http-method">get</span> /checkout</code></a></li>
+  <li><a href="#getOrders"><code><span class="http-method">get</span> /orders</code></a></li>
+  <li><a href="#getOrdersUserId"><code><span class="http-method">get</span> /orders/user/{id}</code></a></li>
+  <li><a href="#getOrders{id}"><code><span class="http-method">get</span> /orders/{id}</code></a></li>
+  <li><a href="#postCheckout"><code><span class="http-method">post</span> /checkout</code></a></li>
+  <li><a href="#postOrders"><code><span class="http-method">post</span> /orders</code></a></li>
+  <li><a href="#putOrders{id}"><code><span class="http-method">put</span> /orders/{id}</code></a></li>
+  </ul>
+  <h4><a href="#Products">Products</a></h4>
+  <ul>
+  <li><a href="#deleteProducts{id}"><code><span class="http-method">delete</span> /products/{id}</code></a></li>
+  <li><a href="#getProducts"><code><span class="http-method">get</span> /products</code></a></li>
+  <li><a href="#getProducts{id}"><code><span class="http-method">get</span> /products/{id}</code></a></li>
+  <li><a href="#postProducts"><code><span class="http-method">post</span> /products</code></a></li>
+  <li><a href="#putProducts{id}"><code><span class="http-method">put</span> /products/{id}</code></a></li>
+  </ul>
+  <h4><a href="#Users">Users</a></h4>
+  <ul>
+  <li><a href="#deleteUsers{id}"><code><span class="http-method">delete</span> /users/{id}</code></a></li>
+  <li><a href="#getUsers"><code><span class="http-method">get</span> /users</code></a></li>
+  <li><a href="#getUsers{id}"><code><span class="http-method">get</span> /users/{id}</code></a></li>
+  <li><a href="#putUsers{id}"><code><span class="http-method">put</span> /users/{id}</code></a></li>
+  </ul>
+  <h4><a href="#Vendors">Vendors</a></h4>
+  <ul>
+  <li><a href="#deleteVendors{id}"><code><span class="http-method">delete</span> /vendors/{id}</code></a></li>
+  <li><a href="#getVendors"><code><span class="http-method">get</span> /vendors</code></a></li>
+  <li><a href="#getVendors{id}"><code><span class="http-method">get</span> /vendors/{id}</code></a></li>
+  <li><a href="#postVendors"><code><span class="http-method">post</span> /vendors</code></a></li>
+  <li><a href="#putVendors{id}"><code><span class="http-method">put</span> /vendors/{id}</code></a></li>
+  </ul>
+
+  <h1><a name="Authentication">Authentication</a></h1>
+  <div class="method"><a name="postLogin"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /login</code></pre></div>
+    <div class="method-summary">Login. (<span class="nickname">postLogin</span>)</div>
+    <div class="method-notes">Login using username and password.</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#login">login</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; login object with username and password. </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success. Redirect.
+        <a href="#"></a>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="postLogout"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /logout</code></pre></div>
+    <div class="method-summary">Logout. (<span class="nickname">postLogout</span>)</div>
+    <div class="method-notes">Logout. No input required.</div>
+
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success. Redirect.
+        <a href="#"></a>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="putUserPassword"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /user/password</code></pre></div>
+    <div class="method-summary">Change password. (<span class="nickname">putUserPassword</span>)</div>
+    <div class="method-notes">Change password with hash and salt.</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#password">password</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Object with password. </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success. Redirect.
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: users_id</div>
+    <pre class="example"><code>Password updated.</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="register"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /register</code></pre></div>
+    <div class="method-summary">Creates a new user. (<span class="nickname">register</span>)</div>
+    <div class="method-notes">Creats a new user using a request object. Hashes and salts the password in the object.</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#register">register</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; User object. </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success. Redirect.
+        <a href="#"></a>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="Cart">Cart</a></h1>
+  <div class="method"><a name="deleteCart{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /cart/{id}</code></pre></div>
+    <div class="method-summary">Deletes a cart item. (<span class="nickname">deleteCart{id}</span>)</div>
+    <div class="method-notes">Removes an item from the shopping cart based on the id param. Admin only.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the cart item. </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: cart_id</div>
+    <pre class="example"><code>Item removed from cart</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="deleteUserCart{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /user/cart/{id}</code></pre></div>
+    <div class="method-summary">Deletes a cart item. (<span class="nickname">deleteUserCart{id}</span>)</div>
+    <div class="method-notes">Deletes an item in the shopping cart of the current user based on cart id param.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the cart item. </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: cart_id</div>
+    <pre class="example"><code>Item removed from cart</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getCart"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /cart</code></pre></div>
+    <div class="method-summary">Gets all cart items. (<span class="nickname">getCart</span>)</div>
+    <div class="method-notes">Gets all shopping cart items for admin.</div>
+
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: cart</div>
+    <pre class="example"><code>[
+  { &quot;id&quot;: 1, &quot;order_id&quot;: 1, &quot;product_id&quot;: 1, &quot;quantity&quot;: 1 },
+  { &quot;id&quot;: 2, &quot;order_id&quot;: 3, &quot;product_id&quot;: 1, &quot;quantity&quot;: 1 },
+  { &quot;id&quot;: 3, &quot;order_id&quot;: 2, &quot;product_id&quot;: 2, &quot;quantity&quot;: 5 }
+]</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getCartOrder{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /cart/order/{id}</code></pre></div>
+    <div class="method-summary">Gets a cart. (<span class="nickname">getCartOrder{id}</span>)</div>
+    <div class="method-notes">Gets a cart as identified by the order id param. Admin only.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the order. </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: cart_id</div>
+    <pre class="example"><code>[{&quot;id&quot;:1,&quot;order_id&quot;:1,&quot;product_id&quot;:1,&quot;quantity&quot;:1},{&quot;id&quot;:2,&quot;order_id&quot;:3,&quot;product_id&quot;:1,&quot;quantity&quot;:1},{&quot;id&quot;:3,&quot;order_id&quot;:2,&quot;product_id&quot;:2,&quot;quantity&quot;:5}]</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getCartUser{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /cart/user/{id}</code></pre></div>
+    <div class="method-summary">Gets a cart. (<span class="nickname">getCartUser{id}</span>)</div>
+    <div class="method-notes">Gets a cart as identified by the order id param. Admin only.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the user. </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: cart_id</div>
+    <pre class="example"><code>[{&quot;order_id&quot;:1,&quot;id&quot;:3,&quot;name&quot;:&quot;Smoke Bomb&quot;,&quot;price&quot;:&quot;$1.22&quot;,&quot;quantity&quot;:2,&quot;qty_total&quot;:&quot;$2.44&quot;},{&quot;order_id&quot;:1,&quot;id&quot;:4,&quot;name&quot;:&quot;Spy Glass&quot;,&quot;price&quot;:&quot;$40.00&quot;,&quot;quantity&quot;:1,&quot;qty_total&quot;:&quot;$40.00&quot;}]</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getCart{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /cart/{id}</code></pre></div>
+    <div class="method-summary">Gets a cart item. (<span class="nickname">getCart{id}</span>)</div>
+    <div class="method-notes">Gets the info for a specific cart item as identified by the id param. Admin only.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the cart item. </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: cart_id</div>
+    <pre class="example"><code>{ &quot;id&quot;: 1, &quot;order&quot;: 1, &quot;product&quot;: 1, &quot;quantity&quot;: 1 }</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="postCart"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /cart</code></pre></div>
+    <div class="method-summary">Creates a new cart item. (<span class="nickname">postCart</span>)</div>
+    <div class="method-notes">Creates a new item in the shopping cart for current user.</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#post_cart">post_cart</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; A new cart object </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: cart</div>
+    <pre class="example"><code>Item added to cart</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="postCartOrder{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /cart/order/{id}</code></pre></div>
+    <div class="method-summary">Creates a new cart item. (<span class="nickname">postCartOrder{id}</span>)</div>
+    <div class="method-notes">Creates a new item in the shopping cart of any given order. Admin only.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the order. </div>    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#post_cart">post_cart</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; A new cart object </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: cart</div>
+    <pre class="example"><code>Item added to cart</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="putCart{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /cart/{id}</code></pre></div>
+    <div class="method-summary">Updates a cart item. (<span class="nickname">putCart{id}</span>)</div>
+    <div class="method-notes">Updates an item in the shopping cart based on id param. Admin only.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the cart item. </div>    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#put_cart">put_cart</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; An updated cart object </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: cart_id</div>
+    <pre class="example"><code>Item in cart has been updated</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="putUserCart{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /user/cart/{id}</code></pre></div>
+    <div class="method-summary">Updates a cart item. (<span class="nickname">putUserCart{id}</span>)</div>
+    <div class="method-notes">Updates an item in the shopping cart of the current user based on cart id param.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the cart item. </div>    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#put_cart">put_cart</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; An updated cart object </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: cart_id</div>
+    <pre class="example"><code>Item in cart has been updated</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="Orders">Orders</a></h1>
+  <div class="method"><a name="deleteOrders{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /orders/{id}</code></pre></div>
+    <div class="method-summary">Deletes an order. (<span class="nickname">deleteOrders{id}</span>)</div>
+    <div class="method-notes">Deletes a specific order based on id param.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the order. </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: orders_id</div>
+    <pre class="example"><code>Order deleted</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getCheckout"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /checkout</code></pre></div>
+    <div class="method-summary">Gets all relevant information prior to checkout. (<span class="nickname">getCheckout</span>)</div>
+    <div class="method-notes">Gets the cart for checkout, caluculates the total amount, and provides delivery and billing info.</div>
+
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: orders_id</div>
+    <pre class="example"><code>{&quot;items&quot;:[{&quot;order_id&quot;:1,&quot;id&quot;:3,&quot;name&quot;:&quot;Smoke Bomb&quot;,&quot;price&quot;:&quot;$1.22&quot;,&quot;quantity&quot;:2,&quot;qty_total&quot;:&quot;$2.44&quot;},{&quot;order_id&quot;:1,&quot;id&quot;:4,&quot;name&quot;:&quot;Spy Glass&quot;,&quot;price&quot;:&quot;$40.00&quot;,&quot;quantity&quot;:1,&quot;qty_total&quot;:&quot;$40.00&quot;}],&quot;total&quot;:&quot;$42.44&quot;,&quot;billing&quot;:{&quot;id&quot;:1,&quot;payerName&quot;:&quot;Bob Evans&quot;,&quot;paymentMethod&quot;:&quot;Credit Card&quot;,&quot;contact&quot;:{&quot;phone&quot;:&quot;816-816-8166&quot;,&quot;address&quot;:&quot;123 fake st.&quot;,&quot;city&quot;:&quot;Metropolis&quot;,&quot;state&quot;:&quot;MO&quot;,&quot;zip&quot;:&quot;64565&quot;,&quot;email&quot;:&quot;hapdud@hermit.com&quot;}},&quot;delivery&quot;:{&quot;id&quot;:1,&quot;receiverName&quot;:&quot;Bob Evans&quot;,&quot;deliveryMethod&quot;:&quot;Ground&quot;,&quot;contact&quot;:{&quot;phone&quot;:&quot;816-816-8166&quot;,&quot;address&quot;:&quot;123 fake st.&quot;,&quot;city&quot;:&quot;Metropolis&quot;,&quot;state&quot;:&quot;MO&quot;,&quot;zip&quot;:&quot;64565&quot;,&quot;email&quot;:&quot;hapdud@hermit.com&quot;}}}</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getOrders"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /orders</code></pre></div>
+    <div class="method-summary">Gets all orders. (<span class="nickname">getOrders</span>)</div>
+    <div class="method-notes">Gets all orders based on authorization. Admin Only.</div>
+
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: orders</div>
+    <pre class="example"><code>[{&quot;id&quot;:1,&quot;user&quot;:1,&quot;date_started&quot;:&quot;2022-11-22&quot;,&quot;date_completed&quot;:&quot;2022-11-22&quot;,&quot;delivery_id&quot;:1,&quot;billing_id&quot;:1,&quot;amount&quot;:&quot;$1.22&quot;},{&quot;id&quot;:2,&quot;user&quot;:4,&quot;date_started&quot;:&quot;2022-11-20&quot;,&quot;date_completed&quot;:&quot;2022-11-21&quot;,&quot;delivery_id&quot;:5,&quot;billing_id&quot;:5,&quot;amount&quot;:&quot;$4.22&quot;},{&quot;id&quot;:3,&quot;user&quot;:1,&quot;date_started&quot;:&quot;2022-11-22&quot;,&quot;date_completed&quot;:&quot;2022-11-22&quot;,&quot;delivery_id&quot;:2,&quot;billing_id&quot;:1,&quot;amount&quot;:&quot;$1.42&quot;}]</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getOrdersUserId"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /orders/user/{id}</code></pre></div>
+    <div class="method-summary">Gets all orders that belong to the current user. (<span class="nickname">getOrdersUserId</span>)</div>
+    <div class="method-notes">Gets all orders for the current user.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the user. </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: orders</div>
+    <pre class="example"><code>[{&quot;id&quot;:1,&quot;user_id&quot;:1,&quot;date_started&quot;:&quot;2022-11-22&quot;,&quot;date_completed&quot;:&quot;2022-11-22&quot;,&quot;delivery_id&quot;:1,&quot;billing_id&quot;:1,&quot;amount&quot;:&quot;$1.22&quot;},{&quot;id&quot;:2,&quot;user_id&quot;:1,&quot;date_started&quot;:&quot;2022-11-20&quot;,&quot;date_completed&quot;:&quot;2022-11-21&quot;,&quot;delivery_id&quot;:5,&quot;billing_id&quot;:5,&quot;amount&quot;:&quot;$4.22&quot;},{&quot;id&quot;:3,&quot;user_id&quot;:1,&quot;date_started&quot;:&quot;2022-11-22&quot;,&quot;date_completed&quot;:&quot;2022-11-22&quot;,&quot;delivery_id&quot;:2,&quot;billing_id&quot;:1,&quot;amount&quot;:&quot;$1.42&quot;}]</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getOrders{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /orders/{id}</code></pre></div>
+    <div class="method-summary">Gets order info. (<span class="nickname">getOrders{id}</span>)</div>
+    <div class="method-notes">Gets info on specific order as identified by id.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the order. </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: orders_id</div>
+    <pre class="example"><code>{ &quot;id&quot;: 1, &quot;user_id&quot;: 1, &quot;date_started&quot;: &quot;2022-11-22&quot;, &quot;date_completed&quot;: &quot;2022-11-22&quot;, &quot;delivery_id&quot;: 1,
+    &quot;billing_id&quot;: 1, &quot;amount&quot;: &quot;$1.22&quot; }</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="postCheckout"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /checkout</code></pre></div>
+    <div class="method-summary">For checking out. (<span class="nickname">postCheckout</span>)</div>
+    <div class="method-notes">Completes the open order for the current user, tallies up a total of all items in the cart and confirms delivery and billing info, if different from the users default info. This is where credit card info would be collected.</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#checkout">checkout</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; A new checkout object </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: orders</div>
+    <pre class="example"><code>{ &quot;id&quot;: 1, &quot;user_id&quot;: 1, &quot;date_started&quot;: &quot;2022-11-22&quot;, &quot;date_completed&quot;: &quot;2022-11-22&quot;, &quot;delivery_id&quot;: 1,
+    &quot;billing_id&quot;: 1, &quot;amount&quot;: &quot;$1.22&quot;}</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="postOrders"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /orders</code></pre></div>
+    <div class="method-summary">Creates a new order. (<span class="nickname">postOrders</span>)</div>
+    <div class="method-notes">Creates a new order on the current user if there is not already and open order. Does not require any input. Automatically set all values based on current user.</div>
+
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: orders</div>
+    <pre class="example"><code>Order created with ID</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="putOrders{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /orders/{id}</code></pre></div>
+    <div class="method-summary">Updates an order. (<span class="nickname">putOrders{id}</span>)</div>
+    <div class="method-notes">Updates a specific order based on the id param. Admin only.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the order. </div>    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#order">order</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; An updated order object </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: orders_id</div>
+    <pre class="example"><code>Order updated</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="Products">Products</a></h1>
+  <div class="method"><a name="deleteProducts{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /products/{id}</code></pre></div>
+    <div class="method-summary">Deletes a product. (<span class="nickname">deleteProducts{id}</span>)</div>
+    <div class="method-notes">Removes a specific product from the database using the id param. Admin only.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the product. </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: products_id</div>
+    <pre class="example"><code>Product has been deleted</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getProducts"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /products</code></pre></div>
+    <div class="method-summary">Gets all products. (<span class="nickname">getProducts</span>)</div>
+    <div class="method-notes">Gets info on all products in the database.</div>
+
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: products</div>
+    <pre class="example"><code>[{&quot;id&quot;:1,&quot;name&quot;:&quot;Umbrella Gun&quot;,&quot;description&quot;:&quot;Blah Blah&quot;,&quot;price&quot;:&quot;$121.99&quot;,&quot;vendor_id&quot;:1},{&quot;id&quot;:2,&quot;name&quot;:&quot;Knockout Gas&quot;,&quot;description&quot;:&quot;Yak Yak&quot;,&quot;price&quot;:&quot;$32.99&quot;,&quot;vendor_id&quot;:2},{&quot;id&quot;:3,&quot;name&quot;:&quot;Cufflink Bomb&quot;,&quot;description&quot;:&quot;Chitter Chitter&quot;,&quot;price&quot;:&quot;$234.99&quot;,&quot;vendor_id&quot;:1}]</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getProducts{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /products/{id}</code></pre></div>
+    <div class="method-summary">Gets a product. (<span class="nickname">getProducts{id}</span>)</div>
+    <div class="method-notes">Gets the info on a specific product based on the id param.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the product. </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: products_id</div>
+    <pre class="example"><code>{&quot;id&quot;:1,&quot;name&quot;:&quot;Umbrella Gun&quot;,&quot;description&quot;:&quot;Blah Blah&quot;,&quot;price&quot;:&quot;$121.99&quot;,&quot;vendor_id&quot;:1}</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="postProducts"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /products</code></pre></div>
+    <div class="method-summary">Creates a new product. (<span class="nickname">postProducts</span>)</div>
+    <div class="method-notes">Adds a new product to the database. Admin only.</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#product">product</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; A new product object </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: products</div>
+    <pre class="example"><code>Product created</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="putProducts{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /products/{id}</code></pre></div>
+    <div class="method-summary">Updates a product. (<span class="nickname">putProducts{id}</span>)</div>
+    <div class="method-notes">Updates a specific product in the database using the id param. Admin only.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the product. </div>    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#product">product</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; An updated product object </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: products_id</div>
+    <pre class="example"><code>Product has been updated</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="Users">Users</a></h1>
+  <div class="method"><a name="deleteUsers{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /users/{id}</code></pre></div>
+    <div class="method-summary">Deletes an user. (<span class="nickname">deleteUsers{id}</span>)</div>
+    <div class="method-notes">Deletes a single user as identified by id. Admin only.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the user. </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: users_id</div>
+    <pre class="example"><code>User deleted</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getUsers"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /users</code></pre></div>
+    <div class="method-summary">Gets current or all user(s). (<span class="nickname">getUsers</span>)</div>
+    <div class="method-notes">Gets all users if user has proper authorization.</div>
+
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: users</div>
+    <pre class="example"><code>[
+  { &quot;id&quot;: 1, &quot;name&quot;:&quot;Carey Maynard&quot;, &quot;username&quot;:&quot;hapdude&quot;, &quot;password&quot;:&quot;hapdude123&quot;, &quot;contact&quot;:
+    {&quot;phone&quot;:&quot;816-816-8166&quot;, &quot;address&quot;:&quot;123 fake st.&quot;, &quot;city&quot;:&quot;Metropolis&quot;, &quot;state&quot;:&quot;MO&quot;, &quot;zip&quot;:&quot;64565&quot;, &quot;email&quot;:&quot;hapdud@hermit.com&quot;}
+  },
+  { &quot;id&quot;: 2, &quot;name&quot;:&quot;Bob Ard&quot;, &quot;username&quot;:&quot;happy&quot;, &quot;password&quot;:&quot;hapdu&quot;, &quot;contact&quot;:
+    {&quot;phone&quot;:&quot;888-555-8166&quot;, &quot;address&quot;:&quot;321 fake st.&quot;, &quot;city&quot;:&quot;Gotham&quot;, &quot;state&quot;:&quot;MO&quot;, &quot;zip&quot;:&quot;64565&quot;, &quot;email&quot;:&quot;hap@hermit.com&quot;}
+  },
+  { &quot;id&quot;: 3, &quot;name&quot;:&quot;Rey Mayn&quot;, &quot;username&quot;:&quot;dude&quot;, &quot;password&quot;:&quot;ude123&quot;, &quot;contact&quot;:
+    {&quot;phone&quot;:&quot;757-666-8166&quot;, &quot;address&quot;:&quot;666 fake st.&quot;, &quot;city&quot;:&quot;Metropolis&quot;, &quot;state&quot;:&quot;MO&quot;, &quot;zip&quot;:&quot;64565&quot;, &quot;email&quot;:&quot;dud@hermit.com&quot;}
+  },
+  { &quot;id&quot;: 4, &quot;name&quot;:&quot;Car Nard&quot;, &quot;username&quot;:&quot;pdud&quot;, &quot;password&quot;:&quot;e123&quot;, &quot;contact&quot;:
+    {&quot;phone&quot;:&quot;654-777-8166&quot;, &quot;address&quot;:&quot;987 fake st.&quot;, &quot;city&quot;:&quot;Gotham&quot;, &quot;state&quot;:&quot;MO&quot;, &quot;zip&quot;:&quot;64565&quot;, &quot;email&quot;:&quot;pdud@hermit.com&quot;}
+  }
+]</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getUsers{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /users/{id}</code></pre></div>
+    <div class="method-summary">Gets a user's info. (<span class="nickname">getUsers{id}</span>)</div>
+    <div class="method-notes">Gets a specific user's info as identified by id.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the user. </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: users_id</div>
+    <pre class="example"><code>{ 
+  &quot;id&quot;: 1, &quot;name&quot;:&quot;Carey Maynard&quot;, &quot;username&quot;:&quot;hapdude&quot;, &quot;contact&quot;:
+    {
+      &quot;phone&quot;:&quot;816-816-8166&quot;, &quot;address&quot;:&quot;123 fake st.&quot;, &quot;city&quot;:&quot;Metropolis&quot;, &quot;state&quot;:&quot;MO&quot;, &quot;zip&quot;:&quot;64565&quot;, &quot;email&quot;:&quot;hapdud@hermit.com&quot;
+    }
+}</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="putUsers{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /users/{id}</code></pre></div>
+    <div class="method-summary">For updating an existing user. (<span class="nickname">putUsers{id}</span>)</div>
+    <div class="method-notes">For updating an existing user as identified by id. Any user if Admin or only current user otherwise.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the user. </div>    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#user">user</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; An updated user object </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: users_id</div>
+    <pre class="example"><code>User updated</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="Vendors">Vendors</a></h1>
+  <div class="method"><a name="deleteVendors{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /vendors/{id}</code></pre></div>
+    <div class="method-summary">Deletes a vendor. (<span class="nickname">deleteVendors{id}</span>)</div>
+    <div class="method-notes">Deletes a  specific vendor based on id param. Admin only.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the vendor. </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: vendors_id</div>
+    <pre class="example"><code>Vendor has been deleted</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getVendors"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /vendors</code></pre></div>
+    <div class="method-summary">Gets all vendors. (<span class="nickname">getVendors</span>)</div>
+    <div class="method-notes">Gets all vendors and their info.</div>
+
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: vendors</div>
+    <pre class="example"><code>[
+  { &quot;id&quot;: 1, &quot;name&quot;:&quot;Corpo Corp&quot;, &quot;description&quot;:&quot;blah blah blah&quot;, &quot;contact&quot;:
+    {&quot;phone&quot;:&quot;999-888-7777&quot;, &quot;address&quot;:&quot;123 real pl.&quot;, &quot;city&quot;:&quot;Metropolis&quot;, &quot;state&quot;:&quot;MO&quot;, &quot;zip&quot;:&quot;78974&quot;, &quot;email&quot;:&quot;hapdud@hermit.com&quot;}
+  },
+  { &quot;id&quot;: 2, &quot;name&quot;:&quot;Inky Inc&quot;, &quot;description&quot;:&quot;yada yada yada&quot;, &quot;contact&quot;:
+    {&quot;phone&quot;:&quot;999-111-2222&quot;, &quot;address&quot;:&quot;444 donkey st.&quot;, &quot;city&quot;:&quot;New Fruit&quot;, &quot;state&quot;:&quot;IL&quot;, &quot;zip&quot;:&quot;49038&quot;, &quot;email&quot;:&quot;hapdud@hermit.com&quot;}
+  },
+  { &quot;id&quot;: 3, &quot;name&quot;:&quot;Limit Ltd&quot;, &quot;description&quot;:&quot;yak yak yak&quot;, &quot;contact&quot;:
+    {&quot;phone&quot;:&quot;888-123-4567&quot;, &quot;address&quot;:&quot;222 poor blvd.&quot;, &quot;city&quot;:&quot;Appleville&quot;, &quot;state&quot;:&quot;NY&quot;, &quot;zip&quot;:&quot;43898&quot;, &quot;email&quot;:&quot;hapdud@hermit.com&quot;}
+  }
+]</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getVendors{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /vendors/{id}</code></pre></div>
+    <div class="method-summary">Gets a vendor. (<span class="nickname">getVendors{id}</span>)</div>
+    <div class="method-notes">Gets a specific vendor info based on id param.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the vendor. </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: vendors_id</div>
+    <pre class="example"><code>{&quot;id&quot;:1,&quot;name&quot;:&quot;Corpo Corp&quot;,&quot;description&quot;:&quot;blah blah blah&quot;,&quot;contact&quot;:{&quot;phone&quot;:&quot;999-888-7777&quot;,&quot;address&quot;:&quot;123 real pl.&quot;,&quot;city&quot;:&quot;Metropolis&quot;,&quot;state&quot;:&quot;MO&quot;,&quot;zip&quot;:&quot;78974&quot;,&quot;email&quot;:&quot;hapdud@hermit.com&quot;}}</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="postVendors"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /vendors</code></pre></div>
+    <div class="method-summary">Creates a new vendor. (<span class="nickname">postVendors</span>)</div>
+    <div class="method-notes">Creates a new vendor based on request object. Admin only.</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#vendor">vendor</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; A new vendor object </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: vendors</div>
+    <pre class="example"><code>Vendor created</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="putVendors{id}"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /vendors/{id}</code></pre></div>
+    <div class="method-summary">Update a vendor. (<span class="nickname">putVendors{id}</span>)</div>
+    <div class="method-notes">Update a specific vendor based on id param. Admin only.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The id of the vendor. </div>    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#vendor">vendor</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; An updated vendor object </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>text/plain; charset=utf-8</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: vendors_id</div>
+    <pre class="example"><code>Vendor has been updated</code></pre>
+    <h4 class="field-label">default</h4>
+    Default error sample response
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+
+  <h2><a name="__Models">Models</a></h2>
+  [ Jump to <a href="#__Methods">Methods</a> ]
+
+  <h3>Table of Contents</h3>
+  <ol>
+    <li><a href="#checkout"><code>checkout</code></a></li>
+    <li><a href="#checkout_billing"><code>checkout_billing</code></a></li>
+    <li><a href="#checkout_delivery"><code>checkout_delivery</code></a></li>
+    <li><a href="#login"><code>login</code></a></li>
+    <li><a href="#order"><code>order</code></a></li>
+    <li><a href="#password"><code>password</code></a></li>
+    <li><a href="#post_cart"><code>post_cart</code></a></li>
+    <li><a href="#product"><code>product</code></a></li>
+    <li><a href="#put_cart"><code>put_cart</code></a></li>
+    <li><a href="#register"><code>register</code></a></li>
+    <li><a href="#register_contact"><code>register_contact</code></a></li>
+    <li><a href="#user"><code>user</code></a></li>
+    <li><a href="#vendor"><code>vendor</code></a></li>
+  </ol>
+
+  <div class="model">
+    <h3><a name="checkout"><code>checkout</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">useDefaultDelivery (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+<div class="param">useDefaultBilling (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+<div class="param">ccPlaceholder (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">delivery (optional)</div><div class="param-desc"><span class="param-type"><a href="#checkout_delivery">checkout_delivery</a></span>  </div>
+<div class="param">billing (optional)</div><div class="param-desc"><span class="param-type"><a href="#checkout_billing">checkout_billing</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="checkout_billing"><code>checkout_billing</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">payerName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">paymentMethod (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">contact (optional)</div><div class="param-desc"><span class="param-type"><a href="#register_contact">register_contact</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="checkout_delivery"><code>checkout_delivery</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">receiverName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">deliveryMethod (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">contact (optional)</div><div class="param-desc"><span class="param-type"><a href="#register_contact">register_contact</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="login"><code>login</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="order"><code>order</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">user_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">date_started (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">date_completed (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">billing_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">delivery_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="password"><code>password</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="post_cart"><code>post_cart</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">product (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">quantity (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="product"><code>product</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">price (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">vendor_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="put_cart"><code>put_cart</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">quantity (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="register"><code>register</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">fullname (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">contact (optional)</div><div class="param-desc"><span class="param-type"><a href="#register_contact">register_contact</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="register_contact"><code>register_contact</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">phone (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">address (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">city (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">state (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">zip (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="user"><code>user</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">fullname (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">contact (optional)</div><div class="param-desc"><span class="param-type"><a href="#register_contact">register_contact</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="vendor"><code>vendor</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">contact (optional)</div><div class="param-desc"><span class="param-type"><a href="#register_contact">register_contact</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  </body>
+</html>
