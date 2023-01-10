@@ -37,8 +37,6 @@ The files used to create a Postgres database are included in the database_creati
 
 ## Schema
 
-Initial hand drawn sketch:
-
 ![Database Schema](./ecommerce_project.png)
 
 
