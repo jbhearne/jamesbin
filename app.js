@@ -3,13 +3,15 @@ require('dotenv/config')
 const express = require('express')
 const bodyParser = require('body-parser')
 const passport = require('passport');
-const { sessionConfig, session } = require('./src/models/util/sessionConfig')
+const { sessionConfig, session } = require('./src/models/util/sessionConfig');
+const cors = require('cors')
 
 //create server
 const app = express()
 const PORT = process.env.PORT
 
 //middleware
+app.use(cors())
 app.use(bodyParser.json())
 app.use(
   bodyParser.urlencoded({

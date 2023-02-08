@@ -1,6 +1,6 @@
 
 
-function Cart() {
+function Orders() {
 
 
   return (
@@ -10,4 +10,4 @@ function Cart() {
   )
 }
 
-export default Cart;
+export default Orders;

@@ -1,0 +1,13 @@
+img {
+  width: 80px;
+}
+
+.productsCatalog {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  list-style: none;
+}
+
+.productsCatalog a {
+  color: black;
+}
