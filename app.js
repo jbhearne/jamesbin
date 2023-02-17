@@ -3,21 +3,50 @@ require('dotenv/config')
 const express = require('express')
 const bodyParser = require('body-parser')
 const passport = require('passport');
-const { sessionConfig, session } = require('./src/models/util/sessionConfig');
+//const { sessionConfig, session } = require('./src/models/util/sessionConfig');
 const cors = require('cors')
+const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
+const randomString = require('randomstring')
+const sessionPool = require('./src/models/util/pool')
 
 //create server
 const app = express()
 const PORT = process.env.PORT
 
 //middleware
-app.use(cors())
+app.use(cors({credentials: true, origin: ['http://api.app.localhost:3002', 'http://localhost:3000']}))
+/*app.use((req, res, next) => {
+  res.set('Access-Control-Allow-Origin', ['http://api.app.localhost:3002']);
+  next();
+});*/
 app.use(bodyParser.json())
 app.use(
   bodyParser.urlencoded({
     extended: true,
   })
 )
+
+const sessionDBaccess = sessionPool;
+
+const sessionConfig = {
+  store: new pgSession({
+      pool: sessionDBaccess,
+      tableName: 'session'
+  }),
+  name: 'SID',
+  /*secret: randomString.generate({
+      length: 14,
+      charset: 'alphanumeric'
+  }),*/
+  secret: 'test',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      SameSite: 'lax',
+      secure: false // ENABLE ONLY ON HTTPS
+  }}
 
 //start session and passport
 app.use(passport.initialize())

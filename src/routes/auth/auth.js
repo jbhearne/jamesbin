@@ -22,6 +22,7 @@ passport.use(new LocalStrategy((username, password, cb) => {
     if (!correctPassword) {
       return cb(null, false, { message: 'Incorrect username or password.' })
     }
+    console.log(res.rows[0])
     return cb(null, res.rows[0]);
   })
 }))
@@ -46,10 +47,12 @@ router.get('/login', function(req, res, next) {
 });
 
 //route used to login. a request body with username and password expected.
-router.post('/login', (req, res, next) => {console.log('howdy'); next()}, passport.authenticate('local', {
-  successRedirect: '/',
+router.post('/login', (req, res, next) => {console.log(req.body); next()}, passport.authenticate('local', {
+  //successRedirect: '/',
   failureRedirect: '/login'
-}));
+}), (req, res) => {
+  res.send(req.user)
+});
 
 //route to logout
 router.post('/logout', function(req, res, next) {

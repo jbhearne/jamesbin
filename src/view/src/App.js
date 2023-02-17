@@ -1,8 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
-import React from 'react';
-
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { selectUser } from './components/features/user/userSlice';
 
 import Home from './components/home/Home';
 import Products from './components/features/products/Products';
@@ -20,12 +21,18 @@ import Register from './components/features/user/register/Register';
 import ProductPage from './components/features/products/product/ProductPage'
 
 function App() {
+  const user = {fullname: false}
+  //const user = useSelector(selectUser);
+  /*useEffect(() => {
+
+  }, [user])*/
+  
   return (
     <div className="App">
       <Router>
         <header className="App-header">
         <NavLink to=''><h1>James' Bin</h1></NavLink>
-          <div id="user-login">LOGIN</div>
+          <div id="user-login">{user.fullname || (<NavLink to='/user/login'>Login</NavLink>)}</div>
           <nav id="main-nav">
             <ul>
               <li><NavLink to='products'>Products</NavLink></li>
