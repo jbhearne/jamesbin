@@ -3,12 +3,12 @@ require('dotenv/config')
 const express = require('express')
 const bodyParser = require('body-parser')
 const passport = require('passport');
-//const { sessionConfig, session } = require('./src/models/util/sessionConfig');
+//GARBAGE const { sessionConfig, session } = require('./src/models/util/sessionConfig');
 const cors = require('cors')
-const session = require('express-session');
-const pgSession = require('connect-pg-simple')(session);
-const randomString = require('randomstring')
-const sessionPool = require('./src/models/util/pool')
+//GARBAGE const session = require('express-session');
+//GARBAGE const pgSession = require('connect-pg-simple')(session);
+//GARBAGE const randomString = require('randomstring')
+//GARBAGE const sessionPool = require('./src/models/util/pool')
 
 //create server
 const app = express()
@@ -27,32 +27,11 @@ app.use(
   })
 )
 
-const sessionDBaccess = sessionPool;
-
-const sessionConfig = {
-  store: new pgSession({
-      pool: sessionDBaccess,
-      tableName: 'session'
-  }),
-  name: 'SID',
-  /*secret: randomString.generate({
-      length: 14,
-      charset: 'alphanumeric'
-  }),*/
-  secret: 'test',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-      SameSite: 'lax',
-      secure: false // ENABLE ONLY ON HTTPS
-  }}
-
 //start session and passport
-app.use(passport.initialize())
-app.use(session(sessionConfig))
-app.use(passport.session());
-app.use(passport.authenticate('session'));
+app.use(passport.initialize()) //??? do id need this for JWT? Don't think so.
+//GARBAGE app.use(session(sessionConfig))
+//GARBAGE app.use(passport.session());
+//GARBAGE app.use(passport.authenticate('session'));
 
 //import and use authentication routes
 const authRouter = require('./src/routes/auth/auth');
