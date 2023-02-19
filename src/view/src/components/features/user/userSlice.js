@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { apiFetch, apiPost } from '../../../utils/apiFetch';
+import { apiFetch, apiPost, setToken } from '../../../utils/apiFetch';
 
 
 const EP = {
@@ -8,11 +8,18 @@ const EP = {
   user: '/user'
 }
 
+//IDEA testing setting tokens some logic may need to get broken out
 export const login = createAsyncThunk(
   'user/login',
   async (request) => {
     console.log('test beofore request')
     const logged = await apiPost(EP.login, request)
+    console.log(logged);
+    setToken(logged);
+    const token = localStorage.getItem("id_token");
+    const auth = await apiFetch('/authenticate', token)
+    console.log(auth)
+    ///////////////console.log(localStorage.getItem("id_token"));
     console.log('test after request')
   }
 );
@@ -30,7 +37,8 @@ export const login = createAsyncThunk(
 export const fetchUser = createAsyncThunk(
   'user/fetchUser',
   async () => {
-    const user = await apiFetch(EP.user)
+    const token = localStorage.getItem("id_token");
+    const user = await apiFetch(EP.user, token)
     return user
   }
 );

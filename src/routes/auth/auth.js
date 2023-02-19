@@ -89,6 +89,7 @@ router.post("/register", async (req, res, next) => {
   })
 })
 
+
 router.put('/user/password', loggedIn, async (req, res, next) => {
   const { password } = req.body;
   const userId = req.user.id;

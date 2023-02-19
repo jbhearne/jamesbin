@@ -34,7 +34,7 @@ const jsonwebtoken = require('jsonwebtoken');
 }))*/
 
 //IDEA: start of JWT authentication strategy
-const pathToPubKey = '../../../public.pem';
+const pathToPubKey = path.join(__dirname, '../../../', 'public.pem')//'../../../../public.pem';
 const PUB_KEY = fs.readFileSync(pathToPubKey, 'utf8');
 
 const options = {
@@ -62,27 +62,28 @@ passport.use(new JwtStrategy(options, (jwt_payload, done) => {
   });
 }))
 
+
 //IDEA issue JWT, this should go in another file
-const pathToPrvKey = '../../../private.pem';
+const pathToPrvKey = path.join(__dirname, '../../../', 'private.pem')//'../../../../private.pem';
 const PRV_KEY = fs.readFileSync(pathToPrvKey, 'utf8');
 
 const issueJWT = (user) => {
   const id = user.id;
-  const expiresIn = '1d';
+  const expiresIn = 24 * 60 * 60 * 1000;
 
   const payload = {
     sub: id,
     iat: Date.now(),
   }
 
-  const signedToken = sign(payload, PRV_KEY, {
+  const signedToken = jsonwebtoken.sign(payload, PRV_KEY, {
     expiresIn: expiresIn,
     algorithm: 'RS256',
   });
 
   return {
     token: 'Bearer ' + signedToken,
-    expires: expiresIn,
+    expiresIn: expiresIn,
   }
 }
 
@@ -113,15 +114,12 @@ router.get('/login', function(req, res, next) {
   res.send(req.user)
 });*/
 
-//IDEA password validator should be in different file
-const validPassword = async ()
-
 
 //IDEA new login route for JWT
 router.post('/login', (req, res, next) => {console.log(req.body); next()}, async (req, res, next) => {
   const sql = 'SELECT * FROM users WHERE username = $1';
-  pool.query(sql, [req.body.username], async (err, res) => {
-    const user = res.rows[0]
+  pool.query(sql, [req.body.username], async (err, results) => {
+    const user = results.rows[0]
     if (err) { res.status(401).json({ success: false, msg: "error" }); }
     if (!user) {
       res.status(401).json({ success: false, msg: "could not find user" });
@@ -129,11 +127,11 @@ router.post('/login', (req, res, next) => {console.log(req.body); next()}, async
     const isValidPassword = await bcrypt.compare(req.body.password, user.password);
 
     if (isValidPassword) {
-      const tokenObject = issueJWT(user)
+      const tokenObject = issueJWT(user);
       res.status(200).json({
         success: true,
         token: tokenObject.token,
-        expiresIn: tokenObject.expires,
+        expiresIn: tokenObject.expiresIn,
       });
     } else {
       res
@@ -142,6 +140,16 @@ router.post('/login', (req, res, next) => {console.log(req.body); next()}, async
     }
   })
 });
+
+//IDEA testing default authenicate route 
+router.get('/authenticate', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  console.log(req.user)
+  res.status(200).json({
+    user: req.user,
+    success: true,
+    msg: 'authenticated',
+  })
+})
 
 //route to logout
 router.post('/logout', function(req, res, next) {

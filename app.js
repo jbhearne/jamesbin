@@ -34,7 +34,7 @@ app.use(passport.initialize()) //??? do id need this for JWT? Don't think so.
 //GARBAGE app.use(passport.authenticate('session'));
 
 //import and use authentication routes
-const authRouter = require('./src/routes/auth/auth');
+const authRouter = require('./src/routes/auth/jwt-auth');
 app.use('/', authRouter);
 
 //import and use app routes
