@@ -1,4 +1,5 @@
-import { fetchUser } from "../features/user/userSlice";
+import { fetchUser, setIsloggedIn, removeUser } from "../features/user/userSlice";
+import { logoutToken } from "../../utils/apiFetch";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 
@@ -14,12 +15,18 @@ function Home() {
     dispatch(fetchUser())
   }
 
+  const logoutTest = (e) => {
+    dispatch(removeUser());
+    logoutToken();
+  }
+
   return (
     <div>
       <h2>Mission Statement</h2>
       <p>Hello this is something about what this is</p>
       <p>{test}</p>
-      <button onClick={handleTest}></button>
+      <button onClick={handleTest}></button><br/>
+      <button onClick={logoutTest}></button>
     </div>
   )
 }

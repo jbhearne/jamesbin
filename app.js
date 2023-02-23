@@ -15,7 +15,8 @@ const app = express()
 const PORT = process.env.PORT
 
 //middleware
-app.use(cors({credentials: true, origin: ['http://api.app.localhost:3002', 'http://localhost:3000']}))
+//app.use(cors({credentials: true, origin: ['http://api.app.localhost:3002', 'http://localhost:3000']}))
+app.use(cors())
 /*app.use((req, res, next) => {
   res.set('Access-Control-Allow-Origin', ['http://api.app.localhost:3002']);
   next();
@@ -28,7 +29,7 @@ app.use(
 )
 
 //start session and passport
-app.use(passport.initialize()) //??? do id need this for JWT? Don't think so.
+//app.use(passport.initialize()) //??? do id need this for JWT? Don't think so.
 //GARBAGE app.use(session(sessionConfig))
 //GARBAGE app.use(passport.session());
 //GARBAGE app.use(passport.authenticate('session'));

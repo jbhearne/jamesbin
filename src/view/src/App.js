@@ -2,8 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { selectUser } from './components/features/user/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser, fetchUser, setIsloggedIn } from './components/features/user/userSlice';
 
 import Home from './components/home/Home';
 import Products from './components/features/products/Products';
@@ -21,11 +21,16 @@ import Register from './components/features/user/register/Register';
 import ProductPage from './components/features/products/product/ProductPage'
 
 function App() {
-  const user = {fullname: false}
-  //const user = useSelector(selectUser);
-  /*useEffect(() => {
-
-  }, [user])*/
+  //const user = {fullname: false}
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  useEffect(() => {
+    dispatch(fetchUser())
+    
+  }, [])
+  useEffect(() => {
+    dispatch(setIsloggedIn(!!user.username));
+  }, [user])
   
   return (
     <div className="App">

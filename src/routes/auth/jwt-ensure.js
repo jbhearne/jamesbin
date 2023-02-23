@@ -3,18 +3,26 @@
 
 const passport = require('passport')
 
-//checks if the user is logged in
+//IDEA creates a function that when called returns the authenticate function, this way I dont have to go back and add passport to all my routes.
 const loggedIn = (req, res, next) => {
-  //console.log('logging in')
-  //console.log(req)
-  if (req.user) { next() } else { return res.status(401).json({ message: 'not logged in' }) }
-
+  return passport.authenticate('jwt', {session: false}, (err, user, info, status) => {
+    if (err) { return next(err) }
+    if (!user) { 
+      const information = Object.keys(info).length > 0 ? info : { message: 'Not logged in.'};
+      return res.status(404).json({ 
+        info: information,
+        auth: false,
+        status: status,
+      });
+    }
+    req.user = user;
+    next();
+  })(req, res, next);
 }
-
-//check if the user has admin status
+  
 const isAdmin = (req, res, next) => {
   if (req.user) {
-    if (!req.user.isAdmin) {
+    if (!req.user.admin) {
       console.log('need admin access');
       return res.status(401).send('NO ACCESS. Admin only.')
     } else { next(); }
@@ -25,7 +33,7 @@ const isAdmin = (req, res, next) => {
 const adminOrCurrentUser = (req, res, next) => {
   const id = parseInt(req.params.id);
   if (req.user) {
-    if (!req.user.isAdmin) {
+    if (!req.user.admin) {
       if (req.user.id !== id) {
         return res.status(401).send('no access')
       } else { next() }
@@ -33,9 +41,6 @@ const adminOrCurrentUser = (req, res, next) => {
   } else { return res.status(401).send('not logged in') } 
 }
 
-/*const setJwtUser = (req, res, next) => {
-  next(passport.authenticate('jwt', {session: false}))
-}*/
 
 module.exports = {
   loggedIn,

@@ -31,7 +31,7 @@ const findAllUsers = async () => {
 
 //queries user using user ID and returns a user object with contact info OR false if user not in database.
 const findUserById = async (id) => {
-  const userRes = await pool.query('SELECT fullname, username, contact_id FROM users WHERE id = $1', [id]);  //NOTE does not include password column
+  const userRes = await pool.query('SELECT id, fullname, username, contact_id FROM users WHERE id = $1', [id]);  //NOTE does not include password column
   const noUserResults = checkNoResults(userRes);
   if (noUserResults) return noUserResults;
   const userObj = userRes.rows[0];
