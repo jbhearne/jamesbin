@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { selectUser, fetchUser, login, setIsloggedIn } from '../userSlice';
-import { fetchLogin } from '../../../../utils/apiFetch';
+import { fetchLogin } from '../../../../utils/apiLogin';
 
 function Login() {
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ function Login() {
       username: e.target.username.value,
       password: e.target.password.value
     })
-    /*await dispatch(login({
+    /*GARBAGE await dispatch(login({
       username: e.target.username.value,
       password: e.target.password.value
     }));*/
@@ -23,8 +23,8 @@ function Login() {
     if(isLoggedIn) {
       navigate('/');
     }
-    //dispatch(fetchUser());
-    //navigate('/home');
+    //GARBAGE dispatch(fetchUser());
+    //GARBAGE navigate('/home');
   }
 
   return (

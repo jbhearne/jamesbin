@@ -13,7 +13,8 @@ const {
   addOrderOnUser,
   changeOrder,
   removeOrder,
-  completeOrderNow
+  completeOrderNow,
+  findItemsByOrderId,
 } = require('../models/findOrder');
 
 const { 
@@ -155,6 +156,19 @@ const checkout = async (request, response) => {
   }
 }
 
+////CHANGED add for completed orders? gets all cart items for a specidfied order. sends a response object.
+const getItemsByOrderId = async (request, response) => {
+  const id = parseInt(request.params.id);
+  try {
+    const items = await findItemsByOrderId(id);
+    const check = checkForFoundRowsArr(items);
+    response.status(check.status).json(check.results);
+  } catch (err) {
+    console.error(err);
+    throw new Error('API failure: ' + err);
+  }
+};
+
 module.exports = {
   getOrders,
   getOrdersByUser,
@@ -162,5 +176,6 @@ module.exports = {
   createOrder,
   updateOrder,
   deleteOrder,
-  checkout
+  checkout,
+  getItemsByOrderId
 };

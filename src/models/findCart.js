@@ -81,6 +81,7 @@ const findCartByOrderId = async (orderId) => {
   return cart;
 }
 
+
 //returns an array of all cart items that are on open orders
 const findAllCurrentCartItemsWithProducts = async () => {
   const sql = 'SELECT cart.id, cart.order_id, cart.product_id, products.name, products.price, cart.quantity\

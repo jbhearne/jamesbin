@@ -1,16 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { apiFetch, apiPost, setToken, fetchLogin } from '../../../utils/apiFetch';
-
-
-const EP = {
-  login: '/login',
-  register: '/register',
-  user: '/user',
-  logout: '/logout',
-}
+import { apiFetch, apiPost, setToken } from '../../../utils/apiFetch';
+import EP from '../../../dataEndpoints';
 
 //IDEA testing setting tokens some logic may need to get broken out
-/*export const login = createAsyncThunk(
+/*GARBAGE export const login = createAsyncThunk(
   'user/login',
   async (request) => {
     console.log('test beofore request')
@@ -31,7 +24,7 @@ const EP = {
   }
 );*/
 
-export const login = createAsyncThunk(
+/*GARBAGE export const login = createAsyncThunk(
   'user/login',
   async (body) => {
     console.log('test beofore request')
@@ -43,7 +36,7 @@ export const login = createAsyncThunk(
 
     return isLoggedIn;
   }
-);
+);*/
 
 /*export const register = createAsyncThunk(
   'user/register',
@@ -64,14 +57,14 @@ export const fetchUser = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk(
+/*GARBAGE export const logout = createAsyncThunk(
   'user/logout',
   async () => {
     //const token = localStorage.getItem("id_token");
     const user = await apiPost(EP.logout)
     return user
   }
-);
+);*/
 
 /*export const updateUser = createAsyncThunk(
   'user/updateUser',
@@ -105,7 +98,7 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: {
-    [login.pending]: (state, action) => {
+    /*GARBAGE [login.pending]: (state, action) => {
       state.isLoading = true;
       state.hasError = false;
     },
@@ -119,7 +112,7 @@ export const userSlice = createSlice({
     [login.rejected]: (state, action) => {
       state.isLoading = false;
       state.hasError = true;
-    },/*
+    },*//*GARBAGE
     [register.pending]: (state, action) => {
       state.isLoading = true;
       state.hasError = false;
@@ -165,6 +158,7 @@ export const userSlice = createSlice({
 export const selectUser = (state) => state.user.user;
 export const selectLoginMessage = (state) => state.user.loginMessage;
 export const selectUpdateMessage = (state) => state.user.updateMessage;
+export const selectIsloggedIn = (state) => state.user.isLoggedIn;
 export const removeUser = userSlice.actions.removeUser;
 export const setIsloggedIn = userSlice.actions.setIsloggedIn;
 

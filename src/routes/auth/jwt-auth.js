@@ -25,18 +25,20 @@ const options = {
 }
 
 passport.use(new JwtStrategy(options, (jwt_payload, done) => {
-  console.log('JWTsTRAT')
+  //console.log('JWTsTRAT')
+  //console.log(jwt_payload)
   const id = jwt_payload.sub;
-
+  const isCurrent = jwt_payload.exp > Date.now();
   const sql = 'SELECT * FROM users WHERE id = $1';
   pool.query(sql, [id], async (err, res) => {
     if (err) { return done(err, false) }
-    if (res.rows[0]) {
+    if (res.rows[0] && isCurrent) {
       console.log('DONE+USER')
       return done(null, res.rows[0], { msg: 'JWT user found.' });
     } else {
       console.log('DONE+FALSE')
-      return done(null, false, { msg: 'JWT does not match database' });
+      const expires = new Date(jwt_payload.exp);
+      return done(null, false, { msg: 'JWT does not match database or is expired', JWTexpires: expires });
     }
   });
 }))

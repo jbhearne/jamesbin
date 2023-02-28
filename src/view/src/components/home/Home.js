@@ -1,5 +1,5 @@
 import { fetchUser, setIsloggedIn, removeUser } from "../features/user/userSlice";
-import { logoutToken } from "../../utils/apiFetch";
+import { logoutToken } from "../../utils/apiLogin";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 

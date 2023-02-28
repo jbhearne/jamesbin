@@ -1,39 +1,5 @@
-
 import dataUrl from "./dataUrl";
 
-
-export const apiFetch = async (endpoint, token) => {
-  const headers = token ? {
-    'content-type': 'application/json',
-    'Authorization': token,
-    'Test': 'JWT present'
-  } : {
-    'content-type': 'application/json',
-    'Test': 'No JWT'
-  }
-
-  const resolve = await fetch(dataUrl + endpoint, {
-    headers: headers,
-  });
-  const data = await resolve.json();
-  return data;
-}
-
-export const apiPost = async (endpoint, body) => {
-  console.log(body)
-  const postData = await fetch(dataUrl + endpoint, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  });
-  const jsonData = await postData.json()
-
-  return jsonData;
-}
-
-/*
 //IDEA these were interpreted from a web post
 
 export const setToken = (response) => {
@@ -71,6 +37,3 @@ export const fetchLogin = async (body) => {
   setToken(jwtResponse);
   return isLoggedIn();
 }
-*/
-
-

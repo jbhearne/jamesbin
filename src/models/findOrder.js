@@ -268,6 +268,18 @@ const removeOrder = async (id) => {
   return deletedOrderObj;
 }
 
+//CHANGED add for completed orders?
+const findItemsByOrderId = async (orderId) => {
+  const sql = 'SELECT  cart.id, cart.product_id, cart.order_id, products.name, products.price, cart.quantity, (products.price * cart.quantity) AS "subtotal"  \
+  FROM cart JOIN orders ON cart.order_id = orders.id JOIN products ON cart.product_id = products.id \
+  WHERE order_id = $1';
+  const results = await pool.query(sql, [orderId]);
+  const noResults = checkNoResults(results);
+  if (noResults) return noResults;
+  const items = results.rows;
+  return items;
+}
+
 module.exports = {
   isOrderOpen,
   defaultBillingAndDelivery,
@@ -285,5 +297,6 @@ module.exports = {
   addOrderOnUser,
   changeOrder,
   removeOrder,
-  completeOrderNow
+  completeOrderNow,
+  findItemsByOrderId,
 }

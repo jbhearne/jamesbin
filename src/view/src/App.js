@@ -19,6 +19,7 @@ import User from './components/features/user/User';
 import Login from './components/features/user/login/Login';
 import Register from './components/features/user/register/Register';
 import ProductPage from './components/features/products/product/ProductPage'
+import LoggedIn from './components/LoggedIn';
 
 function App() {
   //const user = {fullname: false}
@@ -54,11 +55,13 @@ function App() {
           <Route path='/product/:id' element={<ProductPage />} />
           <Route path='/vendors' element={<Vendors />} />
           <Route path='/vendor/:id' element={<Vendor />} />
-          <Route path='/orders' element={<Orders />} />
+          {/*<Route path='/orders' element={<Orders />} />*/}
+          <Route path='/orders' element={<LoggedIn Component={Orders} compProps={{test: 'test', test2: '   test2'}} />} />
           <Route path='/order/checkout' element={<Checkout />} />
           <Route path='/order/complete' element={<Complete />} />
           <Route path='/order/:id' element={<Order />} />
-          <Route path='/cart' element={<Cart />} />
+          {/*<Route path='/cart' element={<Cart />} />*/}
+          <Route path='/cart' element={<LoggedIn Component={Cart} />} />
           <Route path='/user/register' element={<Register />} />
           <Route path='/user/login' element={<Login />} />
           <Route path='/user' element={<User />} />
