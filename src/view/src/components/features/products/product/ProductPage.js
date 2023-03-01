@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useState, useEffect } from 'react';
 import { fetchProduct, selectProduct } from '../productsSlice';
 import { useParams, useSearchParams } from 'react-router-dom';
+import { addItemToCart } from '../../cart/cartSlice';
 
 
 function Product() {
@@ -18,6 +19,18 @@ function Product() {
     e.target.src = '/placeholder.png'
   }
 
+  const addToCart = (e) => {
+    dispatch(addItemToCart({
+      id: -1,
+      productName: product.name,
+      productId: product.id,
+      orderId: -1,
+      price: product.price,
+      quantity: 1,
+    }))
+  }
+
+
   return (
     <div className='productPage'>
       <p>HI!</p>
@@ -27,6 +40,7 @@ function Product() {
       <p>{product.description}</p>
       <h4>{product.vendorName}</h4>
       <p>{product.vendorDescription}</p>
+      <button onClick={addToCart}>Add To Cart</button>
     </div>
   )
 }

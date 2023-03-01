@@ -12,7 +12,16 @@ export const fetchCart = createAsyncThunk(
     const cart = await apiFetch(`/cart/user/${id}`, token);
     console.log(cart)
     console.log('fectch')
-    return cart;
+    return cart.map(item =>{
+      return {
+        id: item.id,
+        productName: item.name,
+        productId: item.product_id,
+        orderId: item.order_id,
+        price: item.price,
+        quantity: item.quantity,
+      };
+    })
   }
 );
 
@@ -25,7 +34,9 @@ export const cartSlice = createSlice({
     hasError: false,
   },
   reducers: {
-
+    addItemToCart: (state, action) => {
+      state.cart.push(action.payload)
+    },
   },
   extraReducers: {
     [fetchCart.pending]: (state, action) => {
@@ -45,7 +56,6 @@ export const cartSlice = createSlice({
 })
 
 export const selectCart = (state) => state.cart.cart;
-//export const removeUser = userSlice.actions.removeUser;
-//export const setIsloggedIn = userSlice.actions.setIsloggedIn;
+export const addItemToCart = cartSlice.actions.addItemToCart;
 
 export default cartSlice.reducer;

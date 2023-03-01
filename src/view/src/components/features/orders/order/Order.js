@@ -2,7 +2,7 @@
 
 function Order({ order, handleOrderClick }) {
 
-  const date = new Date(order.date_completed);
+  const date = new Date(order.dateCompleted);
 
   return (
     <tr onClick={() => handleOrderClick(order.id)}>

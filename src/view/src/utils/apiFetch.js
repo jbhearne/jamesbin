@@ -1,6 +1,6 @@
 
 import dataUrl from "./dataUrl";
-
+//const token = localStorage.getItem("id_token");
 
 export const apiFetch = async (endpoint, token) => {
   const headers = token ? {
@@ -19,13 +19,20 @@ export const apiFetch = async (endpoint, token) => {
   return data;
 }
 
-export const apiPost = async (endpoint, body) => {
+export const apiPost = async (endpoint, body, token) => {
   console.log(body)
+  const headers = token ? {
+    'content-type': 'application/json',
+    'Authorization': token,
+    'Test': 'JWT present'
+  } : {
+    'content-type': 'application/json',
+    'Test': 'No JWT'
+  }
+
   const postData = await fetch(dataUrl + endpoint, {
     method: 'POST',
-    headers: {
-      'content-type': 'application/json'
-    },
+    headers: headers,
     body: JSON.stringify(body)
   });
   const jsonData = await postData.json()

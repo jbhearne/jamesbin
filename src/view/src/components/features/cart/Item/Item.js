@@ -4,9 +4,9 @@ function Item({ item }) {
 
 
   return (
-    <div>
-      <span>{item.name}</span><span>...</span><span>{item.price}</span>  <span>{item.quantity}</span>
-    </div>
+    <tr>
+      <td>{item.productName}</td><td>{item.price}</td><td>{item.quantity}</td><td>*</td>
+    </tr>
   )
 }
 

@@ -68,7 +68,7 @@ function Orders({ test, test2 }) {
         </thead>
         <tbody>
           {orders.map(order => {
-            if (order.date_completed) {
+            if (order.dateCompleted) {
               return (
                 <Order  key={order.id} order={order} handleOrderClick={handleOrderClick} />
               )

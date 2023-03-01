@@ -53,7 +53,20 @@ export const fetchUser = createAsyncThunk(
   async () => {
     const token = localStorage.getItem("id_token");
     const user = await apiFetch(EP.user, token)
-    return user
+    return {
+      id: user.id,
+      fullname: user.fullname,
+      username: user.username,
+      contact: {
+        id: user.contact.id,
+        phone: user.contact.phone,
+        address: user.contact.address,
+        city: user.contact.city,
+        state: user.contact.state,
+        zip: user.contact.zip,
+        email: user.contact.email,
+      },
+    }
   }
 );
 

@@ -6,7 +6,18 @@ export const fetchOrders = createAsyncThunk(
   async (id) => {
     const token = localStorage.getItem("id_token");
     const orders = await apiFetch(`/orders/user/${id}`, token);
-    return orders;
+    console.log(orders)
+    return orders.map(order => {
+      return {
+        id: order.id,
+        userId: order.user_id,
+        dateStarted: order.date_started,
+        dateCompleted: order.date_completed,
+        amount: order.amount,
+        billingId: order.billing_id,
+        deliveryId: order.delivery_id,
+      }
+    });
   }
 );
 
@@ -15,7 +26,18 @@ export const fetchItems = createAsyncThunk(
   async (id) => {
     const token = localStorage.getItem("id_token");
     const items = await apiFetch(`/cart/order/${id}`, token);
-    return items;
+    console.log(items)
+    return items.map(item => {
+      return {
+        id: item.id,
+        productName: item.name,
+        orderId: item.order_id,
+        price: item.price,
+        productId: item.product_id,
+        quantity: item.quantity,
+        subtotal: item.subtotal,
+      }
+    });
   }
 );
 
