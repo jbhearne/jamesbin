@@ -6,7 +6,7 @@ export const fetchOrders = createAsyncThunk(
   async (id) => {
     const token = localStorage.getItem("id_token");
     const orders = await apiFetch(`/orders/user/${id}`, token);
-    console.log(orders)
+    //testlog console.log(orders)
     return orders.map(order => {
       return {
         id: order.id,
@@ -50,7 +50,10 @@ export const ordersSlice = createSlice({
     hasError: false,
   },
   reducers: {
-
+    removeOrders: (state, action) => {
+      state.orders = [];
+      state.orderItems = [];
+    },
   },
   extraReducers: {
     [fetchOrders.pending]: (state, action) => {
@@ -84,5 +87,6 @@ export const ordersSlice = createSlice({
 
 export const selectOrders = (state) => state.orders.orders;
 export const selectOrderItems = (state) => state.orders.orderItems;
+export const removeOrders = ordersSlice.actions.removeOrders;
 
 export default ordersSlice.reducer;

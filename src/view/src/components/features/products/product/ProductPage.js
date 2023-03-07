@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useState, useEffect } from 'react';
 import { fetchProduct, selectProduct } from '../productsSlice';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { addItemToCart } from '../../cart/cartSlice';
+import { addItemToCart, selectTempCartId, incrementTempCartId } from '../../cart/cartSlice';
 
 
 function Product() {
@@ -19,15 +19,17 @@ function Product() {
     e.target.src = '/placeholder.png'
   }
 
+  const tempCartId = useSelector(selectTempCartId);
   const addToCart = (e) => {
     dispatch(addItemToCart({
-      id: -1,
+      id: tempCartId,
       productName: product.name,
       productId: product.id,
       orderId: -1,
       price: product.price,
       quantity: 1,
     }))
+    dispatch(incrementTempCartId());
   }
 
 

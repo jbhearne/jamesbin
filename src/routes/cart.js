@@ -15,5 +15,4 @@ router.get('/cart/user/:id', (req, res, next) => {loggedIn(req, res, next)}, adm
 router.put('/user/cart/:id', (req, res, next) => {loggedIn(req, res, next)}, cart.updateCartItemIfUser); 
 router.delete('/user/cart/:id', (req, res, next) => {loggedIn(req, res, next)}, cart.deleteCartItemIfUser);
 
-
 module.exports = router;

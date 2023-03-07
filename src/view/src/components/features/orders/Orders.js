@@ -28,8 +28,12 @@ function Orders({ test, test2 }) {
   const renderOrderItems = () => {
     return (
       <div>
-        <h4>Order Number {orderItems[0].order_id}</h4>
+        <h4>Order Number {orderItems[0].orderId}</h4>
         <button onClick={() => setIsOrderItems(false)}>close</button>
+        <h5>
+          <span>{new Date(orders.filter(order => order.id === orderItems[0].orderId)[0].dateCompleted).toDateString()}</span>
+          <span>{orders.filter(order => order.id === orderItems[0].orderId)[0].amount}</span>
+        </h5>
         <table>
           <thead>
             <tr>

@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { selectProducts, fetchProducts } from './productsSlice';
+
 import Product from './product/Product';
 import './products.css';
 

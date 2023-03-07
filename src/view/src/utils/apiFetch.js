@@ -40,6 +40,25 @@ export const apiPost = async (endpoint, body, token) => {
   return jsonData;
 }
 
+export const apiDelete = async (endpoint, token) => {
+  const headers = token ? {
+    'content-type': 'application/json',
+    'Authorization': token,
+    'Test': 'JWT present'
+  } : {
+    'content-type': 'application/json',
+    'Test': 'No JWT'
+  }
+
+  const deleteData = await fetch(dataUrl + endpoint, {
+    method: 'DELETE',
+    headers: headers,
+  });
+  const jsonData = await deleteData.json()
+
+  return jsonData;
+}
+
 /*
 //IDEA these were interpreted from a web post
 

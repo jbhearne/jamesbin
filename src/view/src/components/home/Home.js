@@ -1,7 +1,10 @@
 import { fetchUser, setIsloggedIn, removeUser } from "../features/user/userSlice";
+import { removeCart } from '../features/cart/cartSlice'
+import { removeOrders } from '../features/orders/ordersSlice'
 import { logoutToken } from "../../utils/apiLogin";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+
 
 function Home() {
   const test = "helllo";
@@ -17,6 +20,8 @@ function Home() {
 
   const logoutTest = (e) => {
     dispatch(removeUser());
+    dispatch(removeCart());
+    dispatch(removeOrders());
     logoutToken();
   }
 
