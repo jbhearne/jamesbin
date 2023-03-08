@@ -7,8 +7,8 @@ const passport = require('passport')
 //router.get('/user', passport.authenticate('jwt', {session: false}), users.getCurrentUser);
 router.get('/user', (req, res, next) => {loggedIn(req, res, next)}, (req, res, next) => {console.log(req.user); next()}, users.getCurrentUser); //CHANGED added this route to get current logged in user
 router.get('/users', (req, res, next) => {loggedIn(req, res, next)}, isAdmin, users.getUsers);
-router.get('/users/:id', (req, res, next) => {loggedIn(req, res, next)}, adminOrCurrentUser, users.getUserById);
-router.put('/users/:id', (req, res, next) => {loggedIn(req, res, next)}, adminOrCurrentUser, users.updateUser);
-router.delete('/users/:id', (req, res, next) => {loggedIn(req, res, next)}, isAdmin, users.deleteUser);
+router.get('/user/:id', (req, res, next) => {loggedIn(req, res, next)}, adminOrCurrentUser, users.getUserById);
+router.put('/user/:id', (req, res, next) => {loggedIn(req, res, next)}, adminOrCurrentUser, users.updateUser);
+router.delete('/user/:id', (req, res, next) => {loggedIn(req, res, next)}, isAdmin, users.deleteUser);
 
 module.exports = router;

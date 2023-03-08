@@ -20,6 +20,7 @@ import Login from './components/features/user/login/Login';
 import Register from './components/features/user/register/Register';
 import ProductPage from './components/features/products/product/ProductPage'
 import LoggedIn from './components/LoggedIn';
+import Logout from './components/features/user/login/Logout';
 
 function App() {
   //const user = {fullname: false}
@@ -32,13 +33,28 @@ function App() {
   useEffect(() => {
     dispatch(setIsloggedIn(!!user.username));
   }, [user])
-  
+  //(<NavLink to='/user'>{user.fullname}</NavLink>)
+  const usernameOrLogin = () => {
+    if (user.username) {
+      return (
+        <div>
+          <NavLink to='/user'>{user.username}</NavLink> <Logout>Logout</Logout>
+        </div>
+      )
+    }
+    return (
+      <div>
+        <NavLink to='/user/login'>Login</NavLink>
+      </div>
+    )
+  }
+
   return (
     <div className="App">
       <Router>
         <header className="App-header">
         <NavLink to=''><h1>James' Bin</h1></NavLink>
-          <div id="user-login">{user.fullname || (<NavLink to='/user/login'>Login</NavLink>)}</div>
+          <div id="user-login">{usernameOrLogin()}</div>
           <nav id="main-nav">
             <ul>
               <li><NavLink to='products'>Products</NavLink></li>

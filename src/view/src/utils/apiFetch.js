@@ -40,6 +40,26 @@ export const apiPost = async (endpoint, body, token) => {
   return jsonData;
 }
 
+export const apiPut = async (endpoint, body, token) => {
+  const headers = token ? {
+    'content-type': 'application/json',
+    'Authorization': token,
+    'Test': 'JWT present'
+  } : {
+    'content-type': 'application/json',
+    'Test': 'No JWT'
+  }
+
+  const putData = await fetch(dataUrl + endpoint, {
+    method: 'PUT',
+    headers: headers,
+    body: JSON.stringify(body)
+  });
+  const jsonData = await putData.json()
+
+  return jsonData;
+}
+
 export const apiDelete = async (endpoint, token) => {
   const headers = token ? {
     'content-type': 'application/json',

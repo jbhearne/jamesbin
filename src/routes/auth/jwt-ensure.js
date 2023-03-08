@@ -39,7 +39,7 @@ const adminOrCurrentUser = (req, res, next) => {
         return res.status(401).send('no access')
       } else { next() }
     } else { next() }
-  } else { return res.status(401).send('not logged in') } 
+  } else { return res.status(401).send('not logged in...') } 
 }
 
 

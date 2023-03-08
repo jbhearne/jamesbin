@@ -56,8 +56,8 @@ const updateUser = async (request, response) => {
   try {
     const updatedUser = await changeUser(id, updates);
     const check = checkForFoundRowObj(updatedUser);
-    if (check.status >= 400 && check.status < 500) response.status(check.status).json(check.results);
-    if (check.status >= 200 && check.status < 300) response.status(check.status).json(`User modified with ID: ${check.results.id} updated.`);
+    if (check.status >= 400 && check.status < 500) response.status(check.status).json({ msg: check.results, success: false });
+    if (check.status >= 200 && check.status < 300) response.status(check.status).json({ msg: `User modified with ID: ${check.results.id} updated.`, success: true });
   } catch (err) {
     console.error(err);
     throw new Error('API failure: ' + err);
