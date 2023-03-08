@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const router = express.Router();
+const validate = require('./validate')
 
 const pool = require('../../models/util/pool');
 
@@ -125,6 +126,12 @@ router.post("/register", async (req, res, next) => {
     if (rows.length > 0) {
       console.log('User already exists.')
       return res.status(400).json({ msg: 'User already exists.', success: false })
+    }
+
+    const validPassword = validate.password(password, { min: 3, include: ',.', exclude: 'a' })
+
+    if (!validPassword.isValid) {
+      return res.status(400).json({ msg: validPassword.msg, success: false })
     }
 
     const salt = await bcrypt.genSalt(10);

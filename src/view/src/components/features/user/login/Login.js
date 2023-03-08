@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { selectUser, fetchUser, login, setIsloggedIn } from '../userSlice';
 import { fetchLogin } from '../../../../utils/apiLogin';
+import './Login.css'
 
 function Login() {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ function Login() {
         <input id='password' defaultValue='happytime'></input>
         <button form='login' type='submit' ></button>
       </form>
-
+      <Link className='registerLink' to='/user/register'>Register</Link>
     </div>
   )
 }
