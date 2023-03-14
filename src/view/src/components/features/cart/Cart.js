@@ -1,24 +1,25 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useMemo, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { selectCart, selectTempCartId, fetchCart, removeItemFromCart } from './cartSlice';
 import { selectUser } from '../user/userSlice';
 import Item from './Item/Item';
 import { apiPost } from '../../../utils/apiFetch';
 
-function Cart() {
+function Cart({ controls }) {
   const dispatch = useDispatch()
   const user = useSelector(selectUser);
   const cart = useSelector(selectCart);
   const dataFetchedRef = useRef(false);
-
-
+  const navigate = useNavigate();
+  //console.log('before use cart')
   useEffect(() => {
-    console.log('useEffect')
+    //console.log('useEffect')
     if (dataFetchedRef.current) return;
     dataFetchedRef.current = true;
     dispatch(fetchCart({ id: user.id, cart: cart }))
   }, []);
-
+  //console.log('after use cart')
   
   //console.log(cart)
   return (
@@ -35,11 +36,12 @@ function Cart() {
         <tbody>
           {cart.map(item => {
             return (
-              <Item key={item.id} item={item} />
+              <Item key={item.id} item={item} controls={controls} />
             )
           })}
         </tbody>
       </table>
+      {controls && (<button onClick={() => navigate('/order/checkout')}>Checkout</button>)}
     </div>
   )
 }

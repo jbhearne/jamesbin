@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { deleteUserCartItem, removeItemFromCart } from "../cartSlice";
 
-function Item({ item }) {
+function Item({ item, controls }) {
 
   const dispatch = useDispatch();
 
@@ -16,7 +16,7 @@ function Item({ item }) {
       <td>{item.price}</td>
       <td>{item.quantity}</td>
       <td>*</td>
-      <td><button onClick={() => handleDelete(item.id)}>x</button></td>
+      {controls && (<td><button onClick={() => handleDelete(item.id)}>x</button></td>)}
     </tr>
   )
 }

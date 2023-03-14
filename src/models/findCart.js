@@ -12,7 +12,9 @@ const {
   isOrderOpen, 
   findOpenOrderByUserId,
   findOrderById,
-  isItemOnCompleteOrder
+  isItemOnCompleteOrder,
+  addOrder,
+  defaultBillingAndDelivery,
 } = require('./findOrder');
 const { isProductExtant } = require('./findProduct');
 
@@ -108,11 +110,22 @@ const findAllCurrentCartItemsWithProductsByUser = async (userId) => {
 //takes a new cart item object with the odrder id determined by the open order that belongs to the specified user id and inserts into the cart table.
 const addCartItemToUserOrder = async (userId, newCartItem) => {
   const { productId, quantity } = newCartItem;
-  const order = await findOpenOrderByUserId(userId);
+  const extantOrder = await findOpenOrderByUserId(userId);
   const isProduct = await isProductExtant(productId);
+  let order = extantOrder;
+  
+  if (extantOrder === 'No orders started') {
+    const ids = await defaultBillingAndDelivery(userId);
+    const newOrder = await addOrder({ 
+      user_id: userId,                   //TODO need to fix camelcase/snakecase
+      billing_id: ids.billingId,
+      delivery_id: ids.deliveryId,
+    })
+    order = newOrder;
+  } 
 
-  if (typeof order === 'string') {
-    return order;
+  if (typeof extantOrder === 'string' && extantOrder !== 'No orders started') {
+    return extantOrder;
   } else if (!isProduct) {
     return `Product #${productId} does not exist.`;
   } else {
