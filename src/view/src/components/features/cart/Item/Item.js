@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../user/userSlice";
 import { useNavigate } from "react-router-dom";
+import { subtotal } from "../../../../utils/utils";
 import { deleteUserCartItem, removeItemFromCart, addItemToCart, fetchCart, selectTempCartId, selectCart, updateUserCartItem } from "../cartSlice";
 
 function Item({ item, controls }) {
@@ -38,7 +39,7 @@ function Item({ item, controls }) {
       <td>{item.productName}</td>
       <td>{item.price}</td>
       <td>{item.quantity}</td>
-      <td>*</td>
+      <td>{subtotal(item.price, item.quantity)}</td>
       {controls && (<td>
         <form id='updateCart' onSubmit={handleUpdate}>
           <input id='quantity' className="qtyInput" aria-label="quantity-control" type='number' defaultValue={item.quantity}></input>

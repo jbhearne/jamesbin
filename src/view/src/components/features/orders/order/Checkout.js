@@ -63,7 +63,7 @@ function Checkout() {
     dispatch(removeCart());
     dispatch(removeCheckoutOrder());
     dispatch(removeOrderItems());
-    navigate('/')
+    navigate('/order/complete')
   }
 
   return (
@@ -71,7 +71,7 @@ function Checkout() {
       <h2>Checkout</h2>
       <h3>{'Order Total: $' + checkoutOrder.total}</h3>
       <Cart controls={false} />
-      {!checkoutOrder.billing ? (<p>loading</p>) : (<Billing billing={checkoutOrder.billing} />) /*why props are passing undefined?? I shouldn't need this conditional*/}
+      {!checkoutOrder.billing ? (<p>loading</p>) : (<Billing billing={checkoutOrder.billing} />) /*FIXME why props are passing undefined?? I shouldn't need this conditional*/}
       {!checkoutOrder.delivery ? (<p>loading</p>) : (<Delivery delivery={checkoutOrder.delivery} />)}
       <CreditCard />
       <button id='complete' onClick={handleComplete}>Complete Order</button>

@@ -12,17 +12,13 @@ import {
 import { apiPut } from '../../../../../utils/apiFetch';
 
 
-function Billing({ billing }) {
+function Billing({ billing, controls = true }) {
   const isLoading = useSelector(selectIsOrderLoading);
   const useDefaultBilling = useSelector(selectUseDefaultBilling);
   const user = useSelector(selectUser);
   const [editMode, setEditMode] = useState(false);
   const [message, setMessage] = useState('');
   const dispatch = useDispatch()
-
-  useEffect(() => {
-
-  })
 
   const handleCheck = (e) => {
     dispatch(setUseDefaultBilling(e.target.checked))
@@ -79,8 +75,16 @@ function Billing({ billing }) {
     return (
       <div>
         <h3>Billing</h3>
-        <label>{'Use Default Billing Info:' /*+ useDefaultBilling*/}<input id='useDefaultBilling' type='checkbox' defaultChecked={useDefaultBilling} onClick={handleCheck}></input></label><br />
-        {useDefaultBilling ? (<span>{billing.contact.address}</span>) : (
+        {controls && (
+          <div>
+            <label>{'Use Default Billing Info:' /*+ useDefaultBilling*/}
+              <input id='useDefaultBilling' type='checkbox' defaultChecked={useDefaultBilling} onClick={handleCheck}></input>
+            </label>
+          </div>
+        )}
+        {useDefaultBilling && controls ? (
+          <span>{billing.contact.address}</span>
+        ) : (
           <div>
             <span>Name:</span> <span>{billing.payerName}</span><br />
             <span>Payment Method:</span> <span>{billing.paymentMethod}</span><br />
@@ -94,16 +98,16 @@ function Billing({ billing }) {
               <span>Email: </span><span>{billing.contact.email}</span><br />
               <span>Phone: </span><span>{billing.contact.phone}</span><br />
             </div>
+            {controls && (<button onClick={() => setEditMode(true)}>Edit Billing Address</button>)}
           </div>
-          )}
-        {useDefaultBilling ? ('') : ( <button onClick={() => setEditMode(true)}>Edit Billing Address</button> ) }
+        )}
       </div>
     )
   }
 
   return (
     <div>
-     {isLoading ? (<p>loading</p>) : (editMode ? edit() : view())}
+     {editMode ? edit() : view()}
     </div>
   )
 

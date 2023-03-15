@@ -91,11 +91,11 @@ export const fetchCompleteOrder = createAsyncThunk(
     const token = localStorage.getItem("id_token");
     const completeOrder = await apiPost('/checkout', completeCheckout, token);
     return {
-        id: completeOrder.order_id,
+        id: completeOrder.order.id,
         billing: completeCheckout.billing,
         delivery: completeCheckout.delivery,
         cart: cart,
-        total: completeOrder.amount,
+        total: completeOrder.order.amount,
       }
   });
 

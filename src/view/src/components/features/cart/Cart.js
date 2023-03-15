@@ -24,6 +24,7 @@ function Cart({ controls }) {
   //console.log(cart)
   return (
     <div>
+      <h2>Shopping Cart</h2>
       <table>
         <thead>
           <tr>

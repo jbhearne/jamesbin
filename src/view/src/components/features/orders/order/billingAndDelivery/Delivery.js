@@ -5,7 +5,7 @@ import { selectUser, fetchUser, login } from '../../../user/userSlice';
 import { setDelivery, selectIsOrderLoading, selectUseDefaultDelivery, setUseDefaultDelivery } from '../../ordersSlice';
 import { apiPut } from '../../../../../utils/apiFetch';
 
-function Delivery({ delivery }) {
+function Delivery({ delivery, controls = true }) {
   const useDefaultDelivery = useSelector(selectUseDefaultDelivery);
   const user = useSelector(selectUser);
   const [editMode, setEditMode] = useState(false);
@@ -67,8 +67,14 @@ function Delivery({ delivery }) {
     return (
       <div>
         <h3>Delivery</h3>
-        <label>{'Use Default Delivery Info:' /*+ useDefaultDelivery*/}<input id='useDefaultDelivery' type='checkbox' defaultChecked={useDefaultDelivery} onClick={handleCheck}></input></label><br />
-        {useDefaultDelivery ? 
+        {controls && (
+          <div>
+          <label>{'Use Default Delivery Info:' /*+ useDefaultDelivery*/}
+            <input id='useDefaultDelivery' type='checkbox' defaultChecked={useDefaultDelivery} onClick={handleCheck}></input>
+          </label>
+          </div>
+        )}
+        {useDefaultDelivery && controls ? 
         (
         <span>{delivery.contact.address}</span>
         ) : (
@@ -86,7 +92,7 @@ function Delivery({ delivery }) {
             <span>Email: </span><span>{delivery.contact.email}</span><br />
             <span>Phone: </span><span>{delivery.contact.phone}</span><br />
           </div>
-          <button onClick={() => setEditMode(true)}>Edit Delivery Address</button>
+          {controls && (<button onClick={() => setEditMode(true)}>Edit Delivery Address</button>)}
         </div>)}
       </div>
     )
