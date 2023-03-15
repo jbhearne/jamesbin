@@ -40,6 +40,14 @@ export const apiPost = async (endpoint, body, token) => {
   return jsonData;
 }
 
+export const multiPost = async (endpoint, arr, i, token) => {
+  console.log('top of multi ' + (parseInt(Date.now()) - 1678800000000))
+  if (i === arr.length) return
+  await apiPost(endpoint, arr[i], token)
+  await multiPost(endpoint, arr, i + 1, token)
+  console.log('bottom of multi ' + (parseInt(Date.now()) - 1678800000000))
+}
+
 export const apiPut = async (endpoint, body, token) => {
   const headers = token ? {
     'content-type': 'application/json',

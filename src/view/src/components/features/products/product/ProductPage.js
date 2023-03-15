@@ -1,13 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useState, useEffect } from 'react';
 import { fetchProduct, selectProduct } from '../productsSlice';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { addItemToCart, selectTempCartId, incrementTempCartId } from '../../cart/cartSlice';
 
 
 function Product() {
   //const { product } = props;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const product = useSelector(selectProduct);
   const { id } = useParams();
 
@@ -27,9 +28,10 @@ function Product() {
       productId: product.id,
       orderId: -1,
       price: product.price,
-      quantity: 1,
+      quantity: e.target.quantity.value,
     }))
     dispatch(incrementTempCartId());
+    navigate('/products')
   }
 
 
@@ -42,7 +44,10 @@ function Product() {
       <p>{product.description}</p>
       <h4>{product.vendorName}</h4>
       <p>{product.vendorDescription}</p>
-      <button onClick={addToCart}>Add To Cart</button>
+      <form id='addToCart' onSubmit={addToCart}>
+      <label>Quantity: <input id='quantity' type='number' min='1' max='100' defaultValue='1'></input></label>
+      <button id='addButton'>Add To Cart</button>
+      </form>
     </div>
   )
 }

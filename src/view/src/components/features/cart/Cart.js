@@ -31,6 +31,8 @@ function Cart({ controls }) {
             <th>Price</th>
             <th>QTY.</th>
             <th>Subtotal</th>
+            {controls && (<th>Change QTY</th>)}
+            {controls && (<th>Delete</th>)}
           </tr>
         </thead>
         <tbody>

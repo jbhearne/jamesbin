@@ -1,26 +1,40 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { apiFetch, apiPost, apiDelete} from '../../../utils/apiFetch';
+import { apiFetch, apiPost, apiDelete, multiPost, apiPut} from '../../../utils/apiFetch';
 import EP from '../../../dataEndpoints';
+import './cart.css';
 
 export const fetchCart = createAsyncThunk(
   'cart/fetchCart',
   async ({ id: id, cart: cart }) => {
     //console.log('startfetchcartbeforeselectuser')
     //GARBAGE const user = useSelector(selectUser);
-    console.log('startfetchcart' + Date.now())
+    console.log('startfetchcart' + (parseInt(Date.now()) - 1678800000000))
     const token = localStorage.getItem("id_token");
     //console.log(cart)
     //console.log('fectch')
     if (cart.length > 0) {
       const localItems = cart.filter(item => item.id < 0);
+      const bodies = localItems.map(body => {
+        return { productId: body.productId, quantity: body.quantity };
+      });
+      console.log(bodies)
+      console.log('before multi ' + (parseInt(Date.now()) - 1678800000000))
       if (localItems.length > 0) {
-        localItems.forEach(async item => {
-          apiPost('/cart', {
+        await multiPost('/cart', bodies, 0, token);
+      }
+      /*if (localItems.length > 0) {
+        await localItems.forEach(async item => {
+          console.log('top of loop ' + (parseInt(Date.now()) - 1678800000000))
+          await apiPost('/cart', {
             productId: item.productId,
             quantity: item.quantity,
           }, token);
+          console.log('bottom of loop' + (parseInt(Date.now()) - 1678800000000))
         });
-      }
+        console.log('out of loop' + (parseInt(Date.now()) - 1678800000000))
+      }*/
+
+      console.log('after multi ' + (parseInt(Date.now()) - 1678800000000))
     }
     const newCart = await apiFetch(`/cart/user/${id}`, token);
     return newCart.map(item =>{
@@ -36,6 +50,8 @@ export const fetchCart = createAsyncThunk(
   }
 );
 
+
+//TODO make this update the store
 export const deleteUserCartItem = createAsyncThunk(
   'cart/deleteUserCartItem',
   async (id) => {
@@ -43,6 +59,15 @@ export const deleteUserCartItem = createAsyncThunk(
     const deleted = await apiDelete(`/user/cart/${id}`, token)
   }
 )
+
+
+//TODO make this update the store
+export const updateUserCartItem = createAsyncThunk(
+  'cart/updateUserCartItem',
+  async ({id: id, body: body}) => {
+    const token = localStorage.getItem('id_token');
+    const updated = await apiPut(`/user/cart/${id}`, body, token)
+  })
 
 export const cartSlice = createSlice({
   name: 'cart',
