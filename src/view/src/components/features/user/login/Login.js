@@ -9,7 +9,7 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectUser);
-  const handleLogin = async (e) => {
+  const handleLogin = async (e) => { //TODO add this to userSlice to set JWT expires state.
     e.preventDefault();
     const isLoggedIn = await fetchLogin({
       username: e.target.username.value,

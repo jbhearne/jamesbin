@@ -5,11 +5,13 @@ import { selectOrders, fetchOrders, fetchItems, selectOrderItems } from './order
 import { selectUser } from '../user/userSlice';
 import Order from './order/Order'
 import OrderItem from './order/OrderItem'
+import './orders.css'
 
 function Orders({ test, test2 }) {
   const [isOrderItems, setIsOrderItems] = useState(false)
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  
   useEffect(() => {
     dispatch(fetchOrders(user.id));
     setIsOrderItems(false);
@@ -73,9 +75,15 @@ function Orders({ test, test2 }) {
         <tbody>
           {orders.map(order => {
             if (order.dateCompleted) {
-              return (
-                <Order  key={order.id} order={order} handleOrderClick={handleOrderClick} />
-              )
+              if (isOrderItems && order.id === orderItems[0].orderId) {
+                return (
+                  <Order className='highlight' key={order.id} order={order} handleOrderClick={handleOrderClick} />
+                )
+              } else {
+                return (
+                  <Order className='noHighlight' key={order.id} order={order} handleOrderClick={handleOrderClick} />
+                )
+              }
             }
           })}
         </tbody>

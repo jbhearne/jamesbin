@@ -12,7 +12,9 @@ function Complete() {
   return (
     <div>
       <h2>Order #{completeOrder.id} Complete!</h2>
+      <p>{new Date(completeOrder.dateCompleted).toDateString()}</p>
       <h3>{'Order Total: $' + completeOrder.total}</h3>
+      {!completeOrder.cart ? (<p>loading</p>) : (
       <div>
         <table>
           <thead>
@@ -31,7 +33,7 @@ function Complete() {
             })}
           </tbody>
         </table>
-      </div>
+      </div>)}
       {!completeOrder.delivery ? (<p>loading</p>) : (<Delivery delivery={completeOrder.delivery} controls={false} />)}
       {!completeOrder.billing ? (<p>loading</p>) : (<Billing billing={completeOrder.billing} controls={false} />) /*FIXME why props are passing undefined?? I shouldn't need this conditional*/}
     </div>

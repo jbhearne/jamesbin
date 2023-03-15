@@ -8,12 +8,16 @@ function User() {
   const user = useSelector(selectUser);
   const [editMode, setEditMode] = useState(false);
   const [message, setMessage] = useState('');
+  const [editUsername, setEditUsername] = useState(false);
   const dispatch = useDispatch()
+
+  const handleCheck = (e) => {
+    setEditUsername(e.target.checked)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     const updateUser = {
-      username: e.target.username.value,
       fullname: e.target.fullname.value,
       contact: {
         email: e.target.email.value,
@@ -24,6 +28,8 @@ function User() {
         zip: e.target.zip.value,
       }
     }
+    if (editUsername) updateUser.username = e.target.username.value;
+    
     const token = localStorage.getItem("id_token");
     const result = await apiPut(`/user/${user.id}`, updateUser, token);
     if (result.success) {
@@ -38,8 +44,9 @@ function User() {
     return (
       <div>
       <h2>Edit User Profile</h2>
+      <label>Change Username: <input id='editUsername' type="checkbox" onClick={handleCheck} /></label>
       <form name='userProfile' onSubmit={handleSubmit}>
-        <label>Username:</label> <input id='username' type='text' defaultValue={user.username}></input><br />
+        {editUsername && (<div><label>Username: <input id='username' type='text' defaultValue={user.username}></input></label></div>)}
         <label>Full Name:</label> <input id='fullname' type='text' defaultValue={user.fullname}></input><br />
         <span>Contact Info:</span>
         <div>

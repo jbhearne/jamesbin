@@ -96,6 +96,7 @@ export const fetchCompleteOrder = createAsyncThunk(
         delivery: completeCheckout.delivery,
         cart: cart,
         total: completeOrder.order.amount,
+        dateCompleted: completeOrder.order.date_completed,
       }
   });
 
@@ -138,6 +139,9 @@ export const ordersSlice = createSlice({
     },
     removeCheckoutOrder: (state, action) => {
       state.checkoutOrder = {};
+    },
+    removeCompleteOrder: (state, action) => {
+      state.completeOrder = {};
     },
   },
   extraReducers: {
@@ -213,5 +217,6 @@ export const setUseDefaultBilling = ordersSlice.actions.setUseDefaultBilling;
 export const setUseDefaultDelivery = ordersSlice.actions.setUseDefaultDelivery;
 export const removeOrderItems = ordersSlice.actions.removeOrderItems;
 export const removeCheckoutOrder = ordersSlice.actions.removeCheckoutOrder;
+export const removeCompleteOrder = ordersSlice.actions.removeCompleteOrder;
 
 export default ordersSlice.reducer;
