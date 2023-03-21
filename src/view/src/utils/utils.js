@@ -1,5 +1,5 @@
 
 export const subtotal = (price, qty) => {
-  const numPrice = Math.trunc(Number(price.replace(/[^0-9.-]+/g,"")) * 100) / 100;
-  return '$' + (numPrice * parseInt(qty));
+  const numPrice = Number(price.replace(/[^0-9.-]+/g,""));
+  return '$' + Math.trunc((numPrice * parseInt(qty)) * 100) / 100;
 }
