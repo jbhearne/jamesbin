@@ -117,7 +117,8 @@ const checkout = async (request, response) => {
   const body = request.body;
   const user = request.user;
   try {
-    const cart = await collectCart(user.id);  
+    const cart = await collectCart(user.id);
+    //console.log(cart)
     const amount = cart.total;
 
     const isNotOneOrder = cart.items.some((item) => item.order_id !== cart.items[0].order_id);

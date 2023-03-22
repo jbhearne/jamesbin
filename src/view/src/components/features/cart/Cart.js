@@ -44,7 +44,7 @@ function Cart({ controls }) {
           })}
         </tbody>
       </table>
-      {controls && (<button onClick={() => navigate('/order/checkout')}>Checkout</button>)}
+      {(controls && cart.length > 0) && (<button onClick={() => navigate('/order/checkout')}>Checkout</button>)}
     </div>
   )
 }

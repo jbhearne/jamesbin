@@ -1,13 +1,64 @@
-import { useSelector } from "react-redux";
-import { selectCompleteOrder } from "../ordersSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { 
+  selectCompleteOrder,
+  selectCheckoutOrder,
+  selectUseDefaultBilling,
+  selectUseDefaultDelivery,
+  fetchCompleteOrder,
+  removeCheckoutOrder,
+  removeOrderItems,
+  fetchCheckout,
+ } from "../ordersSlice";
+import { selectCart, removeCart, fetchCart } from "../../cart/cartSlice";
 import Billing from "./billingAndDelivery/Billing";
 import Delivery from "./billingAndDelivery/Delivery";
+import { selectUser } from "../../user/userSlice";
 import Cart from "../../cart/Cart";
 import Item from "../../cart/Item/Item";
 
 function Complete() {
+  const dispatch = useDispatch()
+  const user = useSelector(selectUser)
+  useEffect(() => {
+    //console.log('useEffect')
+    if (user.id) {
+      dispatch(fetchCart({ id: user.id, cart: [] }));
+      dispatch(fetchCheckout());
+    }  
+  }, [user.id]);
+  //console.log('after')
 
+  const checkoutOrder = useSelector(selectCheckoutOrder);
+  //const ccPlaceholder = useSelector(selectCcPlaceholder);
+  const useDefaultBilling = useSelector(selectUseDefaultBilling);
+  const useDefaultDelivery = useSelector(selectUseDefaultDelivery);
+  const cart = useSelector(selectCart)
   const completeOrder = useSelector(selectCompleteOrder);
+  useEffect(() => {
+    if (cart.length > 0 && checkoutOrder.billing) {
+      console.log(checkoutOrder)
+      console.log('complete')
+        const completeCheckout = {
+          useDefaultBilling: useDefaultBilling,
+          useDefaultDelivery: useDefaultDelivery,
+          billing: checkoutOrder.billing,
+          delivery: checkoutOrder.delivery,
+          //ccPlaceholder: ccPlaceholder,
+        }
+        if (true) {
+          dispatch(fetchCompleteOrder({ completeCheckout: completeCheckout, cart: cart }));
+          dispatch(removeCart());
+          //dispatch(removeCheckoutOrder());
+          dispatch(removeOrderItems());
+          //navigate('/order/complete')
+          //window.open('https://google.com', '_self')
+        }
+    }
+  }, [cart, checkoutOrder]);
+
+  //4242424242424242
+
 
   return (
     <div>

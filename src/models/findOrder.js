@@ -86,6 +86,7 @@ const findBillingInfo = async (orderId) => {
       email: billing.email
     }
   }
+  //console.log(info)
   return info;
 }
 

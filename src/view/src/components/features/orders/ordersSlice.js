@@ -65,7 +65,7 @@ export const fetchCheckout = createAsyncThunk(
           state: checkout.billing.contact.state,
           zip: checkout.billing.contact.zip,
           email: checkout.billing.contact.email,
-        }
+        },
       },
       delivery: {
         id: checkout.delivery.id,
@@ -80,8 +80,8 @@ export const fetchCheckout = createAsyncThunk(
           state: checkout.delivery.contact.state,
           zip: checkout.delivery.contact.zip,
           email: checkout.delivery.contact.email,
-        }
-      }
+        },
+      },
     }
 });
 

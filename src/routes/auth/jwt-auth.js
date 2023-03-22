@@ -26,7 +26,7 @@ const options = {
 }
 
 passport.use(new JwtStrategy(options, (jwt_payload, done) => {
-  //console.log('JWTsTRAT')
+  console.log('JWTsTRAT')
   //console.log(jwt_payload)
   const id = jwt_payload.sub;
   const isCurrent = jwt_payload.exp > Date.now();

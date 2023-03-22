@@ -49,6 +49,7 @@ const collectCart = async (userId) => {
   const delivery = await findDeliveryInfo(items[0].order_id);
 
   const checkout = { items, total, billing, delivery}
+  //console.log(checkout)
   return checkout;
 }
 

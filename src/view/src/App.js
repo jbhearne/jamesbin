@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-do
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, fetchUser, setIsloggedIn } from './components/features/user/userSlice';
+import '@stripe/stripe-js';
 
 import Home from './components/home/Home';
 import Products from './components/features/products/Products';
@@ -21,6 +22,7 @@ import Register from './components/features/user/register/Register';
 import ProductPage from './components/features/products/product/ProductPage'
 import LoggedIn from './components/LoggedIn';
 import Logout from './components/features/user/login/Logout';
+import GetStripe from './components/features/orders/order/GetStripe';
 
 function App() {
   //const user = {fullname: false}
@@ -73,7 +75,7 @@ function App() {
           <Route path='/vendor/:id' element={<Vendor />} />
           {/*<Route path='/orders' element={<Orders />} />*/}
           <Route path='/orders' element={<LoggedIn Component={Orders} compProps={{test: 'test', test2: '   test2'}} />} />
-          <Route path='/order/checkout' element={<Checkout />} />
+          <Route path='/order/checkout' element={<GetStripe />} />
           <Route path='/order/complete' element={<Complete />} />
           <Route path='/order/:id' element={<Order />} />
           <Route path='/cart' element={<Cart controls={true} />} />
