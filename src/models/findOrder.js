@@ -180,7 +180,7 @@ const findOrderById = async (id) => {
 
 //returns an array of all orders from a single user as specified by the user id.
 const findOrdersByUserId = async (id) => {
-  const  sql = 'SELECT * FROM orders WHERE user_id = $1';
+  const  sql = 'SELECT * FROM orders WHERE user_id = $1 ORDER BY date_completed DESC';
   const results = await pool.query(sql, [id]);
   const noResults = checkNoResults(results);
   if (noResults) return noResults;

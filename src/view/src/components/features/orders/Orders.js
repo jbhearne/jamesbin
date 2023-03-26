@@ -3,12 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { selectOrders, fetchOrders, fetchItems, selectOrderItems } from './ordersSlice'
 import { selectUser } from '../user/userSlice';
+import { page } from '../../../utils/page'
 import Order from './order/Order'
 import OrderItem from './order/OrderItem'
 import './orders.css'
 
 function Orders({ test, test2 }) {
-  const [isOrderItems, setIsOrderItems] = useState(false)
+  const [isOrderItems, setIsOrderItems] = useState(false);
+  
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   
@@ -18,8 +20,19 @@ function Orders({ test, test2 }) {
   }, []);
 
   const orders = useSelector(selectOrders);
-  
 
+  const [pageNum, setPageNum] = useState(1);
+  const [numItems, setNumItems] = useState(10);
+/*   const pageEnd = pageNum * numItems;
+  const pageStart = pageEnd - numItems;
+  const maxPage = Math.ceil(orders.length / numItems); */
+  const p = page(pageNum, setPageNum, numItems, setNumItems, orders.length, 4)
+
+
+  const handlePage = (e) => {
+    p.setPage(e.target.value);
+  }
+  
   const handleOrderClick = async (orderId) => {
     await dispatch(fetchItems(orderId));
     setIsOrderItems(true);
@@ -73,7 +86,7 @@ function Orders({ test, test2 }) {
           </tr>
         </thead>
         <tbody>
-          {orders.map(order => {
+          {orders.filter((item, idx) => idx >= p.pageStart && idx < p.pageEnd).map(order => {
             if (order.dateCompleted) {
               if (isOrderItems && order.id === orderItems[0].orderId) {
                 return (
@@ -88,6 +101,12 @@ function Orders({ test, test2 }) {
           })}
         </tbody>
       </table>
+      <span><button onClick={handlePage} value='prev'>prev</button></span><span>{pageNum}</span><span><button onClick={handlePage} value='next'>next</button></span><br />
+      {p.pageLinks.map(pNum =>  {
+        return (
+          <button onClick={handlePage} value={pNum}>{pNum}</button>
+        )
+      })}
     </div>
   )
 }
