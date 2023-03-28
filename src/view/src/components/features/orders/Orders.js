@@ -26,7 +26,7 @@ function Orders({ test, test2 }) {
 /*   const pageEnd = pageNum * numItems;
   const pageStart = pageEnd - numItems;
   const maxPage = Math.ceil(orders.length / numItems); */
-  const p = page(pageNum, setPageNum, numItems, setNumItems, orders.length, 4)
+  const p = page(pageNum, setPageNum, numItems, setNumItems, orders.length, 6)
 
 
   const handlePage = (e) => {
@@ -42,9 +42,8 @@ function Orders({ test, test2 }) {
 
   const renderOrderItems = () => {
     return (
-      <div>
+      <div className='order-details'>
         <h4>Order Number {orderItems[0].orderId}</h4>
-        <button onClick={() => setIsOrderItems(false)}>close</button>
         <h5>
           <span>{new Date(orders.filter(order => order.id === orderItems[0].orderId)[0].dateCompleted).toDateString()}</span>
           <span>{orders.filter(order => order.id === orderItems[0].orderId)[0].amount}</span>
@@ -68,16 +67,17 @@ function Orders({ test, test2 }) {
             })}
           </tbody>
         </table>
+        <button onClick={() => setIsOrderItems(false)}>close</button>
       </div>
     )
   }
 
   return (
-    <div>
+    <div className='main-orders'>
       <h2>ORDERS</h2>
       <p>{test+test2}</p>
       {isOrderItems && renderOrderItems()}
-      <table>
+      <table className='orders-table'>
         <thead>
           <tr>
             <th>Order#</th>
@@ -101,12 +101,14 @@ function Orders({ test, test2 }) {
           })}
         </tbody>
       </table>
-      <span><button onClick={handlePage} value='prev'>prev</button></span><span>{pageNum}</span><span><button onClick={handlePage} value='next'>next</button></span><br />
-      {p.pageLinks.map(pNum =>  {
-        return (
-          <button onClick={handlePage} value={pNum}>{pNum}</button>
-        )
-      })}
+      <nav>
+        <span className='page-nav'><button onClick={handlePage} value='prev'>prev</button><span>{pageNum}</span><button onClick={handlePage} value='next'>next</button></span><br />
+        {p.pageLinks.map(pNum =>  {
+          return (
+            <button className='page-number' onClick={handlePage} value={pNum}>{pNum}</button>
+          )
+        })}
+      </nav>
     </div>
   )
 }

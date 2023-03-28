@@ -1,0 +1,60 @@
+.billing-delivery label {
+  display: inline-flex;
+}
+
+.billing-delivery input[type="checkbox"] {
+  margin: .2rem;
+}
+
+.billing-delivery button {
+  margin: 1rem;
+}
+
+.billing-delivery label input {
+  margin: .25rem;
+}
+
+
+
+.main-checkout h2 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.main-checkout h3 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.stripe-pay button {
+  font-size: 2rem;
+  padding: 1rem;
+  margin: 1rem;
+}
+
+.main-complete table {
+  margin: auto;
+}
+
+.main-complete td {
+  padding-right: 2rem;
+  text-align: start;
+}
+.main-complete th {
+  padding-right: 1rem;
+  text-align: start;
+}
+
+.main-complete tr:nth-child(even) {
+  background-color: #F4F4F4;
+}
+
+.main-complete h2 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.main-complete h3 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.main-complete .billing-delivery {
+  margin: 2rem;
+}

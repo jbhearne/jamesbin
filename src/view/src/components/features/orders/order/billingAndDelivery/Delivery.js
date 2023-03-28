@@ -40,22 +40,22 @@ function Delivery({ delivery, controls = true }) {
       <div>
       <h3>Edit Delivery Address</h3>
       <form name='userProfile' onSubmit={handleSubmit}>
-        <label>Receiver Name:</label> <input id='receiverName' type='text' defaultValue={delivery.receiverName}></input><br />
-        <label>Delivery Method:</label> <input id='deliveryMethod' type='text' defaultValue={delivery.deliveryMethod}></input><br />
-        <label>Delivery Notes:</label> <input id='notes' type='text' defaultValue={delivery.notes}></input><br />
+        <label>Receiver Name: <input id='receiverName' type='text' defaultValue={delivery.receiverName}></input></label><br />
+        <label>Delivery Method: <input id='deliveryMethod' type='text' defaultValue={delivery.deliveryMethod}></input></label><br />
+        <label>Delivery Notes: <input id='notes' type='text' defaultValue={delivery.notes}></input></label><br />
         <span>Contact Info:</span>
         <div>
           <span>Address:</span> 
             <div>
-            <label>Street Address: </label><input id='address' type='text' defaultValue={delivery.contact.address}></input><br />
-            <label>City: </label><input id='city' type='text' defaultValue={delivery.contact.city}></input>, 
-            <label>State: </label><input id='state' type='text' defaultValue={delivery.contact.state}></input> 
-            <label>Zip Code: </label><input id='zip' type='text' defaultValue={delivery.contact.zip}></input>
+            <label>Street Address: <input id='address' type='text' defaultValue={delivery.contact.address}></input></label><br />
+            <label>City: <input id='city' type='text' defaultValue={delivery.contact.city}></input></label> 
+            <label>, State: <input id='state' type='text' defaultValue={delivery.contact.state}></input></label>
+            <label>Zip Code: <input id='zip' type='text' defaultValue={delivery.contact.zip}></input></label>
             </div>
-          <label>Email: </label><input id='email' type='email' defaultValue={delivery.contact.email}></input><br />
-          <label>Phone: </label><input id='phone' type='tel' defaultValue={delivery.contact.phone}></input><br />
+          <label>Email: <input id='email' type='email' defaultValue={delivery.contact.email}></input></label><br />
+          <label>Phone: <input id='phone' type='tel' defaultValue={delivery.contact.phone}></input></label><br />
         </div>
-        <label>Update: </label><input type='submit'></input>
+        <input type='submit' value='Update'></input>
       </form>
       <button onClick={() => setEditMode(false)}>View Delivery Address</button>
       {message && (<div>{message}</div>)}
@@ -99,7 +99,7 @@ function Delivery({ delivery, controls = true }) {
   }
 
   return (
-    <div>
+    <div className='billing-delivery'>
      {editMode ? edit() : view()}
     </div>
   )

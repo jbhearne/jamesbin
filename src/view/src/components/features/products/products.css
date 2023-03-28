@@ -2,12 +2,80 @@ img {
   width: 80px;
 }
 
+.main-products h3 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
 .productsCatalog {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   list-style: none;
+  padding: 2vh;
 }
 
 .productsCatalog a {
   color: black;
+  text-decoration: none;
+}
+
+
+.product {
+  border: 0;
+  border-bottom: 2px solid lightgray;
+  padding-bottom: 1rem;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/*.page-nav {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/*.page-nav button {
+  border: 0;
+  background-color: black;
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: .3rem;
+  margin: .4rem;
+  cursor: pointer;
+  border-radius: 6px;
+}*//*
+
+.page-nav span {
+  border: 0;
+  background-color: unset;
+  color: grey;
+  font-size: 1.5rem;
+}
+
+.page-number {
+  border: 0;
+  background-color: unset;
+  cursor: pointer;
+  margin: 0 .2rem 2rem;
+  color: blue;
+  text-decoration: underline;
+  
+}*/
+
+.product-name {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.product-page label {
+  font-weight: 700;
+}
+
+.product-page input {
+  margin: 0 .5rem 0 .5rem;
+  width: 2.5rem;
+}
+
+.product-page button {
+  background-color: black;
+  border: 0;
+  border-radius: 5px;
+  color: white;
+  font-weight: 700;
 }

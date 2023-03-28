@@ -20,7 +20,7 @@ export const fetchCart = createAsyncThunk(
       console.log(bodies)
       console.log('before multi ' + (parseInt(Date.now()) - 1678800000000))
       if (localItems.length > 0) {
-        await multiPost('/cart', bodies, 0, token);
+        await multiPost('/cart', bodies, 0, token); //TODO: need to create an API call to post multiple cart items in one call.
       }
       /*if (localItems.length > 0) {
         await localItems.forEach(async item => {

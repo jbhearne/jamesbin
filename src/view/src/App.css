@@ -14,21 +14,57 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  height: 15vh;
+  background-color: #000000;
+  height: 10rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(1rem);
   color: white;
+
 }
 
+
+.title {
+  display: flex;
+  width: 100%;
+}
+
+.titleLink {
+  width: 100%;
+  font-family: Georgia, Times, 'Times New Roman', serif;
+  text-decoration: none;
+}
+
+.titleLink h1{
+  margin: 0rem 0 0rem 0;
+}
+
+.user-login {
+  width: 100%;
+  text-align: right;
+  margin: 0 2vw 0 0;
+}
 
 .App-header li {
   display: inline;
   font-size: 1rem;
   color: white;
+}
+
+.main-nav ul {
+  padding-inline-start: 0;
+}
+
+.main-nav li {
+  padding: 0 2vw 0 2vw;
+}
+
+.main-nav a {
+  text-decoration: unset;
+  font-weight: 700;
+  font-family: Georgia, Times, 'Times New Roman', serif;
 }
 
 a {
@@ -50,4 +86,85 @@ main {
   to {
     transform: rotate(360deg);
   }
+}
+
+button {
+  border: 0;
+  background-color: black;
+  color: white;
+  font-weight: 700;
+  padding: .3rem;
+  border-radius: 3px;
+}
+
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  /* For iOS < 15 to remove gradient background */
+  background-color: #fff;
+  /* Not removed via appearance */
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid currentColor;
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em black;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+input[type="submit"] {
+  margin: 1rem;
+  border: 0;
+  background-color: black;
+  color: white;
+  font-weight: 700;
+  padding: .3rem;
+  border-radius: 3px;
+}
+
+input {
+  border: .2rem solid black;
+}
+
+button:active {
+  border: .2rem solid red;
+  border-radius: .5rem;
+}
+
+.page-nav {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+
+.page-nav span {
+  border: 0;
+  background-color: unset;
+  color: grey;
+  font-size: 1.5rem;
+}
+
+.page-number {
+  border: 0;
+  background-color: unset;
+  cursor: pointer;
+  margin: 0 .2rem 2rem;
+  color: blue;
+  text-decoration: underline;
+  
 }

@@ -47,21 +47,21 @@ function Billing({ billing, controls = true }) {
       <div>
       <h3>Edit Billing Address</h3>
       <form name='userProfile' onSubmit={handleSubmit}>
-        <label>Payer Name:</label> <input id='payerName' type='text' defaultValue={billing.payerName}></input><br />
-        <label>Payment Method:</label> <input id='paymentMethod' type='text' defaultValue={billing.paymentMethod}></input><br />
+        <label>Payer Name: <input id='payerName' type='text' defaultValue={billing.payerName}></input></label><br />
+        <label>Payment Method: <input id='paymentMethod' type='text' defaultValue={billing.paymentMethod}></input></label><br />
         <span>Contact Info:</span>
         <div>
           <span>Address:</span> 
             <div>
-            <label>Street Address: </label><input id='address' type='text' defaultValue={billing.contact.address}></input><br />
-            <label>City: </label><input id='city' type='text' defaultValue={billing.contact.city}></input>, 
-            <label>State: </label><input id='state' type='text' defaultValue={billing.contact.state}></input> 
-            <label>Zip Code: </label><input id='zip' type='text' defaultValue={billing.contact.zip}></input>
+            <label>Street Address: <input id='address' type='text' defaultValue={billing.contact.address}></input></label><br />
+            <label>City: <input id='city' type='text' defaultValue={billing.contact.city}></input></label>
+            <label>, State: <input id='state' type='text' defaultValue={billing.contact.state}></input></label> 
+            <label>Zip Code: <input id='zip' type='text' defaultValue={billing.contact.zip}></input></label>
             </div>
-          <label>Email: </label><input id='email' type='email' defaultValue={billing.contact.email}></input><br />
-          <label>Phone: </label><input id='phone' type='tel' defaultValue={billing.contact.phone}></input><br />
+          <label>Email: <input id='email' type='email' defaultValue={billing.contact.email}></input></label><br />
+          <label>Phone: <input id='phone' type='tel' defaultValue={billing.contact.phone}></input></label><br />
         </div>
-        <label>Update: </label><input type='submit'></input>
+        <input type='submit' value='Update'></input>
       </form>
       <button onClick={() => setEditMode(false)}>View Billing Address</button>
       {message && (<div>{message}</div>)}
@@ -106,7 +106,7 @@ function Billing({ billing, controls = true }) {
   }
 
   return (
-    <div>
+    <div className='billing-delivery'>
      {editMode ? edit() : view()}
     </div>
   )

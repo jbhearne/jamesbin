@@ -55,9 +55,12 @@ function App() {
     <div className="App">
       <Router>
         <header className="App-header">
-        <NavLink to=''><h1>James' Bin</h1></NavLink>
-          <div id="user-login">{usernameOrLogin()}</div>
-          <nav id="main-nav">
+
+            <div id="user-login" className="user-login">{usernameOrLogin()}</div>
+            <NavLink className="titleLink" to=''><h1>James' Bin</h1></NavLink>
+            
+
+          <nav id="main-nav" className="main-nav">
             <ul>
               <li><NavLink to='products'>Products</NavLink></li>
               <li><NavLink to='vendors'>Vendors</NavLink></li>

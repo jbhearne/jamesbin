@@ -24,7 +24,7 @@ function Products() {
  }, []);
 
   return (
-    <div>
+    <div className='main-products'>
       <h3>Many Fine Products...</h3>
       <ul className='productsCatalog'>
         {products.filter((item, idx) => idx >= p.pageStart && idx < p.pageEnd).map(product => {
@@ -33,11 +33,11 @@ function Products() {
           )
         })}
       </ul>
-      <span><button onClick={handlePage} value='prev'>prev</button></span><span>{pageNum}</span><span><button onClick={handlePage} value='next'>next</button></span>
+      <span className='page-nav'><button onClick={handlePage} value='prev'>prev</button><span>{pageNum}</span><button onClick={handlePage} value='next'>next</button></span>
       <br />
       {p.pageLinks.map(pNum =>  {
         return (
-          <button onClick={handlePage} value={pNum}>{pNum}</button>
+          <button className='page-number' onClick={handlePage} value={pNum}>{pNum}</button>
         )
       })}
     </div>

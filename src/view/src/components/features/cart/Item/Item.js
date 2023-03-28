@@ -20,7 +20,7 @@ function Item({ item, controls }) {
 
   const handleUpdate = async (e) => {
     e.preventDefault()
-    dispatch(updateUserCartItem({ id: item.id, body: { productId: item.productId, quantity: e.target.quantity.value }}));
+    await dispatch(updateUserCartItem({ id: item.id, body: { productId: item.productId, quantity: e.target.quantity.value }}));
     /*dispatch(addItemToCart({
       id: tempCartId,
       productName: item.productName,
@@ -35,18 +35,19 @@ function Item({ item, controls }) {
   }
 
   return (
-    <tr>
+    <tr className="cartItem">
       <td>{item.productName}</td>
       <td>{item.price}</td>
       <td>{item.quantity}</td>
       <td>{subtotal(item.price, item.quantity)}</td>
       {controls && (<td>
         <form id='updateCart' onSubmit={handleUpdate}>
-          <input id='quantity' className="qtyInput" aria-label="quantity-control" type='number' defaultValue={item.quantity}></input>
+          <input id='quantity' className="qtyInput" aria-label="quantity-control" type='number' min="1" defaultValue={item.quantity}></input>
           <button>update</button>
         </form>
         </td>)}
       {controls && (<td><button onClick={() => handleDelete(item.id)}>x</button></td>)}
+      <td>{item.id}</td>
     </tr>
   )
 }

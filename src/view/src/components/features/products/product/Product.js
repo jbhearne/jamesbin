@@ -9,7 +9,7 @@ function Product(props) {
   }
 
   return (
-    <div>
+    <div className='product'>
       <h4 className='productName'>{product.name}</h4>
       <p className='price'>{product.price}</p>
       <img src={`/images/products/product-img-${product.id}.png`} onError={addDefaultSrc} />

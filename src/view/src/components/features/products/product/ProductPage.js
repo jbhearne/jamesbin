@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { fetchProduct, selectProduct } from '../productsSlice';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { addItemToCart, selectTempCartId, incrementTempCartId } from '../../cart/cartSlice';
+import '../products.css'
 
 
 function Product() {
@@ -36,9 +37,9 @@ function Product() {
 
 
   return (
-    <div className='productPage'>
+    <div className='product-page'>
       <p>HI!</p>
-      <h2 className='productName'>{product.name}</h2>
+      <h2 className='product-name'>{product.name}</h2>
       <h3 className='price'>{product.price}</h3>
       <img src={`/images/products/product-img-${product.id}.png`} onError={addDefaultSrc} />
       <p>{product.description}</p>

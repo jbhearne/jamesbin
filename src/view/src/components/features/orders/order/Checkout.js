@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiPost, apiFetch } from '../../../../utils/apiFetch';
+import "./checkout.css"
 
 const stripePromise = loadStripe('pk_test_51MoFPfLe0FPU1SNMz0VpDaaRmWnvEfIfninY8srdIqBdupcQCbNuI0A1x5EZN2N05S3wzCBDGaI4SDw3lQy1XlTI00EN5MFzvC');
 
@@ -47,9 +48,37 @@ function Checkout({ intent }) {
   /*const token = localStorage.getItem("id_token");
   const secretPromise = apiFetch('/secret', token)*/
   //console.log('oprtions' + clientSecret)
+  const appearance = {
+    theme: 'stripe',
+
+    rules: {
+      '.Tab': {
+        border: '.2rem solid #000000',
+        boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(18, 42, 66, 0.02)',
+      },
+      '.Input': {
+        border: '.2rem solid #000000',
+        fontSize: '1rem',
+        padding: '0',
+      },
+    },
+  
+    variables: {
+      colorPrimary: '#000000',
+      colorBackground: '#ffffff',
+      colorText: '#30313d',
+      colorDanger: '#df1b41',
+      fontFamily: 'Ideal Sans, system-ui, sans-serif',
+      spacingUnit: '2px',
+      borderRadius: '2px',
+      // See all possible variables below
+    }
+  };
+
   const options = {
     // passing the client secret obtained from the server
-    clientSecret: intent.client_secret
+    clientSecret: intent.client_secret,
+    appearance: appearance
   };
   /* useEffect(() => {
     //console.log('useEffect')
@@ -140,19 +169,19 @@ function Checkout({ intent }) {
   }
 
   return (
-    <div>
+    <div className='main-checkout'>
       <h2>Checkout</h2>
       <h3>{'Order Total: $' + checkoutOrder.total}</h3>
       <Cart controls={false} />
       {!checkoutOrder.billing ? (<p>loading</p>) : (<Billing billing={checkoutOrder.billing} />) /*FIXME why props are passing undefined?? I shouldn't need this conditional*/}
       {!checkoutOrder.delivery ? (<p>loading</p>) : (<Delivery delivery={checkoutOrder.delivery} />)}
-      <CreditCard />
+      {/* <CreditCard /> */}
       <Elements stripe={stripePromise} options={options}>
         <CheckoutForm amount={intent.amount}/>
       </Elements>
 
       {/*<form action="http://localhost:3000/create-checkout-session" method="POST" target='_blank'>*/}
-      <button id='complete' onClick={handleComplete}>Complete Order</button>
+      {/* <button id='complete' onClick={handleComplete}>Complete Order</button> */}
       {/*</form>*/}
     </div>
   )

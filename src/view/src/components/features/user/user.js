@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { selectUser, fetchUser, login } from './userSlice';
 import { apiPut } from '../../../utils/apiFetch';
+import "./user.css";
 
 function User() {
   const user = useSelector(selectUser);
@@ -42,23 +43,23 @@ function User() {
 
   const editUser = () => {
     return (
-      <div>
+      <div className='main-user'>
       <h2>Edit User Profile</h2>
       <label>Change Username: <input id='editUsername' type="checkbox" onClick={handleCheck} /></label>
       <form name='userProfile' onSubmit={handleSubmit}>
         {editUsername && (<div><label>Username: <input id='username' type='text' defaultValue={user.username}></input></label></div>)}
-        <label>Full Name:</label> <input id='fullname' type='text' defaultValue={user.fullname}></input><br />
+        <label>Full Name: <input id='fullname' type='text' defaultValue={user.fullname}></input></label><br />
         <span>Contact Info:</span>
         <div>
           <span>Address:</span> 
             <div>
-            <label>Street Address: </label><input id='address' type='text' defaultValue={user.contact.address}></input><br />
-            <label>City: </label><input id='city' type='text' defaultValue={user.contact.city}></input>, <label>State: </label><input id='state' type='text' defaultValue={user.contact.state}></input> <label>Zip Code: </label><input id='zip' type='text' defaultValue={user.contact.zip}></input>
+            <label>Street Address: <input id='address' type='text' defaultValue={user.contact.address}></input></label><br />
+            <label>City: <input id='city' type='text' defaultValue={user.contact.city}></input></label>, <label>State: <input id='state' type='text' defaultValue={user.contact.state}></input></label> <label>Zip Code: <input id='zip' type='text' defaultValue={user.contact.zip}></input></label>
             </div>
-          <label>Email: </label><input id='email' type='email' defaultValue={user.contact.email}></input><br />
-          <label>Phone: </label><input id='phone' type='tel' defaultValue={user.contact.phone}></input><br />
+          <label>Email: <input id='email' type='email' defaultValue={user.contact.email}></input></label><br />
+          <label>Phone: <input id='phone' type='tel' defaultValue={user.contact.phone}></input></label><br />
         </div>
-        <label>Update: </label><input type='submit'></input>
+        <input type='submit' value='Update'></input>
       </form>
       <button onClick={() => setEditMode(false)}>Cancel</button>
       {message && (<div>{message}</div>)}
@@ -68,19 +69,19 @@ function User() {
   
   const viewUser = () => {
     return (
-      <div>
+      <div className='main-user'>
         <h2>User Profile</h2>
-        <span>Username:</span> <span>{user.username}</span><br />
-        <span>Full Name:</span> <span>{user.fullname}</span><br />
+        <span className='span-label'>Username:</span> <span>{user.username}</span><br />
+        <span className='span-label'>Full Name:</span> <span>{user.fullname}</span><br />
         <span>Contact Info:</span>
         <div>
-          <span>Address:</span> 
+          <span className='span-label'>Address:</span> 
             <div>
               <span>{user.contact.address}</span><br />
               <span>{user.contact.city}</span>, <span>{user.contact.state}</span> <span>{user.contact.zip}</span>
             </div>
-          <span>Email: </span><span>{user.contact.email}</span><br />
-          <span>Phone: </span><span>{user.contact.phone}</span><br />
+          <span className='span-label'>Email: </span><span>{user.contact.email}</span><br />
+          <span className='span-label'>Phone: </span><span>{user.contact.phone}</span><br />
         </div>
         <button onClick={() => setEditMode(true)}>Edit Profile</button>
       </div>

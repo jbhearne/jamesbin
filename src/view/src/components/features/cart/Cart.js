@@ -23,7 +23,7 @@ function Cart({ controls }) {
   
   //console.log(cart)
   return (
-    <div>
+    <div className='shopping-cart'>
       <h2>Shopping Cart</h2>
       <table>
         <thead>
@@ -44,7 +44,7 @@ function Cart({ controls }) {
           })}
         </tbody>
       </table>
-      {(controls && cart.length > 0) && (<button onClick={() => navigate('/order/checkout')}>Checkout</button>)}
+      {(controls && cart.length > 0) && (<button className='checkout' onClick={() => navigate('/order/checkout')}>Checkout</button>)}
     </div>
   )
 }
