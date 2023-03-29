@@ -36,7 +36,7 @@ function Products() {
       <br />
       {p.pageLinks.map(pNum =>  {
         return (
-          <button className='page-number' onClick={handlePage} value={pNum}>{pNum}</button>
+          <button key={pNum} className='page-number' onClick={handlePage} value={pNum}>{pNum}</button>
         )
       })}
     </div>

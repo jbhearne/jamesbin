@@ -20,7 +20,7 @@ export const apiFetch = async (endpoint, token) => {
 }
 
 export const apiPost = async (endpoint, body, token) => {
-  console.log(body)
+  //testlog console.log(body)
   const headers = token ? {
     'content-type': 'application/json',
     'Authorization': token,

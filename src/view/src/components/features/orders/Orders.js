@@ -60,7 +60,7 @@ function Orders({ test, test2 }) {
           </thead>
           <tbody>
             {orderItems.map(item => {
-              console.log('item')
+              //testlog console.log('item')
               return (
                 <OrderItem key={item.id} item={item} />
               )
@@ -105,7 +105,7 @@ function Orders({ test, test2 }) {
         <span className='page-nav'><button onClick={handlePage} value='prev'>prev</button><span>{pageNum}</span><button onClick={handlePage} value='next'>next</button></span><br />
         {p.pageLinks.map(pNum =>  {
           return (
-            <button className='page-number' onClick={handlePage} value={pNum}>{pNum}</button>
+            <button key={pNum} className='page-number' onClick={handlePage} value={pNum}>{pNum}</button>
           )
         })}
       </nav>

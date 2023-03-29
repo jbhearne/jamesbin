@@ -13,7 +13,7 @@ function GetStripe () {
     })();
   }, [])
   
-  console.log(intent)
+  //testlog console.log(intent)
   const loader = () => {
     if (typeof intent?.client_secret === 'string') {
       return (

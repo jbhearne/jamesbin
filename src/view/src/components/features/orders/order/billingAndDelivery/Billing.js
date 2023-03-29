@@ -70,8 +70,8 @@ function Billing({ billing, controls = true }) {
   }
   
   const view = () => {
-    console.log('view')
-    console.log(billing)
+    //testlog console.log('view')
+    //testlog console.log(billing)
     return (
       <div>
         <h3>Billing</h3>
