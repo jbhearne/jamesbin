@@ -38,7 +38,7 @@ import EP from '../../../dataEndpoints';
   }
 );*/
 
-/*export const register = createAsyncThunk(
+/*GARBAGE export const register = createAsyncThunk(
   'user/register',
   async (request) => {
     const registered = await apiFetch(EP.register, {
@@ -93,7 +93,7 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: {
     user: {},
-    //loginMessage: '',
+    //GARBAGE loginMessage: '',
     isLoggedIn: false,
     updateMessage: '',
     isLoading: false,
@@ -151,7 +151,7 @@ export const userSlice = createSlice({
     [fetchUser.rejected]: (state, action) => {
       state.isLoading = false;
       state.hasError = true;
-    },/*
+    },/*TODO or GARBAGE 
     [updateUser.pending]: (state, action) => {
       state.isLoading = true;
       state.hasError = false;

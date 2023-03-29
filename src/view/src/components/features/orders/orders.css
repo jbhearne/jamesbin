@@ -38,10 +38,8 @@
 }
 
 .main-orders tr:nth-child(even) {
-  background-color: #F4F4F4;
+  background-color: aliceblue;
 }
-
-
 
 .order-details {
   margin-bottom: 3rem;

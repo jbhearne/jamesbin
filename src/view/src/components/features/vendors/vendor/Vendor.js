@@ -2,7 +2,6 @@
 
 function Vendor({ vendor }) {
 
-
   return (
     <div>
       <h3>{vendor.name}</h3>

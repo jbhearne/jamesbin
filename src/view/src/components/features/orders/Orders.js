@@ -23,7 +23,7 @@ function Orders({ test, test2 }) {
 
   const [pageNum, setPageNum] = useState(1);
   const [numItems, setNumItems] = useState(10);
-/*   const pageEnd = pageNum * numItems;
+/* GARBAGE  const pageEnd = pageNum * numItems;
   const pageStart = pageEnd - numItems;
   const maxPage = Math.ceil(orders.length / numItems); */
   const p = page(pageNum, setPageNum, numItems, setNumItems, orders.length, 6)
@@ -75,7 +75,7 @@ function Orders({ test, test2 }) {
   return (
     <div className='main-orders'>
       <h2>ORDERS</h2>
-      <p>{test+test2}</p>
+      {/*GARBAGE <p>{test+test2}</p> */}
       {isOrderItems && renderOrderItems()}
       <table className='orders-table'>
         <thead>

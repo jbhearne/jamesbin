@@ -1,6 +1,4 @@
-
-
-
+//GARBAGE module not used
 export const syncCart = (cart) => {
   console.log(Date.now())
   const length = new Promise()

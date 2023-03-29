@@ -18,7 +18,7 @@ function Vendors() {
       <h2>Our Vendors</h2>
       {vendors.map(vendor => {
         return (
-          <div>
+          <div key={vendor.id} className="vendor">
            <Vendor key={vendor.id} vendor={vendor} />
           </div>
         )

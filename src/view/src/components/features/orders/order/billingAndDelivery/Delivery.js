@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { selectUser, fetchUser, login } from '../../../user/userSlice';
+import { useState } from 'react';
+//GARBAGE import { Link } from 'react-router-dom';
+//GARBAGE import { selectUser, fetchUser, login } from '../../../user/userSlice';
 import { setDelivery, selectIsOrderLoading, selectUseDefaultDelivery, setUseDefaultDelivery } from '../../ordersSlice';
-import { apiPut } from '../../../../../utils/apiFetch';
+//GARBAGE import { apiPut } from '../../../../../utils/apiFetch';
 
 function Delivery({ delivery, controls = true }) {
   const useDefaultDelivery = useSelector(selectUseDefaultDelivery);
-  const user = useSelector(selectUser);
+  //GARBAGE const user = useSelector(selectUser);
   const [editMode, setEditMode] = useState(false);
   const [message, setMessage] = useState('');
   const dispatch = useDispatch()
@@ -32,7 +32,7 @@ function Delivery({ delivery, controls = true }) {
       }
     }
     dispatch(setDelivery(newDelivery))
-    //const token = localStorage.getItem("id_token");
+    //GARBAGE const token = localStorage.getItem("id_token");
   }
 
   const edit = () => {
@@ -103,7 +103,6 @@ function Delivery({ delivery, controls = true }) {
      {editMode ? edit() : view()}
     </div>
   )
-
 }
 
 export default Delivery;

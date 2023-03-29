@@ -7,13 +7,13 @@ import Login from './features/user/login/Login';
 export const LoggedIn = (props) => {
   const { Component, compProps } = props;
   const isLoggedIn = useSelector(selectIsloggedIn);
-  const navigate = useNavigate();
-  console.log(isLoggedIn)
+  //GARBAGE const navigate = useNavigate();
+  //testlog console.log(isLoggedIn)
   return (
     <div>
-      <h3>{isLoggedIn}</h3>
+      {/*GARBAGE <h3>{isLoggedIn}</h3> */}
       { isLoggedIn ? <Component {...compProps}/> : <Login /> }
-      { !isLoggedIn && <p>Please Login First</p>}
+      { !isLoggedIn && <p className='not-logged'>Please Login First</p>}
     </div>
   )
 

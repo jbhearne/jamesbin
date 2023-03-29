@@ -1,14 +1,14 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux'
+//GARBAGE import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { selectUser, fetchUser, login, setIsloggedIn } from '../userSlice';
+import { fetchUser, setIsloggedIn } from '../userSlice';
 import { fetchLogin } from '../../../../utils/apiLogin';
 import './Login.css'
 
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector(selectUser);
+  //GARBAGE const user = useSelector(selectUser);
   const handleLogin = async (e) => { //TODO add this to userSlice to set JWT expires state.
     e.preventDefault();
     const isLoggedIn = await fetchLogin({
@@ -29,13 +29,17 @@ function Login() {
   }
 
   return (
-    <div>
+    <div className='main-login'>
       <form id="login" name='login' onSubmit={handleLogin}>
-        <label htmlFor='username'>Username:</label>
-        <input id='username' defaultValue='Fantom'></input>
-        <label htmlFor='password' >Password:</label>
-        <input id='password' defaultValue='happytime'></input>
-        <button form='login' type='submit' ></button>
+        <div className='login-field'>
+          <label htmlFor='username'>Username:</label>
+          <input id='username' defaultValue='Fantom'></input>
+        </div>
+        <div className='login-field'>
+          <label htmlFor='password' >Password:</label>
+          <input id='password' defaultValue='happytime'></input>
+        </div>
+        <button form='login' type='submit' >Login</button>
       </form>
       <Link className='registerLink' to='/user/register'>Register</Link>
     </div>

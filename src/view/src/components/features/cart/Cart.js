@@ -1,10 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { selectCart, selectTempCartId, fetchCart, removeItemFromCart } from './cartSlice';
+import { selectCart, /*GARBAGE  selectTempCartId, */ fetchCart, /*GARBAGE  removeItemFromCart */ } from './cartSlice';
 import { selectUser } from '../user/userSlice';
 import Item from './Item/Item';
-import { apiPost } from '../../../utils/apiFetch';
+//GARBAGE import { apiPost } from '../../../utils/apiFetch';
 
 function Cart({ controls }) {
   const dispatch = useDispatch()
@@ -12,16 +12,16 @@ function Cart({ controls }) {
   const cart = useSelector(selectCart);
   const dataFetchedRef = useRef(false);
   const navigate = useNavigate();
-  //console.log('before use cart')
+  //testlog console.log('before use cart')
   useEffect(() => {
-    //console.log('useEffect')
+    //testlog console.log('useEffect')
     if (dataFetchedRef.current) return;
     dataFetchedRef.current = true;
     dispatch(fetchCart({ id: user.id, cart: cart }))
   }, []);
-  //console.log('after use cart')
+  //testlog console.log('after use cart')
   
-  //console.log(cart)
+  //testlog console.log(cart)
   return (
     <div className='shopping-cart'>
       <h2>Shopping Cart</h2>

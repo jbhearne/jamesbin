@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { fetchProduct, selectProduct } from '../productsSlice';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { addItemToCart, selectTempCartId, incrementTempCartId } from '../../cart/cartSlice';
@@ -7,7 +7,7 @@ import '../products.css'
 
 
 function Product() {
-  //const { product } = props;
+  //GARBAGE const { product } = props;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const product = useSelector(selectProduct);
@@ -38,7 +38,6 @@ function Product() {
 
   return (
     <div className='product-page'>
-      <p>HI!</p>
       <h2 className='product-name'>{product.name}</h2>
       <h3 className='price'>{product.price}</h3>
       <img src={`/images/products/product-img-${product.id}.png`} onError={addDefaultSrc} />

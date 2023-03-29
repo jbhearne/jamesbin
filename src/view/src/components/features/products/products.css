@@ -21,9 +21,18 @@ img {
 
 .product {
   border: 0;
-  border-bottom: 2px solid lightgray;
+
   padding-bottom: 1rem;
   font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.productsCatalog li{
+  border: 2px solid aliceblue;
+  margin: .5rem;
+}
+
+.main-products .page-nav button {
+  margin: 1rem;
 }
 
 /*.page-nav {
@@ -59,7 +68,17 @@ img {
   
 }*/
 
-.product-name {
+.product-page .product-name {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.product-page p {
+  width: 80%;
+  margin: auto;
+  padding-bottom: 2rem;
+}
+
+.product-page h4 {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 

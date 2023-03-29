@@ -1,6 +1,7 @@
+//GARBAGE - this module is not used
 import { useDispatch, useSelector } from 'react-redux'
 import { selectCcPlaceholder, setCcPlaceholder } from '../../ordersSlice';
-import { useEffect } from 'react';
+//GARBAGE import { useEffect } from 'react';
 
 function CreditCard() {
   const dispatch = useDispatch();

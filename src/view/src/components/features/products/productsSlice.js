@@ -1,17 +1,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { apiFetch } from '../../../utils/apiFetch';
-import Product from './product/Product';
+//GARBAGE import Product from './product/Product';
 
-const EP = {
+/*GARBAGE const EP = {
   products: '/products',
   product: '/product/',
   vendor: '/vendor/'
-}
+} */
 
 export const fetchProducts = createAsyncThunk(
   'products/fetchProducts',
-  async (endpoint = EP.products) => {
-    const response = await apiFetch(endpoint);
+  async () => { //GARBAGE - endpoint = EP.products
+    const response = await apiFetch('/products');
     return response.map(product => {
       return {
         id: product.id,
@@ -27,14 +27,14 @@ export const fetchProducts = createAsyncThunk(
 export const fetchProduct = createAsyncThunk(
   'product/fetchProduct',
   async (id) => {
-    const product = await apiFetch(EP.product + id);
+    const product = await apiFetch('/product/' + id); //GARBAGE - EP.product
     const vendor = {
       name: '',
       description: '',
     }
     if (product.vendor_id) {
       const vendorId = parseInt(product.vendor_id);
-      const v = await apiFetch(EP.vendor + vendorId);
+      const v = await apiFetch('/vendor/' + vendorId); //GARBAGE EP.vendor
       vendor.name = v.name;
       vendor.description = v.description;
     }

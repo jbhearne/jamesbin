@@ -1,5 +1,5 @@
 
-/* export const pagefff = (direction, pageNum, maxPage, setPageNum) => {
+/*GARBAGE export const pagefff = (direction, pageNum, maxPage, setPageNum) => {
   if (direction === 'prev') {
     if (pageNum > 1) setPageNum(pageNum - 1);
   } else if (direction === 'next') {

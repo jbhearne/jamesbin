@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { selectUser, fetchUser, login } from './userSlice';
+import { useState } from 'react';
+//GARBAGE import { Link } from 'react-router-dom';
+import { selectUser, fetchUser } from './userSlice';
 import { apiPut } from '../../../utils/apiFetch';
 import "./user.css";
 
@@ -32,7 +32,7 @@ function User() {
     if (editUsername) updateUser.username = e.target.username.value;
     
     const token = localStorage.getItem("id_token");
-    const result = await apiPut(`/user/${user.id}`, updateUser, token);
+    const result = await apiPut(`/user/${user.id}`, updateUser, token); //??? should this happen in the userSlice?
     if (result.success) {
       dispatch(fetchUser());
       setEditMode(false);

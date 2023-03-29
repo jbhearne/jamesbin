@@ -1,27 +1,27 @@
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../user/userSlice";
-import { useNavigate } from "react-router-dom";
+//GARBAGE import { useNavigate } from "react-router-dom";
 import { subtotal } from "../../../../utils/utils";
-import { deleteUserCartItem, removeItemFromCart, addItemToCart, fetchCart, selectTempCartId, selectCart, updateUserCartItem } from "../cartSlice";
+import { deleteUserCartItem, removeItemFromCart, /*GARBAGE addItemToCart, */ fetchCart, selectTempCartId, selectCart, updateUserCartItem } from "../cartSlice";
 
 function Item({ item, controls }) {
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  //GARBAGE const navigate = useNavigate();
 
   const handleDelete = (id) => {
     dispatch(deleteUserCartItem(id));
     dispatch(removeItemFromCart(id));
   }
 
-  const tempCartId = useSelector(selectTempCartId);
+  //GARBAGE const tempCartId = useSelector(selectTempCartId);
   const cart = useSelector(selectCart);
   const user = useSelector(selectUser);
 
   const handleUpdate = async (e) => {
     e.preventDefault()
     await dispatch(updateUserCartItem({ id: item.id, body: { productId: item.productId, quantity: e.target.quantity.value }}));
-    /*dispatch(addItemToCart({
+    /*GARBAGE dispatch(addItemToCart({
       id: tempCartId,
       productName: item.productName,
       productId: item.productId,
@@ -29,25 +29,25 @@ function Item({ item, controls }) {
       price: item.price,
       quantity: e.target.quantity.value,
     }))*/
-    //await dispatch(deleteUserCartItem(item.id));
-    //await dispatch(removeItemFromCart(item.id));
+    //GARBAGE await dispatch(deleteUserCartItem(item.id));
+    //GARBAGE await dispatch(removeItemFromCart(item.id));
     dispatch(fetchCart({ id: user.id, cart: cart }));
   }
 
   return (
     <tr className="cartItem">
-      <td>{item.productName}</td>
+      <td className="product-name">{item.productName}</td>
       <td>{item.price}</td>
       <td>{item.quantity}</td>
       <td>{subtotal(item.price, item.quantity)}</td>
       {controls && (<td>
         <form id='updateCart' onSubmit={handleUpdate}>
           <input id='quantity' className="qtyInput" aria-label="quantity-control" type='number' min="1" defaultValue={item.quantity}></input>
-          <button>update</button>
+          <button className="update">update</button>
         </form>
         </td>)}
-      {controls && (<td><button onClick={() => handleDelete(item.id)}>x</button></td>)}
-      <td>{item.id}</td>
+      {controls && (<td><button className="delete" onClick={() => handleDelete(item.id)}>☓</button></td>)}
+      {/*GARBAGE  <td>{item.id}</td> */}
     </tr>
   )
 }

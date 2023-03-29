@@ -1,4 +1,3 @@
-
 import { apiPost } from '../../../../utils/apiFetch';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -22,7 +21,7 @@ function Register() {
         zip: e.target.zip.value,
       }
     }
-    const result = await apiPost('/register', newUser);
+    const result = await apiPost('/register', newUser); //??? should this be in the userSlice?
     if (result.success) {
       navigate('/user/login');
     } 

@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+//GARBAGE import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import React, { useEffect } from 'react';
@@ -8,12 +8,12 @@ import '@stripe/stripe-js';
 
 import Home from './components/home/Home';
 import Products from './components/features/products/Products';
-import Product from './components/features/products/product/Product';
+//GARBAGE import Product from './components/features/products/product/Product';
 import Vendors from './components/features/vendors/Vendors';
-import Vendor from './components/features/vendors/vendor/Vendor';
+//GARBAGE  ? import Vendor from './components/features/vendors/vendor/Vendor';
 import Orders from './components/features/orders/Orders';
-import Order from './components/features/orders/order/Order';
-import Checkout from './components/features/orders/order/Checkout';
+//GARBAGE import Order from './components/features/orders/order/Order';
+//GARBAGE import Checkout from './components/features/orders/order/Checkout';
 import Complete from './components/features/orders/order/Complete';
 import Cart from './components/features/cart/Cart';
 import User from './components/features/user/User';
@@ -25,7 +25,7 @@ import Logout from './components/features/user/login/Logout';
 import GetStripe from './components/features/orders/order/GetStripe';
 
 function App() {
-  //const user = {fullname: false}
+  //GARBAGE const user = {fullname: false}
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   useEffect(() => {
@@ -35,7 +35,7 @@ function App() {
   useEffect(() => {
     dispatch(setIsloggedIn(!!user.username));
   }, [user])
-  //(<NavLink to='/user'>{user.fullname}</NavLink>)
+  //GARBAGE (<NavLink to='/user'>{user.fullname}</NavLink>)
   const usernameOrLogin = () => {
     if (user.username) {
       return (
@@ -75,14 +75,14 @@ function App() {
           <Route path='/products' element={<Products />} />
           <Route path='/product/:id' element={<ProductPage />} />
           <Route path='/vendors' element={<Vendors />} />
-          <Route path='/vendor/:id' element={<Vendor />} />
+          {/*TODO ? <Route path='/vendor/:id' element={<Vendor />} /> */}
           {/*<Route path='/orders' element={<Orders />} />*/}
           <Route path='/orders' element={<LoggedIn Component={Orders} compProps={{test: 'test', test2: '   test2'}} />} />
           <Route path='/order/checkout' element={<GetStripe />} />
           <Route path='/order/complete' element={<Complete />} />
-          <Route path='/order/:id' element={<Order />} />
+          {/*TODO ? <Route path='/order/:id' element={<Order />} /> */}
           <Route path='/cart' element={<Cart controls={true} />} />
-          {/*<Route path='/cart' element={<LoggedIn Component={Cart} />} />*/}
+          {/*GARBAGE <Route path='/cart' element={<LoggedIn Component={Cart} />} />*/}
           <Route path='/user/register' element={<Register />} />
           <Route path='/user/login' element={<Login />} />
           <Route path='/user' element={<User />} />

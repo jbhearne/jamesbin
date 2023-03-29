@@ -1,0 +1,9 @@
+.main-home h2 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.main-home p {
+  margin: auto;
+  margin-bottom: 2rem;
+  width: 60%;
+}

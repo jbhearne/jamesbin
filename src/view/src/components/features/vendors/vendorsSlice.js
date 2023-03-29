@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { apiFetch } from '../../../utils/apiFetch';
 
-const EP = {
+/*GARBAGE const EP = {
   products: '/products',
   product: '/product/',
   vendor: '/vendor/'
-}
+} */
 
 export const fetchVendors = createAsyncThunk(
   'products/fetchVendors',
@@ -30,7 +30,7 @@ export const fetchVendors = createAsyncThunk(
   }
 );
 
-/*export const fetchProduct = createAsyncThunk(
+/*GARBAGE export const fetchProduct = createAsyncThunk(
   'product/fetchProduct',
   async (id) => {
     const product = await apiFetch(EP.product + id);
@@ -84,6 +84,6 @@ export const vendorsSlice = createSlice({
 });
 
 export const selectVendors = (state) => state.vendors.vendors;
-//export const setProductsProduct = productsSlice.actions.setProductsProduct
+//GARBAGE export const setProductsProduct = productsSlice.actions.setProductsProduct
 
 export default vendorsSlice.reducer;

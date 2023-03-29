@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { useState, useEffect } from 'react';
+//GARBAGE - import { useDispatch, useSelector } from 'react-redux'
+//GARBAGE - import { useState, useEffect } from 'react';
 
 function Product(props) {
   const { product } = props;

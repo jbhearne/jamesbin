@@ -14,7 +14,10 @@
   margin: .25rem;
 }
 
-
+.billing-delivery input {
+  font-size: 1rem;
+  padding: .2rem;
+}
 
 .main-checkout h2 {
   font-family: Georgia, 'Times New Roman', Times, serif;
@@ -24,9 +27,14 @@
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
+.stripe-container {
+  width: 90%;
+  margin: auto;
+}
+
 .stripe-pay button {
-  font-size: 2rem;
-  padding: 1rem;
+  font-size: 1.25rem;
+  padding: .75rem 1rem .75rem 1rem;
   margin: 1rem;
 }
 
@@ -44,7 +52,7 @@
 }
 
 .main-complete tr:nth-child(even) {
-  background-color: #F4F4F4;
+  background-color: aliceblue;
 }
 
 .main-complete h2 {

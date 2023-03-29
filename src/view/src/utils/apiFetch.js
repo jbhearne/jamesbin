@@ -1,6 +1,6 @@
 
 import dataUrl from "./dataUrl";
-//const token = localStorage.getItem("id_token");
+//TODO move token to this file const token = localStorage.getItem("id_token");
 
 export const apiFetch = async (endpoint, token) => {
   const headers = token ? {
@@ -41,11 +41,11 @@ export const apiPost = async (endpoint, body, token) => {
 }
 
 export const multiPost = async (endpoint, arr, i, token) => {
-  console.log('top of multi ' + (parseInt(Date.now()) - 1678800000000))
+  //testlog console.log('top of multi ' + (parseInt(Date.now()) - 1678800000000))
   if (i === arr.length) return
   await apiPost(endpoint, arr[i], token)
   await multiPost(endpoint, arr, i + 1, token)
-  console.log('bottom of multi ' + (parseInt(Date.now()) - 1678800000000))
+  //testlog console.log('bottom of multi ' + (parseInt(Date.now()) - 1678800000000))
 }
 
 export const apiPut = async (endpoint, body, token) => {
@@ -87,7 +87,7 @@ export const apiDelete = async (endpoint, token) => {
   return jsonData;
 }
 
-/*
+/*GARBAGE
 //IDEA these were interpreted from a web post
 
 export const setToken = (response) => {

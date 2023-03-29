@@ -1,21 +1,21 @@
 
 import { useDispatch, useSelector } from 'react-redux'
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { selectUser, fetchUser, login } from '../../../user/userSlice';
+import { useState } from 'react';
+//GARBAGE import { Link } from 'react-router-dom';
+//GARBAGE import { selectUser } from '../../../user/userSlice';
 import { 
   setBilling, 
-  selectIsOrderLoading, 
+  /*GARBAGE  selectIsOrderLoading , */
   setUseDefaultBilling,
   selectUseDefaultBilling,
  } from '../../ordersSlice';
-import { apiPut } from '../../../../../utils/apiFetch';
+//GARBAGE import { apiPut } from '../../../../../utils/apiFetch';
 
 
 function Billing({ billing, controls = true }) {
-  const isLoading = useSelector(selectIsOrderLoading);
+  //GARBAGE const isLoading = useSelector(selectIsOrderLoading);
   const useDefaultBilling = useSelector(selectUseDefaultBilling);
-  const user = useSelector(selectUser);
+  //GARBAGE const user = useSelector(selectUser);
   const [editMode, setEditMode] = useState(false);
   const [message, setMessage] = useState('');
   const dispatch = useDispatch()
@@ -39,7 +39,7 @@ function Billing({ billing, controls = true }) {
       }
     }
     dispatch(setBilling(newBilling))
-    //const token = localStorage.getItem("id_token");
+    //GARBAGE const token = localStorage.getItem("id_token");
   }
 
   const edit = () => {

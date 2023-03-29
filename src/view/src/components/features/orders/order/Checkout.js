@@ -1,7 +1,7 @@
 import Cart from '../../cart/Cart'
 import Billing from './billingAndDelivery/Billing';
 import Delivery from './billingAndDelivery/Delivery';
-import CreditCard from './billingAndDelivery/CreditCard';
+//GARBAGE import CreditCard from './billingAndDelivery/CreditCard';
 import CheckoutForm from './CheckoutForm';
 import {loadStripe} from '@stripe/stripe-js';
 import {Elements} from '@stripe/react-stripe-js';
@@ -21,14 +21,14 @@ import { selectUser } from '../../user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiPost, apiFetch } from '../../../../utils/apiFetch';
+//GARBAGE import { apiPost, apiFetch } from '../../../../utils/apiFetch';
 import "./checkout.css"
 
 const stripePromise = loadStripe('pk_test_51MoFPfLe0FPU1SNMz0VpDaaRmWnvEfIfninY8srdIqBdupcQCbNuI0A1x5EZN2N05S3wzCBDGaI4SDw3lQy1XlTI00EN5MFzvC');
 
 function Checkout({ intent }) {
   
-  /*const stripe = await loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+  /*GARBAGE const stripe = await loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
   var elements = stripe.elements({
     clientSecret: 'sk_test_4eC39HqLyjWDarjtT1zdp7dc',
   });
@@ -39,13 +39,13 @@ function Checkout({ intent }) {
     dispatch(fetchCheckout());
     //dispatch(fetchCart({ id: user.id }));
   }, [])
-  /*const clientSecret = (async () => {
+  /*GARBAGE const clientSecret = (async () => {
     const token = localStorage.getItem("id_token");
     const secretPromise = await apiFetch('/secret', token)
     return secretPromise
     // Render the form using the clientSecret
   })();*/
-  /*const token = localStorage.getItem("id_token");
+  /*GARBAGE const token = localStorage.getItem("id_token");
   const secretPromise = apiFetch('/secret', token)*/
   //console.log('oprtions' + clientSecret)
   const appearance = {
@@ -59,7 +59,7 @@ function Checkout({ intent }) {
       '.Input': {
         border: '.2rem solid #000000',
         fontSize: '1rem',
-        padding: '0',
+        padding: '.2rem',
       },
     },
   
@@ -71,7 +71,6 @@ function Checkout({ intent }) {
       fontFamily: 'Ideal Sans, system-ui, sans-serif',
       spacingUnit: '2px',
       borderRadius: '2px',
-      // See all possible variables below
     }
   };
 
@@ -80,7 +79,7 @@ function Checkout({ intent }) {
     clientSecret: intent.client_secret,
     appearance: appearance
   };
-  /* useEffect(() => {
+  /*GARBAGE useEffect(() => {
     //console.log('useEffect')
     (async () => {
     const token = localStorage.getItem("id_token");
@@ -90,34 +89,34 @@ function Checkout({ intent }) {
   }, []) */
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const isLoading = useSelector(selectIsOrderLoading);
+  //GARBAGE const navigate = useNavigate();
+  //GARBAGE const isLoading = useSelector(selectIsOrderLoading);
   const user = useSelector(selectUser);
-  //console.log('before')
+  //testlog console.log('before')
   useEffect(() => {
-    //console.log('useEffect')
+    //testlog console.log('useEffect')
     dispatch(fetchCheckout());
-    //dispatch(fetchCart({ id: user.id }));
+    //testlog dispatch(fetchCart({ id: user.id }));
   }, [])
 
   useEffect(() => {
-    //console.log('useEffect')
+    //testlog console.log('useEffect')
     if (user.id) {
       dispatch(fetchCart({ id: user.id, cart: [] }));
     }  
   }, [user.id])
-  //console.log('after')
+  //testlog console.log('after')
 
   const checkoutOrder = useSelector(selectCheckoutOrder);
   const ccPlaceholder = useSelector(selectCcPlaceholder);
   const useDefaultBilling = useSelector(selectUseDefaultBilling);
   const useDefaultDelivery = useSelector(selectUseDefaultDelivery);
   const cart = useSelector(selectCart)
-  //console.log('checkOutOrder')
-  //console.log(checkoutOrder)
+  //testlog console.log('checkOutOrder')
+  //testlog console.log(checkoutOrder)
 
   const handleComplete = async (e) => {
-    /*const headers = {
+    /*GARBAGE const headers = {
       "Sec-Fetch-Dest": "document",
       "Sec-Fetch-User": "?1",
       "Upgrade-Insecure-Requests": 1,
@@ -125,30 +124,30 @@ function Checkout({ intent }) {
       //"Access-Control-Allow-Origin": ["http://localhost:3002", "http://localhost:3000", "https://checkout.stripe.com"],
       "test": "HELLO",
     }*/
-    //const body = { cart: cart }
+    //GARBAGE const body = { cart: cart }
 
-    //const xhr = new XMLHttpRequest();
-    //xhr.open("POST", 'http://localhost:3000/create-checkout-session', true);
+    //GARBAGE const xhr = new XMLHttpRequest();
+    //GARBAGE xhr.open("POST", 'http://localhost:3000/create-checkout-session', true);
 
-    //Send the proper header information along with the request
-    //xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    //xhr.setRequestHeader("Sec-Fetch-User", "?1");
-    //xhr.setRequestHeader("Upgrade-Insecure-Requests", 1);
+    //GARBAGE Send the proper header information along with the request
+    //GARBAGE xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    //GARBAGE xhr.setRequestHeader("Sec-Fetch-User", "?1");
+    //GARBAGE xhr.setRequestHeader("Upgrade-Insecure-Requests", 1);
 
-    /*xhr.onreadystatechange = () => { // Call a function when the state changes.
+    /*GARBAGE xhr.onreadystatechange = () => { // Call a function when the state changes.
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
         // Request finished. Do processing here.
       }
     }*/
-    //xhr.send("foo=bar&lorem=ipsum");
-    /*await fetch("http://localhost:3000/create-checkout-session", {
+    //GARBAGE xhr.send("foo=bar&lorem=ipsum");
+    /*GARBAGE await fetch("http://localhost:3000/create-checkout-session", {
       method: 'POST',
       headers: headers,
       body: JSON.stringify(body),
       mode: 'no-cors',
     });*/
 
-    //await apiPost("/create-checkout-session", { cart: cart } )
+    //GARBAGE await apiPost("/create-checkout-session", { cart: cart } )
     
   
 
@@ -164,8 +163,8 @@ function Checkout({ intent }) {
     dispatch(removeCart());
     dispatch(removeCheckoutOrder());
     dispatch(removeOrderItems());
-    //navigate('/order/complete')
-    //window.open('https://google.com', '_self')
+    //GARBAGE navigate('/order/complete')
+    //GARBAGE window.open('https://google.com', '_self')
   }
 
   return (
@@ -175,14 +174,15 @@ function Checkout({ intent }) {
       <Cart controls={false} />
       {!checkoutOrder.billing ? (<p>loading</p>) : (<Billing billing={checkoutOrder.billing} />) /*FIXME why props are passing undefined?? I shouldn't need this conditional*/}
       {!checkoutOrder.delivery ? (<p>loading</p>) : (<Delivery delivery={checkoutOrder.delivery} />)}
-      {/* <CreditCard /> */}
-      <Elements stripe={stripePromise} options={options}>
-        <CheckoutForm amount={intent.amount}/>
-      </Elements>
-
-      {/*<form action="http://localhost:3000/create-checkout-session" method="POST" target='_blank'>*/}
-      {/* <button id='complete' onClick={handleComplete}>Complete Order</button> */}
-      {/*</form>*/}
+      {/*GARBAGE  <CreditCard /> */}
+      <div className="stripe-container" >
+        <Elements stripe={stripePromise} options={options}>
+          <CheckoutForm amount={intent.amount}/>
+        </Elements>
+      </div>
+      {/*GARBAGE <form action="http://localhost:3000/create-checkout-session" method="POST" target='_blank'>*/}
+      {/*GARBAGE  <button id='complete' onClick={handleComplete}>Complete Order</button> */}
+      {/*GARBAGE </form>*/}
     </div>
   )
 

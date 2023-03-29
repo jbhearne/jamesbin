@@ -5,3 +5,8 @@
   margin-bottom: 3rem;
   margin-top: 3rem;
 }
+
+.vendor {
+  padding-bottom: 1rem;
+  border-bottom: .3rem solid aliceblue;
+}

@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { selectProducts, fetchProducts } from './productsSlice';
 import { page } from '../../../utils/page';
-
 import Product from './product/Product';
 import './products.css';
 
