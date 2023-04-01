@@ -12,7 +12,9 @@ const {
   isOrderOpen, 
   findOpenOrderByUserId,
   findOrderById,
-  isItemOnCompleteOrder
+  isItemOnCompleteOrder,
+  addOrder,
+  defaultBillingAndDelivery,
 } = require('./findOrder');
 const { isProductExtant } = require('./findProduct');
 
@@ -22,7 +24,7 @@ const { isProductExtant } = require('./findProduct');
 const collectCart = async (userId) => {
   const sql = "SELECT cart.order_id, cart.id, products.name, products.price, cart.quantity, (products.price * cart.quantity) AS qty_total\
   FROM cart JOIN products ON cart.product_id = products.id JOIN orders ON cart.order_id = orders.id\
-  WHERE orders.user_id = $1 AND orders.date_completed IS NULL;"
+  WHERE orders.user_id = $1 AND orders.date_completed IS NULL ORDER BY cart.id DESC;"
 
   const cart = await pool.query(sql, [userId])
 
@@ -47,6 +49,7 @@ const collectCart = async (userId) => {
   const delivery = await findDeliveryInfo(items[0].order_id);
 
   const checkout = { items, total, billing, delivery}
+  //console.log(checkout)
   return checkout;
 }
 
@@ -81,6 +84,7 @@ const findCartByOrderId = async (orderId) => {
   return cart;
 }
 
+
 //returns an array of all cart items that are on open orders
 const findAllCurrentCartItemsWithProducts = async () => {
   const sql = 'SELECT cart.id, cart.order_id, cart.product_id, products.name, products.price, cart.quantity\
@@ -96,7 +100,7 @@ const findAllCurrentCartItemsWithProducts = async () => {
 const findAllCurrentCartItemsWithProductsByUser = async (userId) => {
   const sql = 'SELECT cart.id, cart.order_id, cart.product_id, products.name, products.price, cart.quantity\
    FROM cart JOIN products ON cart.product_id = products.id JOIN orders ON cart.order_id = orders.id\
-   WHERE orders.user_id = $1 AND orders.date_completed IS NULL;';
+   WHERE orders.user_id = $1 AND orders.date_completed IS NULL ORDER BY cart.id;';
   const results = await pool.query(sql, [userId]);
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
@@ -107,11 +111,22 @@ const findAllCurrentCartItemsWithProductsByUser = async (userId) => {
 //takes a new cart item object with the odrder id determined by the open order that belongs to the specified user id and inserts into the cart table.
 const addCartItemToUserOrder = async (userId, newCartItem) => {
   const { productId, quantity } = newCartItem;
-  const order = await findOpenOrderByUserId(userId);
+  const extantOrder = await findOpenOrderByUserId(userId);
   const isProduct = await isProductExtant(productId);
+  let order = extantOrder;
+  
+  if (extantOrder === 'No orders started') {
+    const ids = await defaultBillingAndDelivery(userId);
+    const newOrder = await addOrder({ 
+      user_id: userId,                   //TODO need to fix camelcase/snakecase
+      billing_id: ids.billingId,
+      delivery_id: ids.deliveryId,
+    })
+    order = newOrder;
+  } 
 
-  if (typeof order === 'string') {
-    return order;
+  if (typeof extantOrder === 'string' && extantOrder !== 'No orders started') {
+    return extantOrder;
   } else if (!isProduct) {
     return `Product #${productId} does not exist.`;
   } else {

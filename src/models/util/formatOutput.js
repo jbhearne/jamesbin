@@ -25,7 +25,7 @@ const formatVendorOutput = (vendor, contact) => {
     id: vendor.id,
     name: vendor.name,
     description: vendor.description,
-    Contact: {
+    contact: {
       id: contact.id,
       phone: contact.phone,
       address: contact.address,

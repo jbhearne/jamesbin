@@ -13,7 +13,8 @@ const {
   addOrderOnUser,
   changeOrder,
   removeOrder,
-  completeOrderNow
+  completeOrderNow,
+  findItemsByOrderId,
 } = require('../models/findOrder');
 
 const { 
@@ -111,11 +112,13 @@ const deleteOrder = async (request, response) => {
 }
 
 //checkout updates order table and alters other related tables. requires a request object.
+//body = { useDefaultDelivery, useDefaultBilling, delivery, billing, ccPlaceholder }
 const checkout = async (request, response) => {
   const body = request.body;
   const user = request.user;
   try {
-    const cart = await collectCart(user.id);  
+    const cart = await collectCart(user.id);
+    //console.log(cart)
     const amount = cart.total;
 
     const isNotOneOrder = cart.items.some((item) => item.order_id !== cart.items[0].order_id);
@@ -146,7 +149,10 @@ const checkout = async (request, response) => {
     const finishedOrder = await completeOrderNow(amount, cart.items[0].order_id);
     const check = checkForFoundRowObj(finishedOrder);
     if (check.status >= 400 && check.status < 500) response.status(check.status).json(check.results);
-    if (check.status >= 200 && check.status < 300) response.status(check.status).json(`Order #${check.results.id} completed for ${check.results.amount}`);
+    if (check.status >= 200 && check.status < 300) response.status(check.status).json({
+      msg: `Order #${check.results.id} completed for ${check.results.amount}`,
+      order: finishedOrder,
+    });
     //TODO add a format function to display order/cart/billing/delivery info
 
   } catch (err) {
@@ -155,6 +161,19 @@ const checkout = async (request, response) => {
   }
 }
 
+////CHANGED add for completed orders? gets all cart items for a specidfied order. sends a response object.
+const getItemsByOrderId = async (request, response) => {
+  const id = parseInt(request.params.id);
+  try {
+    const items = await findItemsByOrderId(id);
+    const check = checkForFoundRowsArr(items);
+    response.status(check.status).json(check.results);
+  } catch (err) {
+    console.error(err);
+    throw new Error('API failure: ' + err);
+  }
+};
+
 module.exports = {
   getOrders,
   getOrdersByUser,
@@ -162,5 +181,6 @@ module.exports = {
   createOrder,
   updateOrder,
   deleteOrder,
-  checkout
+  checkout,
+  getItemsByOrderId
 };

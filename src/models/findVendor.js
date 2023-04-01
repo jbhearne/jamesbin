@@ -4,7 +4,7 @@
 //import and create pool
 const pool = require('./util/pool');
 const { messageNoResults, checkNoResults } = require('./util/checkFind');
-const { formatVendorOutput } = require('./util/formatOutput')
+const { formatVendorOutput, formatContactOutput } = require('./util/formatOutput')
 
 /** Gets a vendor using the vedor's ID
  * @param  {number}  id  [Vendor ID]
@@ -26,8 +26,24 @@ const findVendorById = async (id) => {
 
 //gets all vendor objects from the database
 const findAllVendors = async () => {
-   results = await pool.query('SELECT * FROM vendors ORDER BY id ASC');
-   return results.rows;
+  const sql = 'SELECT vendors.id, vendors.name, vendors.description, vendors.contact_id, \
+  contact.phone, contact.address, contact.city, contact.state, contact.zip, contact.email \
+  FROM vendors JOIN contact ON vendors.contact_id = contact.id ORDER BY id ASC'
+  const results = await pool.query(sql);
+  const noResults = checkNoResults(results);
+  if (noResults) return noResults;
+  const tableOutput = results.rows;
+
+  let contactObj;
+  let vendor;
+  const vendors = [];
+
+  for (rowIdx in tableOutput) {
+    contactObj = formatContactOutput(tableOutput[rowIdx], tableOutput[rowIdx].contact_id);
+    vendor = formatVendorOutput(tableOutput[rowIdx], contactObj);
+    vendors.push(vendor);
+  }
+  return vendors;
 }
 
 //takes a vendor object from the request body and adds it to the database

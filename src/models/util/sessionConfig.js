@@ -14,16 +14,17 @@ const sessionConfig = {
       tableName: 'session'
   }),
   name: 'SID',
-  secret: randomString.generate({
+  /*secret: randomString.generate({
       length: 14,
       charset: 'alphanumeric'
-  }),
+  }),*/
+  secret: 'test',
   resave: false,
   saveUninitialized: true,
   cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      aameSite: true,
-      secure: false // ENABLE ONLY ON HTTPS
+      SameSite: 'none',
+      secure: true // ENABLE ONLY ON HTTPS
   }}
 
 module.exports = {

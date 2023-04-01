@@ -1,0 +1,21 @@
+.registerLink {
+  color: blue;
+}
+
+.main-login .login-field {
+  margin: 1rem;
+}
+
+.main-login .login-field label {
+  margin: 1rem;
+}
+
+.main-login button {
+  margin: 1rem;
+  padding: .5rem;
+}
+
+.main-login input {
+  padding: .25rem;
+  border-radius: 2px;
+}

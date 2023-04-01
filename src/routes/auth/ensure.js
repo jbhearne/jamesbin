@@ -1,9 +1,14 @@
 ////////////////////////////////////////////////////////
 /////route middleware used to check access statues.////
 
+const passport = require('passport')
+
 //checks if the user is logged in
 const loggedIn = (req, res, next) => {
-  if (req.user) { next() } else { return res.status(401).send('not logged in') }
+  //console.log('logging in')
+  //console.log(req)
+  if (req.user) { next() } else { return res.status(401).json({ message: 'not logged in' }) }
+
 }
 
 //check if the user has admin status
@@ -27,6 +32,10 @@ const adminOrCurrentUser = (req, res, next) => {
     } else { next() }
   } else { return res.status(401).send('not logged in') } 
 }
+
+/*const setJwtUser = (req, res, next) => {
+  next(passport.authenticate('jwt', {session: false}))
+}*/
 
 module.exports = {
   loggedIn,

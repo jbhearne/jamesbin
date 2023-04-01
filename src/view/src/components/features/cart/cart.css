@@ -1,0 +1,47 @@
+.qtyInput {
+  width: 35px;
+}
+
+.shopping-cart h2 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.shopping-cart {
+  display: flexbox;
+}
+
+.shopping-cart table {
+  margin: auto;
+}
+
+.shopping-cart td {
+  padding-right: 2rem;
+  text-align: start;
+}
+.shopping-cart th {
+  padding-right: 1rem;
+  text-align: start;
+}
+
+.shopping-cart tr:nth-child(even) {
+  background-color: aliceblue;
+}
+
+.shopping-cart .checkout {
+  margin: 1rem;
+}
+
+.cartItem button.delete {
+  display: flex;
+  width: 1.4rem;
+  height: 1.4rem;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+@media only screen and (max-width: 400px) {
+  .cartItem .update::after {
+    content: none;
+  }
+}

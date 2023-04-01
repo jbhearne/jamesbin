@@ -1,0 +1,63 @@
+
+
+.highlight {
+  color: red;
+}
+
+.noHighlight {
+  cursor: pointer;
+}
+
+.main-orders h2 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.main-orders h4 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.main-orders h5 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.main-orders {
+  display: flexbox;
+}
+
+.main-orders table {
+  margin: auto;
+}
+
+.main-orders td {
+  padding-right: 2rem;
+  text-align: start;
+}
+.main-orders th {
+  padding-right: 1rem;
+  text-align: start;
+}
+
+.main-orders tr:nth-child(even) {
+  background-color: aliceblue;
+}
+
+.order-details {
+  margin-bottom: 3rem;
+}
+
+.order-details table {
+  margin-bottom: 1rem;
+}
+
+.order-details span {
+  margin: 0 1rem 0 1rem;
+}
+
+.main-orders nav {
+  margin: 2rem;
+}
+
+.main-orders .page-nav button {
+  
+  margin: 1rem;
+}

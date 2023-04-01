@@ -1,0 +1,74 @@
+.main-user {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.main-user span {
+  margin-bottom: .5rem;
+  display: inline-flex;
+}
+
+.span-label {
+  margin-right: .5rem;
+}
+
+.main-user button {
+  margin: 1rem;
+  border: 0;
+  background-color: black;
+  color: white;
+  font-weight: 700;
+  padding: .3rem;
+  border-radius: 3px;
+}
+
+.main-user label {
+  display: inline-flex;
+  margin-bottom: .75rem;
+}
+
+.main-user label input {
+  margin-left: .25rem;
+}
+
+.main-user input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  /* For iOS < 15 to remove gradient background */
+  background-color: #fff;
+  /* Not removed via appearance */
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid currentColor;
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+}
+
+
+
+.main-user input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em black;
+}
+
+.main-user input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+.main-user input[type="submit"] {
+  margin: 1rem;
+  border: 0;
+  background-color: black;
+  color: white;
+  font-weight: 700;
+  padding: .3rem;
+  border-radius: 3px;
+}

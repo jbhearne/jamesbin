@@ -38,13 +38,13 @@ const isItemOnCompleteOrder = async id => {
 //sets default values for billing and delivery to the current users name, contact info and other preset values. 
 //Returns an object with the IDs for both delivery row and billing row.
 const defaultBillingAndDelivery = async (userId) => {
-  const results =  await pool.query('SELECT * FROM users WHERE id = $1', [userId])
+  const results =  await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
   const noResults = messageNoResults(results);
   if (noResults) throw Error('User query failed: ' + noResults);
-  const { fullname, contact_id } = results.rows[0]
+  const { fullname, contact_id } = results.rows[0];
 
-  const defaultBillingMethod = 'credit card'
-  const defaultDeliveryMethod = 'standard shipping' //ANCHOR[id=defaultMethod] - change some other selection method.
+  const defaultBillingMethod = 'credit card';
+  const defaultDeliveryMethod = 'standard shipping'; //ANCHOR[id=defaultMethod] - change some other selection method.
   
   const createdBilling = await pool.query('INSERT INTO billing (payer_name, method, contact_id) VALUES ($1, $2, $3) RETURNING *;',
   [ fullname, defaultBillingMethod, contact_id, ]);
@@ -86,6 +86,7 @@ const findBillingInfo = async (orderId) => {
       email: billing.email
     }
   }
+  //console.log(info)
   return info;
 }
 
@@ -149,7 +150,7 @@ const updateBilling = async (billingId, updates, contactId) => {
 //a way to add creditcard info, but not really. just a flourish in that direction.
 const addCCToBilling = async (cc, billingId) => {
   const sql = 'UPDATE billing SET cc_placeholder = $1 WHERE id = $2 RETURNING *';
-  const  results = pool.query(sql, [cc, billingId]);
+  const  results = await pool.query(sql, [cc, billingId]);
   const noResults = messageNoResults(results);
   if (noResults) throw Error('Did not return billing/CC info: ' + noResults);
   return results;
@@ -179,7 +180,7 @@ const findOrderById = async (id) => {
 
 //returns an array of all orders from a single user as specified by the user id.
 const findOrdersByUserId = async (id) => {
-  const  sql = 'SELECT * FROM orders WHERE user_id = $1';
+  const  sql = 'SELECT * FROM orders WHERE user_id = $1 ORDER BY date_completed DESC';
   const results = await pool.query(sql, [id]);
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
@@ -268,6 +269,18 @@ const removeOrder = async (id) => {
   return deletedOrderObj;
 }
 
+//CHANGED add for completed orders?
+const findItemsByOrderId = async (orderId) => {
+  const sql = 'SELECT  cart.id, cart.product_id, cart.order_id, products.name, products.price, cart.quantity, (products.price * cart.quantity) AS "subtotal"  \
+  FROM cart JOIN orders ON cart.order_id = orders.id JOIN products ON cart.product_id = products.id \
+  WHERE order_id = $1';
+  const results = await pool.query(sql, [orderId]);
+  const noResults = checkNoResults(results);
+  if (noResults) return noResults;
+  const items = results.rows;
+  return items;
+}
+
 module.exports = {
   isOrderOpen,
   defaultBillingAndDelivery,
@@ -285,5 +298,6 @@ module.exports = {
   addOrderOnUser,
   changeOrder,
   removeOrder,
-  completeOrderNow
+  completeOrderNow,
+  findItemsByOrderId,
 }

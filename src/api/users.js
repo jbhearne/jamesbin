@@ -36,6 +36,19 @@ const getUserById = async (request, response) => {
   }
 }
 
+const getCurrentUser = async (request, response) => {
+  const id = parseInt(request.user.id);
+  console.log(id + 'user')
+  try {
+    const user = await findUserById(id);
+    const check = checkForFoundRowObj(user);
+    response.status(check.status).json(check.results);
+  } catch (err) {
+    console.error(err);
+    throw new Error('API failure: ' + err);
+  }
+}
+
 //updates user and contact databases. request body can be any combination of properties as long as it follows the correct user object structure
 const updateUser = async (request, response) => {
   const id = parseInt(request.params.id);
@@ -43,8 +56,8 @@ const updateUser = async (request, response) => {
   try {
     const updatedUser = await changeUser(id, updates);
     const check = checkForFoundRowObj(updatedUser);
-    if (check.status >= 400 && check.status < 500) response.status(check.status).json(check.results);
-    if (check.status >= 200 && check.status < 300) response.status(check.status).json(`User modified with ID: ${check.results.id} updated.`);
+    if (check.status >= 400 && check.status < 500) response.status(check.status).json({ msg: check.results, success: false });
+    if (check.status >= 200 && check.status < 300) response.status(check.status).json({ msg: `User modified with ID: ${check.results.id} updated.`, success: true });
   } catch (err) {
     console.error(err);
     throw new Error('API failure: ' + err);
@@ -69,6 +82,7 @@ module.exports = {
   getUsers,
   getUserById,
   updateUser,
-  deleteUser
+  deleteUser,
+  getCurrentUser
 }
   
