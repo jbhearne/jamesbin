@@ -2,20 +2,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { selectCart, /*GARBAGE  selectTempCartId, */ fetchCart, /*GARBAGE  removeItemFromCart */ } from './cartSlice';
-import { selectUser } from '../user/userSlice';
+import { selectUser, selectIsloggedIn } from '../user/userSlice';
 import Item from './Item/Item';
 //GARBAGE import { apiPost } from '../../../utils/apiFetch';
 
 function Cart({ controls }) {
   const dispatch = useDispatch()
   const user = useSelector(selectUser);
+  const isLoggedIn = useSelector(selectIsloggedIn);
   const cart = useSelector(selectCart);
   const dataFetchedRef = useRef(false);
   const navigate = useNavigate();
   //testlog console.log('before use cart')
   useEffect(() => {
     //testlog console.log('useEffect')
-    if (dataFetchedRef.current) return;
+    if (dataFetchedRef.current || !isLoggedIn) return;
     dataFetchedRef.current = true;
     dispatch(fetchCart({ id: user.id, cart: cart }))
   }, []);

@@ -2,7 +2,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { selectOrders, fetchOrders, fetchItems, selectOrderItems } from './ordersSlice'
-import { selectUser } from '../user/userSlice';
+import { selectUser, fetchUser } from '../user/userSlice';
 import { page } from '../../../utils/page'
 import Order from './order/Order'
 import OrderItem from './order/OrderItem'
@@ -13,7 +13,7 @@ function Orders({ test, test2 }) {
   
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  
+
   useEffect(() => {
     dispatch(fetchOrders(user.id));
     setIsOrderItems(false);

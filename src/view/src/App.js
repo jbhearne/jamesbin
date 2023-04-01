@@ -30,11 +30,12 @@ function App() {
   const user = useSelector(selectUser);
   useEffect(() => {
     dispatch(fetchUser())
-    
   }, [])
+
   useEffect(() => {
     dispatch(setIsloggedIn(!!user.username));
   }, [user])
+  
   //GARBAGE (<NavLink to='/user'>{user.fullname}</NavLink>)
   const usernameOrLogin = () => {
     if (user.username) {

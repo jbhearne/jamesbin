@@ -51,8 +51,13 @@ import EP from '../../../dataEndpoints';
 export const fetchUser = createAsyncThunk(
   'user/fetchUser',
   async () => {
+    const expires = new Date(parseInt(localStorage.getItem("expires_at")));
+    console.log(expires)
+    const current = new Date(Date.now())
+    if (expires < current) return {};
+
     const token = localStorage.getItem("id_token");
-    const user = await apiFetch(EP.user, token)
+    const user = await apiFetch("/user", token);
     return {
       id: user.id,
       fullname: user.fullname,
@@ -66,6 +71,8 @@ export const fetchUser = createAsyncThunk(
         zip: user.contact.zip,
         email: user.contact.email,
       },
+      tokenExpires: expires.toString(),
+      fetchedAt: current.toString(),
     }
   }
 );
