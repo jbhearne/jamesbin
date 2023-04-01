@@ -8,8 +8,8 @@ const pool = require('../../models/util/pool')
 const loggedIn = (req, res, next) => {
   return passport.authenticate('jwt', {session: false}, (err, user, info, status) => {
     console.log(info)
-    console.log('loggedInST' + req.secTest)
-    console.log('loggedInuser' + user.id)
+    //console.log('loggedInST' + req.secTest)
+    //console.log('loggedInuser' + user.id)
     if (err) { return next(err) }
     if (!user) { 
       const information = Object.keys(info).length > 0 ? info : { message: 'Not logged in.'}; //FIXME not a good way to detect info. error messages not getting picked up as keys.

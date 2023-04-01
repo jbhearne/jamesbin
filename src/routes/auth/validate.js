@@ -31,7 +31,7 @@ module.exports = {
     const symbolCheck = symbol ? forIncludes(password, symbolStr) : true;
     const excludeCheck =  exclude ? !forIncludes(password, exclude) : true;
     const includeCheck =  include ? forIncludes(password, include) : true;
-    const isValid = length && upperCheck && lowerCheck && numberCheck && symbolCheck && excludeCheck && inlcudeCheck;
+    const isValid = length && upperCheck && lowerCheck && numberCheck && symbolCheck && excludeCheck && includeCheck;
 
     const message = {}
     if (!length) message.length = `Password must between ${min} and ${max} characters long.`;

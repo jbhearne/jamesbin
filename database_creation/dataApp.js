@@ -6,7 +6,8 @@ const passport = require('passport');
 const { popPasswords } = require('./populate/hashmake')
 const { createDatabase } = require('./create_database')
 const { clearDatabase } = require('./clear_database')
-const { popDatabase } = require('./populate/populate')
+//const { popDatabase } = require('./populate/populate')
+const { popDatabase } = require('./populate/populate_more')
 
 //create server
 const app = express()
