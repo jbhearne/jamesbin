@@ -21,7 +21,7 @@ const CheckoutForm = ({ amount }) => {
       elements,
       confirmParams: {
         //return_url: 'http://localhost:3002/order/complete',
-        return_url: '/',
+        return_url: deployUrl
       },
     });
 
