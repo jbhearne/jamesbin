@@ -16,8 +16,9 @@ const jsonwebtoken = require('jsonwebtoken');
 const { addUser } = require('../../models/findUser');
 const { loggedIn } = require('./jwt-ensure')
 
-const pathToPubKey = path.join(__dirname, '../../../', 'public.pem')//'../../../../public.pem';
-const PUB_KEY = fs.readFileSync(pathToPubKey, 'utf8');
+//const pathToPubKey = path.join(__dirname, '../../../', 'public.pem')//'../../../../public.pem';
+//const PUB_KEY = fs.readFileSync(pathToPubKey, 'utf8');
+const PUB_KEY = process.env.JWT_PUBLIC;
 
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -45,8 +46,9 @@ passport.use(new JwtStrategy(options, (jwt_payload, done) => {
 }))
 
 //IDEA issue JWT, this should go in another file
-const pathToPrvKey = path.join(__dirname, '../../../', 'private.pem')//'../../../../private.pem';
-const PRV_KEY = fs.readFileSync(pathToPrvKey, 'utf8');
+//const pathToPrvKey = path.join(__dirname, '../../../', 'private.pem')//'../../../../private.pem';
+//const PRV_KEY = fs.readFileSync(pathToPrvKey, 'utf8');
+const PRV_KEY = process.env.JWT_PRIVATE;
 
 const issueJWT = (user) => {
   const id = user.id;
