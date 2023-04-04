@@ -1,4 +1,4 @@
-const pool = require('../../src/models/util/pool');
+const pool = require('../pool');
 
 const popDatabase = async () => {
   const sql = "insert into contact (phone, address, city, state, zip, email) values ('none', 'none', 'none', 'none', 'none', 'none'); \

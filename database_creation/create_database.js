@@ -1,4 +1,4 @@
-const pool = require('../src/models/util/pool');
+const pool = require('./pool');
 
 const createDatabase = async () => {
   const sql = 'CREATE TABLE "session" (\

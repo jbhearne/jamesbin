@@ -32,7 +32,6 @@ app.get('/', (req, res) => {
 //start server
 app.listen(PORT, async () => {
     console.log(`App running on port ${PORT}.`)
-    console.log(process.env.MY_SECRET)
     console.log(process.env.DATABASE)
     
     //Clears out the database that may have already been created.

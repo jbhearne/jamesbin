@@ -9,6 +9,7 @@
 /coverage
 
 # production
+#since this react app is nested inside a server app it is not building on deployment so it has to be built and included on the repo.
 #/build
 
 # misc

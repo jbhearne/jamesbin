@@ -1,4 +1,4 @@
-const pool = require('../src/models/util/pool');
+const pool = require('./pool');
 
 const clearDatabase = async () => {
   const sql = 'DROP TABLE IF EXISTS "cart" CASCADE;\
