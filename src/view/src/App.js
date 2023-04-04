@@ -28,13 +28,9 @@ function App() {
   //GARBAGE const user = {fullname: false}
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
+
   useEffect(() => {
     dispatch(fetchUser())
-    if (searchParams.get("redirect_status") === "succeeded") {  //TODO store this info and use instead of redirect_status payment_intent=pi_RANDOMCHARS&payment_intent_client_secret=pi_RANDOMCHARS_secret_RANDOMCHARSmm
-      navigate('/order/complete')
-    }
   }, [])
 
   useEffect(() => {
