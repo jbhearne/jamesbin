@@ -58,7 +58,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET)
 
 const { collectCart } = require('./src/models/findCart')
 const { loggedIn } = require('./src/routes/auth/jwt-ensure')
-app.get('/secret', (req, res, next) => {req.secTest = 'secTest'; next()}, (req, res, next) => {loggedIn(req, res, next)}, async (req, res) => {
+app.get('/api/secret', (req, res, next) => {req.secTest = 'secTest'; next()}, (req, res, next) => {loggedIn(req, res, next)}, async (req, res) => {
   console.log('secret' + req.user.id)
   const cart = await collectCart(req.user.id);
   
