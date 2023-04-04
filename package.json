@@ -10,6 +10,8 @@
   "author": "Jules Hearne",
   "license": "ISC",
   "dependencies": {
+    "@cyclic.sh/s3fs": "^1.2.8",
+    "aws-sdk": "^2.1349.0",
     "bcrypt": "^5.1.0",
     "connect-pg-simple": "^8.0.0",
     "cors": "^2.8.5",

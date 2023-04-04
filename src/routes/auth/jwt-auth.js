@@ -1,7 +1,8 @@
 const express = require('express');
 const passport = require('passport');
 const router = express.Router();
-const validate = require('./validate')
+const validate = require('./validate');
+
 
 const pool = require('../../models/util/pool');
 
@@ -10,15 +11,22 @@ const bcrypt = require('bcrypt');
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const fs = require('fs');
+const { initJWT, issueJWT } = require('./async_passport')
+//const fs = require('@cyclic.sh/s3fs')("cyclic-gentle-yoke-fish-us-west-1") //IDEA - fs for AWS for cyclic deploy
 const path = require('path');
 const jsonwebtoken = require('jsonwebtoken');
 
 const { addUser } = require('../../models/findUser');
 const { loggedIn } = require('./jwt-ensure')
 
-//const pathToPubKey = path.join(__dirname, '../../../', 'public.pem')//'../../../../public.pem';
+const pathToPubKey = path.join(__dirname, '../../../', 'public.pem')//'../../../../public.pem'
+//const pathToPubKey = 'public.pem' //??? tried to get this is the path, but the readFileSync keeps turning it into a  absolute system path. Not sure how this is suppoded to wort with cyclic/AWS.
 //const PUB_KEY = fs.readFileSync(pathToPubKey, 'utf8');
-const PUB_KEY = process.env.JWT_PUBLIC;
+//const PUB_KEY = process.env.JWT_PUBLIC; //LEARNED - 255 character limit to environmental variables
+
+initJWT();
+
+/*console.log(PUB_KEY)
 
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -43,12 +51,13 @@ passport.use(new JwtStrategy(options, (jwt_payload, done) => {
       return done(null, false, { msg: 'JWT does not match database or is expired', JWTexpires: expires });
     }
   });
-}))
+}))*/
 
 //IDEA issue JWT, this should go in another file
 //const pathToPrvKey = path.join(__dirname, '../../../', 'private.pem')//'../../../../private.pem';
-//const PRV_KEY = fs.readFileSync(pathToPrvKey, 'utf8');
-const PRV_KEY = process.env.JWT_PRIVATE;
+/*const pathToPrvKey = 'private.pem'
+const PRV_KEY = fs.readFileSync(pathToPrvKey, 'utf8');
+//const PRV_KEY = process.env.JWT_PRIVATE; //LEARNED - 255 character limit to environmental variables
 
 const issueJWT = (user) => {
   const id = user.id;
@@ -69,7 +78,7 @@ const issueJWT = (user) => {
     token: 'Bearer ' + signedToken,
     expiresIn: expiresIn,
   }
-}
+}*/
 
 //placeholder route for a login page
 router.get('/login', function(req, res, next) {
@@ -88,7 +97,7 @@ router.post('/login', (req, res, next) => {console.log(req.body); next()}, async
     const isValidPassword = await bcrypt.compare(req.body.password, user.password);
 
     if (isValidPassword) {
-      const tokenObject = issueJWT(user);
+      const tokenObject = await issueJWT(user); //CHANGED - now importing this from module as async, added await keyword
       res.status(200).json({
         msg: 'logged in',
         success: true,
