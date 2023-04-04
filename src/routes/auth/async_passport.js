@@ -4,10 +4,20 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const s3Keys = require('./get_s3_keys')
 const jsonwebtoken = require('jsonwebtoken');
+const fs = require('fs');
+const path = require('path');
+
+let isLocal = false;
+let PUB_KEY;
+let PRV_KEY;
 
 const initJWT = async () => {
-  const PUB_KEY = await s3Keys.getPublic();
-
+  if (isLocal) {
+    const pathToPubKey = path.join(__dirname, '../../../', 'public.pem')//'../../../../public.pem'
+    PUB_KEY = fs.readFileSync(pathToPubKey, 'utf8');
+  } else {
+    PUB_KEY = await s3Keys.getPublic();
+  }
   console.log(PUB_KEY)
 
   const options = {
@@ -37,7 +47,13 @@ const initJWT = async () => {
 }
 
 const issueJWT = async (user) => {
-  const PRV_KEY = await s3Keys.getPrivate();
+  if (isLocal) {
+    const pathToPrvKey = path.join(__dirname, '../../../', 'private.pem')//'../../../../public.pem'
+    PRV_KEY = fs.readFileSync(pathToPrvKey, 'utf8');
+  } else {
+    PRV_KEY = await s3Keys.getPrivate();
+  }
+
 
   const id = user.id;
   const expiresIn = 24 * 60 * 60 * 1000;

@@ -1,4 +1,5 @@
 import {useStripe, useElements, PaymentElement} from '@stripe/react-stripe-js';
+const deployUrl = 'https://gentle-yoke-fish.cyclic.app'
 
 const CheckoutForm = ({ amount }) => {
   const stripe = useStripe();
@@ -19,7 +20,8 @@ const CheckoutForm = ({ amount }) => {
       //`Elements` instance that was used to create the Payment Element
       elements,
       confirmParams: {
-        return_url: 'http://localhost:3002/order/complete',
+        //return_url: 'http://localhost:3002/order/complete',
+        return_url: deployUrl + '/order/complete',
       },
     });
 

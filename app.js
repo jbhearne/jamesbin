@@ -4,7 +4,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 //GARBAGE const { sessionConfig, session } = require('./src/models/util/sessionConfig');
-const cors = require('cors')
+const cors = require('cors');
+const path = require('path');
 //GARBAGE const session = require('express-session');
 //GARBAGE const pgSession = require('connect-pg-simple')(session);
 //GARBAGE const randomString = require('randomstring')
@@ -32,6 +33,8 @@ app.use(
   })
 )
 
+app.use(express.static(path.join(__dirname, 'src', 'view', 'build')));
+
 //start session and passport
 //app.use(passport.initialize()) //??? makes sure passport is available on all routes
 //GARBAGE app.use(session(sessionConfig)) //configures the session, cookie and asigns a store (database) for serialized session info.
@@ -40,16 +43,16 @@ app.use(
 
 //import and use authentication routes
 const authRouter = require('./src/routes/auth/jwt-auth');
-app.use('/', authRouter);
+app.use('/api', authRouter);
 
 
 //import and use app routes
 const routes = require('./src/routes/index')
-app.use(routes.userRoutes);
-app.use(routes.orderRoutes);
-app.use(routes.vendorRoutes);
-app.use(routes.productRoutes);
-app.use(routes.cartRoutes);
+app.use('/api', routes.userRoutes);
+app.use('/api', routes.orderRoutes);
+app.use('/api', routes.vendorRoutes);
+app.use('/api', routes.productRoutes);
+app.use('/api', routes.cartRoutes);
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET)
 
@@ -95,7 +98,7 @@ app.get('/secret', (req, res, next) => {req.secTest = 'secTest'; next()}, (req, 
 
 //Home route
 app.get('/', (req, res) => {
-  res.send('home')
+  res.sendFile(path.join((__dirname, 'src', 'view', 'build', 'index.html')))
 })
 
 //start server
