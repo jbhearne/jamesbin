@@ -1,6 +1,6 @@
 //GARBAGE import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, NavLink, useSearchParams, useNavigate } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, fetchUser, setIsloggedIn } from './components/features/user/userSlice';
@@ -28,8 +28,13 @@ function App() {
   //GARBAGE const user = {fullname: false}
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(fetchUser())
+    if (searchParams.get("redirect_status") === "succeeded") {  //TODO store this info and use instead of redirect_status payment_intent=pi_RANDOMCHARS&payment_intent_client_secret=pi_RANDOMCHARS_secret_RANDOMCHARSmm
+      navigate('/order/complete')
+    }
   }, [])
 
   useEffect(() => {
