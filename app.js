@@ -97,12 +97,15 @@ app.get('/api/secret', (req, res, next) => {req.secTest = 'secTest'; next()}, (r
 });*/
 
 //Home route
+const frontendRoutes = require('./frontend-routes')
+app.use(frontendRoutes);
 app.get('/', (req, res) => {
-  res.sendFile(path.join((__dirname, 'src', 'view', 'build', 'index.html')))
+  res.sendFile(path.join(__dirname, 'src', 'view', 'build', 'index.html'))
 })
 
 //start server
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}.`)
     console.log(process.env.MY_SECRET)
+    console.log(path.join(__dirname, 'src', 'view', 'build', 'index.html'))
   })

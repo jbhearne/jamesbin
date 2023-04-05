@@ -26,7 +26,9 @@ const collectCart = async (userId) => {
   FROM cart JOIN products ON cart.product_id = products.id JOIN orders ON cart.order_id = orders.id\
   WHERE orders.user_id = $1 AND orders.date_completed IS NULL ORDER BY cart.id DESC;"
 
-  const cart = await pool.query(sql, [userId])
+  const client = await pool.connect();
+  const cart = await client.query(sql, [userId])
+  client.release();
 
   let items = []
   let total = 0
@@ -101,7 +103,11 @@ const findAllCurrentCartItemsWithProductsByUser = async (userId) => {
   const sql = 'SELECT cart.id, cart.order_id, cart.product_id, products.name, products.price, cart.quantity\
    FROM cart JOIN products ON cart.product_id = products.id JOIN orders ON cart.order_id = orders.id\
    WHERE orders.user_id = $1 AND orders.date_completed IS NULL ORDER BY cart.id;';
+   
+  const client = await pool.connect();
   const results = await pool.query(sql, [userId]);
+  client.release();
+
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
   const cartItems = results.rows;
@@ -131,7 +137,11 @@ const addCartItemToUserOrder = async (userId, newCartItem) => {
     return `Product #${productId} does not exist.`;
   } else {
     const sql = 'INSERT INTO cart (order_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *';
-    const results = await pool.query(sql, [order.id, productId, quantity]);
+
+    const client = await pool.connect();
+    const results = await client.query(sql, [order.id, productId, quantity]);
+    client.release();
+    
     const noResults = checkNoResults(results);
     if (noResults) return noResults;
     const cartItem = results.rows[0];
@@ -169,7 +179,11 @@ const changeCartItemQuantity = async (id, quantity) => {
     return `Cart id: ${id} belongs to order that is already complete`;
   } else {
     const sql = 'UPDATE cart SET quantity = $1 WHERE id = $2 RETURNING *';
-    const results = await pool.query(sql, [quantity, id]);
+
+    const client = await pool.connect();
+    const results = await client.query(sql, [quantity, id]);
+    client.release();
+    
     const noResults = checkNoResults(results);
     if (noResults) return noResults;
     return results.rows[0];
@@ -180,7 +194,11 @@ const changeCartItemQuantity = async (id, quantity) => {
 const findCartItemIfUser = async (cartId, userId) => {
   const sql = 'SELECT cart.id FROM cart JOIN orders ON cart.order_id = orders.id \
    WHERE orders.user_id = $1 AND cart.id = $2';
-  const results = await pool.query(sql, [userId, cartId]);
+
+  const client = await pool.connect();
+  const results = await client.query(sql, [userId, cartId]);
+  client.release();
+  
   if (results.rows.length === 0) {
     return `User has no cart item id ${cartId}`;  //REVIEW Keep because less generic?
   } else {
@@ -204,7 +222,11 @@ const changeCartItemQuantityIfUser = async (cartId, quantity, userId) => {
 //deletes the cart item indicated by the cart item id from the database.
 const removeCartItem = async (id) => {
   const sql = 'DELETE FROM cart WHERE id = $1 RETURNING *';
-  const results = await pool.query(sql, [id]);
+
+  const client = await pool.connect();
+  const results = await client.query(sql, [id]);
+  client.release();
+  
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
   return results.rows[0]

@@ -9,7 +9,9 @@ const addContactInfo = async (contactObj) => {
   const { phone, address, city, state, zip, email } = contactObj;
   const sql = 'INSERT INTO contact (phone, address, city, state, zip, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
   
-  const results = await pool.query(sql, [phone, address, city, state, zip, email]);
+  const client = await pool.connect();
+  const results = await client.query(sql, [phone, address, city, state, zip, email]);
+  client.release();
 
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
@@ -20,7 +22,9 @@ const addContactInfo = async (contactObj) => {
 const updateContactInfo = async (updates, contactId) => {
   selectSql = 'SELECT * FROM contact WEHERE id = $1'
 
-  const selectRes = await pool.query(selectSql, [contactId]);
+  const client = await pool.connect();
+  const selectRes = await client.query(selectSql, [contactId]);
+
   
   const contact = selectRes.rows[0]
   for (key in contact) {
@@ -30,7 +34,10 @@ const updateContactInfo = async (updates, contactId) => {
   const { phone, address, city, state, zip, email } = contact;
   const updateSql = 'UPDATE contact SET phone = $1, address = $2, city = $3, state = $4, zip = $5, email = $6 WHERE id = $7 RETURNING *';
 
-  const results = await pool.query(updateSql, [phone, address, city, state, zip, email, contactId]);
+
+  const results = await client.query(updateSql, [phone, address, city, state, zip, email, contactId]);
+  client.release();
+  
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
   return results.rows[0]

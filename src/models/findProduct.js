@@ -8,7 +8,11 @@ const { messageNoResults, checkNoResults } = require('./util/checkFind')
 //queries products using product ID to see if a product exists. Returns true if it does OR false if not.
 const isProductExtant = async (id) => {
   const sql = 'SELECT id FROM products WHERE id = $1';
-  const results = await pool.query(sql, [id]);
+
+  const client = await pool.connect();
+  const results = await client.query(sql, [id]);
+  client.release();
+
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
   return results.rows.length === 1;// ? true : false;
@@ -17,7 +21,11 @@ const isProductExtant = async (id) => {
 //returns an array of all products from the database
 const findAllProducts = async () => {
   const sql = 'SELECT * FROM products ORDER BY id ASC';
-  const results = await pool.query(sql);
+
+  const allProductsClient = await pool.connect();
+  const results = await allProductsClient.query(sql);
+  allProductsClient.release()
+  
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
   return results.rows
@@ -27,7 +35,11 @@ const findAllProducts = async () => {
 //TODO need to add conditional for handling no existing product
 const findProductById = async (id) => {
   const sql = 'SELECT * FROM products WHERE id = $1';
-  const results = await pool.query(sql, [id]);
+
+  const client = await pool.connect();
+  const results = await client.query(sql, [id]);
+  client.release();
+
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
   const productObj = results.rows[0];

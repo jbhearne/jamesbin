@@ -12,7 +12,11 @@ const findAllUsers = async () => {
   const sql = 'SELECT users.id, users.fullname, users.username, users.contact_id, \
     contact.phone, contact.address, contact.city, contact.state, contact.zip, contact.email \
     FROM users JOIN contact ON users.contact_id = contact.id ORDER BY id ASC'
-  const results = await pool.query(sql);
+  
+  const client = await pool.connect();
+  const results = await client.query(sql);
+  client.release();
+  
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
 
@@ -31,11 +35,18 @@ const findAllUsers = async () => {
 
 //queries user using user ID and returns a user object with contact info OR false if user not in database.
 const findUserById = async (id) => {
-  const userRes = await pool.query('SELECT id, fullname, username, contact_id FROM users WHERE id = $1', [id]);  //NOTE does not include password column
+  const sql = 'SELECT id, fullname, username, contact_id FROM users WHERE id = $1';
+
+  const client = await pool.connect();
+  const userRes = await client.query(sql, [id]);  //NOTE does not include password column
+
   const noUserResults = checkNoResults(userRes);
   if (noUserResults) return noUserResults;
   const userObj = userRes.rows[0];
-  const contactRes = await pool.query('SELECT * FROM contact WHERE id = $1', [userObj.contact_id]);
+
+  const contactRes = await client.query('SELECT * FROM contact WHERE id = $1', [userObj.contact_id]);
+  client.release();
+ 
   const noContactResults = checkNoResults(contactRes);
   if (noContactResults) return noContactResults;
   const contactObj = contactRes.rows[0];
@@ -45,7 +56,12 @@ const findUserById = async (id) => {
 
 //queries users to see if username is already in database an returns true if it is unique (not in database) OR false if the username already exists
 const isUsernameUnique = async (username) => {
-  const results = await pool.query('SELECT username FROM users WHERE username = $1', [username]);
+  const sql = 'SELECT username FROM users WHERE username = $1';
+
+  const client = await pool.connect();
+  const results = await client.query(sql, [username]);
+  client.release();
+  
   const noResults = checkNoResults(results);
   return noResults;
 }
@@ -55,12 +71,18 @@ const addUser = async (newUser) => {
   const { fullname, username, password, contact } = newUser;
   const { phone, address, city, state, zip, email } = contact;
   const contactSql = 'INSERT INTO contact (phone, address, city, state, zip, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
-  const contactRes = await pool.query(contactSql, [phone, address, city, state, zip, email]);
+
+  const client = await pool.connect();
+  const contactRes = await client.query(contactSql, [phone, address, city, state, zip, email]);
+
   const noContactResults = checkNoResults(contactRes);
   if (noContactResults) return noContactResults;
   const contactId = contactRes.rows[0].id;
   const userSql = 'INSERT INTO users (fullname, username, password, contact_id) VALUES ($1, $2, $3, $4) RETURNING *'; 
-  const userRes = await pool.query(userSql, [fullname, username, password, contactId]);
+
+  const userRes = await client.query(userSql, [fullname, username, password, contactId]);
+  client.release();
+
   const noUserResults = checkNoResults(userRes);
   if (noUserResults) return noUserResults;
   const userObj = userRes.rows[0];
@@ -91,14 +113,20 @@ const changeUser = async (id, updates) => {
     }
 
     const { fullname, username } = existingUser;
-    const userSql = 'UPDATE users SET fullname = $1, username = $2 WHERE id = $3 RETURNING *' 
-    const userRes = await pool.query(userSql, [fullname, username, id]);
+    const userSql = 'UPDATE users SET fullname = $1, username = $2 WHERE id = $3 RETURNING *'
+
+    const client = await pool.connect();
+    const userRes = await client.query(userSql, [fullname, username, id]);
+
     const noUserResults = checkNoResults(userRes);
     if (noUserResults) return noUserResults;
     const contactId = userRes.rows[0].contact_id;
     const { phone, address, city, state, zip, email } = existingUser.contact;
     const contactSql = 'UPDATE contact SET phone = $1, address = $2, city = $3, state = $4, zip = $5, email = $6 WHERE id = $7 RETURNING *';
-    const contactRes = await pool.query(contactSql, [phone, address, city, state, zip, email, contactId]);
+
+    const contactRes = await client.query(contactSql, [phone, address, city, state, zip, email, contactId]);
+    client.release();
+
     const noContactResults = checkNoResults(contactRes);
     if (noContactResults) return noContactResults;
     const userObj = userRes.rows[0];
@@ -114,11 +142,16 @@ const removeUser = async (id) => {
   if (!existingUser) {
     return `No such user with id: ${id}`
   } else {
-    const userRes = await pool.query('DELETE FROM users WHERE id = $1 RETURNING *', [id]);
+    const client = await pool.connect();
+    const userRes = await client.query('DELETE FROM users WHERE id = $1 RETURNING *', [id]);
+    
     const noUserResults = checkNoResults(userRes);
     if (noUserResults) return noUserResults;
     const contactId = userRes.contact_id;
-    const contactRes = await pool.query('DELETE FROM contact WHERE id = $1', [contactId]); //IDEA add a mark for deletion boolean column to contact table, set it to true instead of deleting.
+
+    const contactRes = await client.query('DELETE FROM contact WHERE id = $1', [contactId]); //IDEA add a mark for deletion boolean column to contact table, set it to true instead of deleting.
+    client.release();
+
     const noContactResults = checkNoResults(contactRes);
     if (noContactResults) return noContactResults;
     const deletedUserObj = formatUserOutput(userRes.rows[0], contactRes.rows[0]);

@@ -68,7 +68,9 @@ const findBillingInfo = async (orderId) => {
    FROM orders JOIN billing ON orders.billing_id = billing.id JOIN contact ON billing.contact_id = contact.id\
     WHERE orders.id = $1'
 
-  const results  = await pool.query(sql, [orderId]);
+  const client = await pool.connect();
+  const results  = await client.query(sql, [orderId]);
+  client.release();
 
   const noResults = messageNoResults(results);
   if (noResults) throw Error('Did not return billing info: ' + noResults);
@@ -99,7 +101,9 @@ const findDeliveryInfo = async (orderId) => {
    FROM orders JOIN delivery ON orders.delivery_id = delivery.id JOIN contact ON delivery.contact_id = contact.id\
     WHERE orders.id = $1'
 
-  const results  = await pool.query(sql, [orderId]);
+  const client = await pool.connect();
+  const results  = await client.query(sql, [orderId]);
+  client.release();
 
   const noResults = messageNoResults(results);
   if (noResults) throw Error('Did not return delivery info: ' + noResults);
@@ -129,7 +133,9 @@ const updateDelivery = async (deliveryId, updates, contactId) => {
   const { receiverName, deliveryMethod, notes } = updates
   const sql = 'UPDATE delivery SET receiver_name = $1, method = $2, notes = $3, contact_id = $4 WHERE id = $5 RETURNING *;';
 
-  const results = await pool.query(sql, [receiverName, deliveryMethod, notes, contactId, deliveryId])
+  const client = await pool.connect();
+  const results = await client.query(sql, [receiverName, deliveryMethod, notes, contactId, deliveryId]);
+  client.release();
 
   const noResults = messageNoResults(results);
   if (noResults) throw Error('Did not return delivery info: ' + noResults);
@@ -144,8 +150,10 @@ const updateBilling = async (billingId, updates, contactId) => {
   const { payerName, paymentMethod } = updates
   const sql = 'UPDATE billing SET payer_name = $1, method = $2, contact_id = $3 WHERE id = $4 RETURNING *;';
 
-  const results = await pool.query(sql, [payerName, paymentMethod, contactId, billingId])
-
+  const client = await pool.connect();
+  const results = await client.query(sql, [payerName, paymentMethod, contactId, billingId]);
+  client.release();
+  
   const noResults = messageNoResults(results);
   if (noResults) throw Error('Did not return billing info: ' + noResults);
 
@@ -155,8 +163,11 @@ const updateBilling = async (billingId, updates, contactId) => {
 //a way to add creditcard info, but not really. just a flourish in that direction.
 const addCCToBilling = async (cc, billingId) => {
   const sql = 'UPDATE billing SET cc_placeholder = $1 WHERE id = $2 RETURNING *';
-  const  results = await pool.query(sql, [cc, billingId]);
 
+  const client = await pool.connect();
+  const  results = await client.query(sql, [cc, billingId]);
+  client.release();
+  
   const noResults = messageNoResults(results);
   if (noResults) throw Error('Did not return billing/CC info: ' + noResults);
   return results;
@@ -165,16 +176,24 @@ const addCCToBilling = async (cc, billingId) => {
 //returns an array of all orders from the database
 const findAllOrders = async () => {
   const sql = 'SELECT * FROM orders ORDER BY id ASC';
-  const results = await pool.query(sql)
+
+  const client = await pool.connect();
+  const results = await client.query(sql);
+  client.release();
+  
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
-  return results.rows
+  return results.rows;
 }
 
 //returns a order object from the database as specified by the orders id
 const findOrderById = async (id) => {
   const sql = 'SELECT * FROM orders WHERE id = $1';
-  const results = await pool.query(sql, [id]);
+
+  const client = await pool.connect();
+  const results = await client.query(sql, [id]);
+  client.release();
+
   if (results.rows.length === 0) {
     return 'No orders started';
   } else {
@@ -187,7 +206,11 @@ const findOrderById = async (id) => {
 //returns an array of all orders from a single user as specified by the user id.
 const findOrdersByUserId = async (id) => {
   const  sql = 'SELECT * FROM orders WHERE user_id = $1 ORDER BY date_completed DESC';
-  const results = await pool.query(sql, [id]);
+
+  const client = await pool.connect();
+  const results = await client.query(sql, [id]);
+  client.release();
+  
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
   const  orderArr = results.rows; 
@@ -197,7 +220,11 @@ const findOrdersByUserId = async (id) => {
 //returns an order object that has not been completed from a single user as specified by the user id.
 const findOpenOrderByUserId = async (userId) => {
   const sql = 'SELECT * FROM orders WHERE user_id = $1 AND date_completed IS NULL;';
-  const results = await pool.query(sql, [userId]);
+
+  const client = await pool.connect();
+  const results = await client.query(sql, [userId]);
+  client.release();
+ 
   if (results.rows.length === 0) {
     return 'No orders started';
   } else {
@@ -211,7 +238,11 @@ const findOpenOrderByUserId = async (userId) => {
 const addOrder = async (newOrder) => {
   const { user_id, billing_id, delivery_id } = newOrder //TODO: clarifiy snake case vs camel case
   const sql = 'INSERT INTO orders (user_id, date_started, billing_id, delivery_id) VALUES ($1, NOW(), $2, $3) RETURNING *'; //uses Postgres NOW() built-in function.
-  const results = await pool.query(sql, [user_id, billing_id, delivery_id]);
+
+  const client = await pool.connect();
+  const results = await client.query(sql, [user_id, billing_id, delivery_id]);
+  client.release();
+  
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
   const orderObj = results.rows[0];
@@ -247,7 +278,11 @@ const changeOrder = async (id, updates) => {
   const { user_id, date_started, date_completed, billing_id, delivery_id } = existingOrder;
   const sql = 'UPDATE orders SET user_id = $1, date_started = $2, date_completed = $3, billing_id = $4, delivery_id = $5 \
     WHERE id = $6 RETURNING *';
-  const results = await pool.query(sql, [user_id, date_started, date_completed, billing_id, delivery_id, id]);
+
+  const client = await pool.connect();
+  const results = await client.query(sql, [user_id, date_started, date_completed, billing_id, delivery_id, id]);
+  client.release();
+  
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
   const orderObj = results.rows[0];
@@ -257,7 +292,10 @@ const changeOrder = async (id, updates) => {
 //takes a monetary value and updates the date completed with the current datetime on the row specified by the order id.
 const completeOrderNow = async (amount, orderId) => {
   const sql = 'UPDATE orders SET date_completed = NOW(), amount = $1 WHERE id = $2 RETURNING *;'
-  const results = await pool.query(sql, [amount, orderId]);
+
+  const client = await pool.connect();
+  const results = await client.query(sql, [amount, orderId]);
+  client.release();
 
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
@@ -281,7 +319,11 @@ const findItemsByOrderId = async (orderId) => {
   const sql = 'SELECT  cart.id, cart.product_id, cart.order_id, products.name, products.price, cart.quantity, (products.price * cart.quantity) AS "subtotal"  \
   FROM cart JOIN orders ON cart.order_id = orders.id JOIN products ON cart.product_id = products.id \
   WHERE order_id = $1';
-  const results = await pool.query(sql, [orderId]);
+
+  const client = await pool.connect();
+  const results = await client.query(sql, [orderId]);
+  client.release();
+  
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
   const items = results.rows;
