@@ -10,6 +10,9 @@ const addContactInfo = async (contactObj) => {
   const sql = 'INSERT INTO contact (phone, address, city, state, zip, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
   
   const results = await pool.query(sql, [phone, address, city, state, zip, email]);
+  pool.end(() => {
+    console.log('pool has ended')
+  })
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
   return results.rows[0]

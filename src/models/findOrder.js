@@ -9,6 +9,9 @@ const { messageNoResults, checkNoResults } = require('./util/checkFind');
 //Returns false if they have no open order OR returns the order object if there is an open order.
 const isOrderOpen = async (userId) => {
   const orders = await pool.query('SELECT id FROM orders WHERE user_id = $1 AND date_completed IS NULL', [userId])
+  pool.end(() => {
+    console.log('pool has ended')
+  })
   if (orders.rows.length === 0) {
     return false;
   } else if (orders.rows.length === 1) {
@@ -68,6 +71,9 @@ const findBillingInfo = async (orderId) => {
     WHERE orders.id = $1'
 
   const results  = await pool.query(sql, [orderId]);
+  pool.end(() => {
+    console.log('pool has ended')
+  })
   const noResults = messageNoResults(results);
   if (noResults) throw Error('Did not return billing info: ' + noResults);
   const billing = results.rows[0];
@@ -98,6 +104,9 @@ const findDeliveryInfo = async (orderId) => {
     WHERE orders.id = $1'
 
   const results  = await pool.query(sql, [orderId]);
+  pool.end(() => {
+    console.log('pool has ended')
+  })
   const noResults = messageNoResults(results);
   if (noResults) throw Error('Did not return delivery info: ' + noResults);
   const delivery = results.rows[0];
@@ -127,6 +136,9 @@ const updateDelivery = async (deliveryId, updates, contactId) => {
   const sql = 'UPDATE delivery SET receiver_name = $1, method = $2, notes = $3, contact_id = $4 WHERE id = $5 RETURNING *;';
 
   const results = await pool.query(sql, [receiverName, deliveryMethod, notes, contactId, deliveryId])
+  pool.end(() => {
+    console.log('pool has ended')
+  })
   const noResults = messageNoResults(results);
   if (noResults) throw Error('Did not return delivery info: ' + noResults);
 
@@ -141,6 +153,9 @@ const updateBilling = async (billingId, updates, contactId) => {
   const sql = 'UPDATE billing SET payer_name = $1, method = $2, contact_id = $3 WHERE id = $4 RETURNING *;';
 
   const results = await pool.query(sql, [payerName, paymentMethod, contactId, billingId])
+  pool.end(() => {
+    console.log('pool has ended')
+  })
   const noResults = messageNoResults(results);
   if (noResults) throw Error('Did not return billing info: ' + noResults);
 
@@ -151,6 +166,9 @@ const updateBilling = async (billingId, updates, contactId) => {
 const addCCToBilling = async (cc, billingId) => {
   const sql = 'UPDATE billing SET cc_placeholder = $1 WHERE id = $2 RETURNING *';
   const  results = await pool.query(sql, [cc, billingId]);
+  pool.end(() => {
+    console.log('pool has ended')
+  })
   const noResults = messageNoResults(results);
   if (noResults) throw Error('Did not return billing/CC info: ' + noResults);
   return results;
@@ -252,6 +270,9 @@ const changeOrder = async (id, updates) => {
 const completeOrderNow = async (amount, orderId) => {
   const sql = 'UPDATE orders SET date_completed = NOW(), amount = $1 WHERE id = $2 RETURNING *;'
   const results = await pool.query(sql, [amount, orderId]);
+  pool.end(() => {
+    console.log('pool has ended')
+  })
   const noResults = checkNoResults(results);
   if (noResults) return noResults;
   const orderObj = results.rows[0];
