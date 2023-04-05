@@ -27,9 +27,6 @@ const collectCart = async (userId) => {
   WHERE orders.user_id = $1 AND orders.date_completed IS NULL ORDER BY cart.id DESC;"
 
   const cart = await pool.query(sql, [userId])
-  pool.end(() => {
-    console.log('pool has ended')
-  })
 
   let items = []
   let total = 0
