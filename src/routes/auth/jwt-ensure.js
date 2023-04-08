@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////
-/////route middleware used to check access statues.////
+/////route middleware used to check access status.////
 
 const passport = require('passport')
 const pool = require('../../models/util/pool')
 
-//IDEA creates a function that when called returns the authenticate function, this way I dont have to go back and add passport to all my routes.
+//a function that when called as middleware, returns the passport.authenticate function using jwt stategy. used on all routes where being authenticated is needed.
 const loggedIn = (req, res, next) => {
   return passport.authenticate('jwt', {session: false}, (err, user, info, status) => {
-    console.log(info)
+    //testlog console.log(info)
     //console.log('loggedInST' + req.secTest)
     //console.log('loggedInuser' + user.id)
     if (err) { return next(err) }
@@ -23,7 +23,8 @@ const loggedIn = (req, res, next) => {
     next();
   })(req, res, next);
 }
-  
+
+//checks if request.user.admin grants access to route if true.
 const isAdmin = (req, res, next) => {
   if (req.user) {
     if (!req.user.admin) {
@@ -46,7 +47,7 @@ const adminOrCurrentUser = (req, res, next) => {
 }
 
 
-//CHANGED add new authoriztion
+//for use on order id parameter routes. checks if the user is admin or if the order belongs to the currrent user and allows access if so. 
 const adminOrUserOrder = (req, res, next) => {
   const orderId = parseInt(req.params.id);
   const sql = 'SELECT * FROM orders WHERE id = $1'

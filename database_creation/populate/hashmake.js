@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const pool = require('../../src/models/util/pool');
 const { messageNoResults, checkNoResults } = require('../../src/models/util/checkFind');
 
+//updates password for specified user. Creates a hash of supplied password.
 const hashMake = async (password, id) => {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
@@ -12,13 +13,12 @@ const hashMake = async (password, id) => {
   return results.rows[0];
 }
 
+//runs hashMake on the specified number if user ids starting with 0
 const popPasswords = async (password, ids) => {
   for (let i = 0; i <= ids; i++) {
     hashMake(password, i);
   }
-} 
-
-//popPasswords('password', 10);
+}
 
 module.exports = {
   popPasswords

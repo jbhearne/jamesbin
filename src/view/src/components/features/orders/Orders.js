@@ -1,45 +1,50 @@
 
+//imports
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { selectOrders, fetchOrders, fetchItems, selectOrderItems } from './ordersSlice'
-import { selectUser, fetchUser } from '../user/userSlice';
+import { selectUser } from '../user/userSlice';
 import { page } from '../../../utils/page'
 import Order from './order/Order'
 import OrderItem from './order/OrderItem'
 import './orders.css'
 
+//Component for displaying the users previous orders
 function Orders({ test, test2 }) {
+  //props: testing how props are passed through from the LoggedIn component.
+
+  //Component state used to track display based info not needed for redux
   const [isOrderItems, setIsOrderItems] = useState(false);
+  const [pageNum, setPageNum] = useState(1);
+  const [numItems, setNumItems] = useState(10);
   
+  //Redux constants
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  const orders = useSelector(selectOrders);
+  const orderItems = useSelector(selectOrderItems);
 
+  //Fetch users order info from database
   useEffect(() => {
     dispatch(fetchOrders(user.id));
     setIsOrderItems(false);
   }, []);
 
-  const orders = useSelector(selectOrders);
-
-  const [pageNum, setPageNum] = useState(1);
-  const [numItems, setNumItems] = useState(10);
-/* GARBAGE  const pageEnd = pageNum * numItems;
-  const pageStart = pageEnd - numItems;
-  const maxPage = Math.ceil(orders.length / numItems); */
+  //builds page object for controling and displaying paginated arrays
   const p = page(pageNum, setPageNum, numItems, setNumItems, orders.length, 6)
 
-
+  //Receives input and sets the page number accordingly 
   const handlePage = (e) => {
     p.setPage(e.target.value);
   }
   
+  //Changes setIsOrderItems to true if a person clicks on an order line item.
   const handleOrderClick = async (orderId) => {
     await dispatch(fetchItems(orderId));
     setIsOrderItems(true);
   }
 
-  const orderItems = useSelector(selectOrderItems);
-
+  //Render a s detailed view of a singal order. Used conditionally.
   const renderOrderItems = () => {
     return (
       <div className='order-details'>
@@ -72,10 +77,10 @@ function Orders({ test, test2 }) {
     )
   }
 
+  //Render a list of a user's previous orders. If a user clicks on an order it will display a detailed view above the orders.
   return (
     <div className='main-orders'>
       <h2>ORDERS</h2>
-      {/*GARBAGE <p>{test+test2}</p> */}
       {isOrderItems && renderOrderItems()}
       <table className='orders-table'>
         <thead>

@@ -1,3 +1,7 @@
+////////////////////////////////////////////////////////////////
+///Functions for creating and using JWT authentication
+
+//imports
 const passport = require('passport');
 const pool = require('../../models/util/pool');
 const JwtStrategy = require('passport-jwt').Strategy;
@@ -7,10 +11,12 @@ const jsonwebtoken = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
 
+//isLocal  is a flag that switchs between filesystem storage and S3 storage
 let isLocal = false;
 let PUB_KEY;
 let PRV_KEY;
 
+//sets the options and initiates passport's JWT strategy using a public key aquiled locally or from the cloud.
 const initJWT = async () => {
   if (isLocal) {
     const pathToPubKey = path.join(__dirname, '../../../', 'public.pem')//'../../../../public.pem'
@@ -18,7 +24,7 @@ const initJWT = async () => {
   } else {
     PUB_KEY = await s3Keys.getPublic();
   }
-  console.log(PUB_KEY)
+  //testlog console.log(PUB_KEY)
 
   const options = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -28,7 +34,7 @@ const initJWT = async () => {
   
   passport.use(new JwtStrategy(options, (jwt_payload, done) => {
     console.log('JWTsTRAT')
-    //console.log(jwt_payload)
+    //testlog console.log(jwt_payload)
     const id = jwt_payload.sub;
     const isCurrent = jwt_payload.exp > Date.now();
     const sql = 'SELECT * FROM users WHERE id = $1';
@@ -46,6 +52,7 @@ const initJWT = async () => {
   }))
 }
 
+//creates a JWT using a private key aquired locally or through the cloud.
 const issueJWT = async (user) => {
   if (isLocal) {
     const pathToPrvKey = path.join(__dirname, '../../../', 'private.pem')//'../../../../public.pem'

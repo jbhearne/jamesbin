@@ -1,12 +1,7 @@
 
-/*GARBAGE export const pagefff = (direction, pageNum, maxPage, setPageNum) => {
-  if (direction === 'prev') {
-    if (pageNum > 1) setPageNum(pageNum - 1);
-  } else if (direction === 'next') {
-    if (pageNum < maxPage) setPageNum(pageNum + 1);
-  }
-} */
-
+//Function that takes React state variables to create information used to paginate arrays and lists. 
+//Returns an object that can be used to set the current page and 
+//info on how many items to display and which number of items should be displayed on the current page.
 export const page = (pageNum, setPageNum, numItems, setNumItems, maxItems, numPageLink = 5) => {
   const pageEnd = pageNum * numItems;
   const pageStart = pageEnd - numItems;

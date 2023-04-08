@@ -1,3 +1,4 @@
+//GARBAGE unused module
 //IDEA in order to implement this I would have to add a body, which would mean changing to a POST request?
 //IDEA unless I can include this in the headers? Which should work. or as a query.which is probably how that is supposed to work.
 

@@ -1,3 +1,4 @@
+//Imports
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { 
@@ -6,7 +7,6 @@ import {
   selectUseDefaultBilling,
   selectUseDefaultDelivery,
   fetchCompleteOrder,
-  /*GARBAGE removeCheckoutOrder, */
   removeOrderItems,
   fetchCheckout,
  } from "../ordersSlice";
@@ -14,12 +14,20 @@ import { selectCart, removeCart, fetchCart } from "../../cart/cartSlice";
 import Billing from "./billingAndDelivery/Billing";
 import Delivery from "./billingAndDelivery/Delivery";
 import { selectUser } from "../../user/userSlice";
-//GARBAGE import Cart from "../../cart/Cart";
 import Item from "../../cart/Item/Item";
 
+//Component for rendering an "Order Complete" screen.
 function Complete() {
-  const dispatch = useDispatch()
-  const user = useSelector(selectUser)
+
+  //Redux constants
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const checkoutOrder = useSelector(selectCheckoutOrder);
+  const useDefaultBilling = useSelector(selectUseDefaultBilling);
+  const useDefaultDelivery = useSelector(selectUseDefaultDelivery);
+  const cart = useSelector(selectCart);
+  const completeOrder = useSelector(selectCompleteOrder);
+
   useEffect(() => {
     //testlog console.log('useEffect')
     if (user.id) {
@@ -29,36 +37,26 @@ function Complete() {
   }, [user.id]);
   //testlog console.log('after')
 
-  const checkoutOrder = useSelector(selectCheckoutOrder);
-  //GARBAGE const ccPlaceholder = useSelector(selectCcPlaceholder);
-  const useDefaultBilling = useSelector(selectUseDefaultBilling);
-  const useDefaultDelivery = useSelector(selectUseDefaultDelivery);
-  const cart = useSelector(selectCart)
-  const completeOrder = useSelector(selectCompleteOrder);
+  //Builds a completeCheckout object and uses that to complete the order on the database, removes related Redux state.
   useEffect(() => {
     if (cart.length > 0 && checkoutOrder.billing) {
       //testlog console.log(checkoutOrder)
       //testlog console.log('complete')
-        const completeCheckout = {
+        const completeCheckout = { //TODO Redux state gets reset after Stripe redirection, and this info is likely lost unless it is set in elsewhere.
           useDefaultBilling: useDefaultBilling,
           useDefaultDelivery: useDefaultDelivery,
           billing: checkoutOrder.billing,
           delivery: checkoutOrder.delivery,
-          //GARBAGE ccPlaceholder: ccPlaceholder,
         }
         if (true) {
           dispatch(fetchCompleteOrder({ completeCheckout: completeCheckout, cart: cart }));
           dispatch(removeCart());
-          //GARBAGE dispatch(removeCheckoutOrder());
           dispatch(removeOrderItems());
-          //GARBAGE navigate('/order/complete')
-          //GARBAGE window.open('https://google.com', '_self')
         }
     }
   }, [cart, checkoutOrder]);
 
-  //GARBAGE 4242424242424242
-
+  //Renders the Complete element 
   return (
     <div className="main-complete">
       <h2>Order #{completeOrder.id} Complete!</h2>
@@ -86,7 +84,7 @@ function Complete() {
       </div>)}
       <div className="billing-delivery">
         {!completeOrder.delivery ? (<p>loading</p>) : (<Delivery delivery={completeOrder.delivery} controls={false} />)}
-        {!completeOrder.billing ? (<p>loading</p>) : (<Billing billing={completeOrder.billing} controls={false} />) /*FIXME why props are passing undefined?? I shouldn't need this conditional*/}
+        {!completeOrder.billing ? (<p>loading</p>) : (<Billing billing={completeOrder.billing} controls={false} />)}
       </div>
     </div>
   )

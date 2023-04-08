@@ -23,12 +23,12 @@ const isOrderOpen = async (userId) => {
 const isItemOnCompleteOrder = async id => {
   const result = await pool.query(
     'SELECT orders.date_completed FROM cart JOIN orders ON cart.order_id = orders.id WHERE cart.id = $1',
-    [id]); ////LEARNED:  no callback... pool.query returns the results and can be used with async/await to create asyncronous functions/modules.
+    [id]); 
   let notNull = false;
   if (result.rows.length === 1) {
     if (result.rows[0].date_completed) {
       notNull = true;
-      //console.log(result.rows[0].date_completed);
+      //testlog console.log(result.rows[0].date_completed);
     } 
   } else if (result.rows.length > 1) {
     throw Error('Multiple Rows.');
@@ -90,7 +90,7 @@ const findBillingInfo = async (orderId) => {
       email: billing.email
     }
   }
-  //console.log(info)
+  //testlog console.log(info)
   return info;
 }
 
@@ -314,7 +314,7 @@ const removeOrder = async (id) => {
   return deletedOrderObj;
 }
 
-//CHANGED add for completed orders?
+//CHANGED gets cart items by specified orderId. returns an array of cart items that includes product information.
 const findItemsByOrderId = async (orderId) => {
   const sql = 'SELECT  cart.id, cart.product_id, cart.order_id, products.name, products.price, cart.quantity, (products.price * cart.quantity) AS "subtotal"  \
   FROM cart JOIN orders ON cart.order_id = orders.id JOIN products ON cart.product_id = products.id \

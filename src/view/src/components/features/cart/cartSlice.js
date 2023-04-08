@@ -1,39 +1,34 @@
+//imports
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { apiFetch, apiPost, apiDelete, multiPost, apiPut} from '../../../utils/apiFetch';
-//GARBAGE import EP from '../../../dataEndpoints';
+import { apiFetch, apiDelete, multiPost, apiPut} from '../../../utils/apiFetch';
 import './cart.css';
 
+//Async thunk used to set the state of the cart array state. It also sycronizes the database and redux.
 export const fetchCart = createAsyncThunk(
   'cart/fetchCart',
   async ({ id: id, cart: cart }) => {
     //testlog console.log('startfetchcartbeforeselectuser')
-    //GARBAGE const user = useSelector(selectUser);
     //testlog console.log('startfetchcart' + (parseInt(Date.now()) - 1678800000000))
+
     const token = localStorage.getItem("id_token");
+
     //testlog console.log(cart)
     //testlog console.log('fectch')
+
+    //if there are any cart items that are present locally in state, but not on the database,
+    //those get added to the database then the all the datbase items are fetched and a new cart array is built.
     if (cart.length > 0) {
       const localItems = cart.filter(item => item.id < 0);
       const bodies = localItems.map(body => {
         return { productId: body.productId, quantity: body.quantity };
       });
+
       //testlog console.log(bodies)
       //testlog console.log('before multi ' + (parseInt(Date.now()) - 1678800000000))
+
       if (localItems.length > 0) {
         await multiPost('/cart', bodies, 0, token); //TODO: need to create an API call to post multiple cart items in one call.
       }
-      /*GARBAGE if (localItems.length > 0) {
-        await localItems.forEach(async item => {
-          console.log('top of loop ' + (parseInt(Date.now()) - 1678800000000))
-          await apiPost('/cart', {
-            productId: item.productId,
-            quantity: item.quantity,
-          }, token);
-          console.log('bottom of loop' + (parseInt(Date.now()) - 1678800000000))
-        });
-        console.log('out of loop' + (parseInt(Date.now()) - 1678800000000))
-      }*/
-
       //testlog console.log('after multi ' + (parseInt(Date.now()) - 1678800000000))
     }
     const newCart = await apiFetch(`/cart/user/${id}`, token);
@@ -52,6 +47,7 @@ export const fetchCart = createAsyncThunk(
 
 
 //TODO make this update the store
+//Used to remove an item from the cart on the database
 export const deleteUserCartItem = createAsyncThunk(
   'cart/deleteUserCartItem',
   async (id) => {
@@ -62,6 +58,7 @@ export const deleteUserCartItem = createAsyncThunk(
 
 
 //TODO make this update the store
+//Used change the quantitiy of an item in the cart on the database
 export const updateUserCartItem = createAsyncThunk(
   'cart/updateUserCartItem',
   async ({id: id, body: body}) => {
@@ -69,6 +66,8 @@ export const updateUserCartItem = createAsyncThunk(
     const updated = await apiPut(`/user/cart/${id}`, body, token)
   })
 
+
+//Cart slice of the state
 export const cartSlice = createSlice({
   name: 'cart',
   initialState: {
@@ -97,6 +96,7 @@ export const cartSlice = createSlice({
       state.tempCartId = state.tempCartId - 1;
     },
   },
+  //TODO: I keep getting a warning that this use of extraReducers is depreciated and will soon need to change to "builder callback notation" https://redux-toolkit.js.org/api/createSlice.
   extraReducers: {
     [fetchCart.pending]: (state, action) => {
       state.isLoading = true;
@@ -114,13 +114,16 @@ export const cartSlice = createSlice({
   }
 })
 
+
+//Redux Selectors for useSelector
 export const selectCart = (state) => state.cart.cart;
 export const selectTempCartId = (state) => state.cart.tempCartId;
 
+//Actions defined in reducers 
 export const addItemToCart = cartSlice.actions.addItemToCart;
 export const removeItemFromCart = cartSlice.actions.removeItemFromCart;
 export const removeCart = cartSlice.actions.removeCart;
 export const incrementTempCartId = cartSlice.actions.incrementTempCartId;
 
-
+//Export the reducer for use in the store 
 export default cartSlice.reducer;

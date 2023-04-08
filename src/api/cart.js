@@ -115,7 +115,6 @@ const createCartItemOnOrder = async (request, response) => {
 
 //updates the quantity of an item in the cart as specified by cart id.
 const updateCartItem = async (request, response, next) => {
-  //console.log('\x1B[31mtest updateCartItem \x1B[37m')  //LEARNED how to color text in BASH console.
   const id = parseInt(request.params.id);
   const { quantity } = request.body;
   try {
@@ -133,7 +132,7 @@ const updateCartItem = async (request, response, next) => {
 const updateCartItemIfUser = async (request, response, next) => {
   const id = parseInt(request.params.id);
   const { quantity } = request.body;
-  const userId = request.user.id
+  const userId = request.user.id;
   try {
     const cartItem = await changeCartItemQuantityIfUser(id, quantity, userId);
     const check = checkForFoundRowObj(cartItem);
@@ -162,7 +161,7 @@ const deleteCartItem = async (request, response) => {
 //same as above, but checks to make sure cart items belong to current user.
 const deleteCartItemIfUser = async (request, response, next) => {
   const id = parseInt(request.params.id);
-  const userId = request.user.id
+  const userId = request.user.id;
   try {
     const cartItem = await removeCartItemIfUser(id, userId);
     const check = checkForFoundRowObj(cartItem);

@@ -51,7 +51,7 @@ const collectCart = async (userId) => {
   const delivery = await findDeliveryInfo(items[0].order_id);
 
   const checkout = { items, total, billing, delivery}
-  //console.log(checkout)
+  //testlog console.log(checkout)
   return checkout;
 }
 
@@ -59,7 +59,6 @@ const collectCart = async (userId) => {
 const findAllCartItems = async () => {
     const sql = 'SELECT * FROM cart';
     const results = await pool.query(sql);
-    //if (!results || !results.rows || !results.rows.length) return null;
     const noResults = checkNoResults(results);
     if (noResults) return noResults;
     const cartItems = results.rows;

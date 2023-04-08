@@ -1,6 +1,8 @@
+//imports
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { apiFetch, apiPost } from '../../../utils/apiFetch';
 
+//Thunk used to get a list of orders from the database. Takes an (user) id arg.
 export const fetchOrders = createAsyncThunk(
   'cart/fetchOrders',
   async (id) => {
@@ -21,6 +23,7 @@ export const fetchOrders = createAsyncThunk(
   }
 );
 
+//Thunk used to get a list of items that are on a singal order. Takes an (order) id arg.
 export const fetchItems = createAsyncThunk(
   'cart/fetchItems',
   async (id) => {
@@ -41,6 +44,7 @@ export const fetchItems = createAsyncThunk(
   }
 );
 
+//Thunk used to get a checkout object to be used during the checkout process. no args.
 export const fetchCheckout = createAsyncThunk(
   'cart/fetchCheckout',
   async () => {
@@ -85,6 +89,9 @@ export const fetchCheckout = createAsyncThunk(
     }
 });
 
+
+//Thunk used get used to complete the order and get final order info, 
+//takes: an completeCheckout object {useDefaultBilling, useDefaultDelivery, billing, delivery, ccPlaceholder} and a cart object
 export const fetchCompleteOrder = createAsyncThunk(
   'cart/fetchCompleteOrder',
   async ({ completeCheckout: completeCheckout, cart: cart }) => {
@@ -100,7 +107,7 @@ export const fetchCompleteOrder = createAsyncThunk(
       }
   });
 
-
+//Orders slice of the state
 export const ordersSlice = createSlice({
   name: 'orders',
   initialState: {
@@ -144,6 +151,7 @@ export const ordersSlice = createSlice({
       state.completeOrder = {};
     },
   },
+  //TODO: I keep getting a warning that this use of extraReducers is depreciated and will soon need to change to "builder callback notation" https://redux-toolkit.js.org/api/createSlice.
   extraReducers: {
     [fetchOrders.pending]: (state, action) => {
       state.isLoading = true;
@@ -200,6 +208,7 @@ export const ordersSlice = createSlice({
   }
 })
 
+//Redux Selectors for useSelector
 export const selectOrders = (state) => state.orders.orders;
 export const selectOrderItems = (state) => state.orders.orderItems;
 export const selectCheckoutOrder = (state) => state.orders.checkoutOrder;
@@ -209,6 +218,7 @@ export const selectUseDefaultBilling = (state) => state.orders.useDefaultBilling
 export const selectUseDefaultDelivery = (state) => state.orders.useDefaultDelivery;
 export const selectCompleteOrder = (state) => state.orders.completeOrder;
 
+//Actions defined in reducers 
 export const removeOrders = ordersSlice.actions.removeOrders;
 export const setBilling = ordersSlice.actions.setBilling;
 export const setDelivery = ordersSlice.actions.setDelivery;
@@ -219,4 +229,5 @@ export const removeOrderItems = ordersSlice.actions.removeOrderItems;
 export const removeCheckoutOrder = ordersSlice.actions.removeCheckoutOrder;
 export const removeCompleteOrder = ordersSlice.actions.removeCompleteOrder;
 
+//Export the reducer for use in the store 
 export default ordersSlice.reducer;

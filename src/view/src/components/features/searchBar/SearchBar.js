@@ -1,5 +1,8 @@
+//TODO this component has not been implemented yet.
+//import
 import { useDispatch, useSelector } from "react-redux";
 import { selectSearch, setSearch, clearSearch } from "./searchBarSlice";
+
 
 function SearchBar() {
   const dispatch = useDispatch();

@@ -1,12 +1,8 @@
+//imports
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { apiFetch } from '../../../utils/apiFetch';
 
-/*GARBAGE const EP = {
-  products: '/products',
-  product: '/product/',
-  vendor: '/vendor/'
-} */
-
+//Thunk that fetches all the vendors from the database and builds an array and sets vendors: [] state
 export const fetchVendors = createAsyncThunk(
   'products/fetchVendors',
   async () => {
@@ -30,33 +26,7 @@ export const fetchVendors = createAsyncThunk(
   }
 );
 
-/*GARBAGE export const fetchProduct = createAsyncThunk(
-  'product/fetchProduct',
-  async (id) => {
-    const product = await apiFetch(EP.product + id);
-    const vendor = {
-      name: '',
-      description: '',
-    }
-    if (product.vendor_id) {
-      const vendorId = parseInt(product.vendor_id);
-      const v = await apiFetch(EP.vendor + vendorId);
-      vendor.name = v.name;
-      vendor.description = v.description;
-    }
-    
-    return {
-      id: product.id,
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      vendorId: product.vendor_id,
-      vendorName: vendor.name,
-      vendorDescription: vendor.description
-    }
-  }
-);*/
-
+//Vendors slice of the state
 export const vendorsSlice = createSlice({
   name: 'vendors',
   initialState: {
@@ -67,6 +37,7 @@ export const vendorsSlice = createSlice({
   reducers: {
   },
   extraReducers: {
+    //TODO: I keep getting a warning that this use of extraReducers is depreciated and will soon need to change to "builder callback notation" https://redux-toolkit.js.org/api/createSlice.
     [fetchVendors.pending]: (state, action) => {
       state.isLoading = true;
       state.hasError = false;
@@ -83,7 +54,8 @@ export const vendorsSlice = createSlice({
   }
 });
 
+//Redux Selectors for useSelector
 export const selectVendors = (state) => state.vendors.vendors;
-//GARBAGE export const setProductsProduct = productsSlice.actions.setProductsProduct
 
+//Export the reducer for use in the store 
 export default vendorsSlice.reducer;

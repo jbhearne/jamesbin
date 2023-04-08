@@ -1,21 +1,26 @@
+//imports 
 import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react';
-//GARBAGE import { Link } from 'react-router-dom';
-//GARBAGE import { selectUser, fetchUser, login } from '../../../user/userSlice';
-import { setDelivery, selectIsOrderLoading, selectUseDefaultDelivery, setUseDefaultDelivery } from '../../ordersSlice';
-//GARBAGE import { apiPut } from '../../../../../utils/apiFetch';
+import { setDelivery, selectUseDefaultDelivery, setUseDefaultDelivery } from '../../ordersSlice';
 
+//Component for rendering delivery info and accepting delivery form data
 function Delivery({ delivery, controls = true }) {
-  const useDefaultDelivery = useSelector(selectUseDefaultDelivery);
-  //GARBAGE const user = useSelector(selectUser);
+ //props: delivery is the data, controls is a boolean that determines if the editing button is active.
+
+  //React component state 
   const [editMode, setEditMode] = useState(false);
   const [message, setMessage] = useState('');
-  const dispatch = useDispatch()
 
+  //Redux constants 
+  const dispatch = useDispatch();
+  const useDefaultDelivery = useSelector(selectUseDefaultDelivery);
+
+  //Handles the checkbox that determines if the user wants to enter delivery info or use their default info.
   const handleCheck = (e) => {
     dispatch(setUseDefaultDelivery(e.target.checked))
   }
 
+    //Handles the submission of updated delivery info.
   const handleSubmit = async (e) => {
     e.preventDefault()
     const newDelivery = {
@@ -31,10 +36,10 @@ function Delivery({ delivery, controls = true }) {
         zip: e.target.zip.value,
       }
     }
-    dispatch(setDelivery(newDelivery))
-    //GARBAGE const token = localStorage.getItem("id_token");
+    dispatch(setDelivery(newDelivery))  //TODO this only sets redux state. I had previously used this info inside this component. This is needed by fetchCompleteOrder, now that get dispatched in Complete.js, but that is after redirection and redux state is lost. TLDR need to add an update function for billing and Delivery.
   }
 
+  //Returns a form for updating delivery info
   const edit = () => {
     return (
       <div>
@@ -62,7 +67,8 @@ function Delivery({ delivery, controls = true }) {
     </div>
     )
   }
-  
+
+  //Returns formatted delivery info and if controls prop is true includes a button to enter edit mode
   const view = () => {
     return (
       <div>
@@ -98,6 +104,7 @@ function Delivery({ delivery, controls = true }) {
     )
   }
 
+  //Renders either the form or the formatted info based on the editMode state.
   return (
     <div className='billing-delivery'>
      {editMode ? edit() : view()}
