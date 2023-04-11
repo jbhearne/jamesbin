@@ -12,17 +12,19 @@ const fs = require('fs');
 const path = require('path');
 
 //isLocal  is a flag that switchs between filesystem storage and S3 storage
-let isLocal = false;
+let isLocal = process.env.FILE_SYSTEM === "local";
 let PUB_KEY;
 let PRV_KEY;
 
 //sets the options and initiates passport's JWT strategy using a public key aquiled locally or from the cloud.
 const initJWT = async () => {
   if (isLocal) {
+    console.log('local init JWT')
     const pathToPubKey = path.join(__dirname, '../../../', 'public.pem')//'../../../../public.pem'
     PUB_KEY = fs.readFileSync(pathToPubKey, 'utf8');
   } else {
     PUB_KEY = await s3Keys.getPublic();
+    console.log("s3 init JWT")
   }
   //testlog console.log(PUB_KEY)
 
@@ -55,9 +57,11 @@ const initJWT = async () => {
 //creates a JWT using a private key aquired locally or through the cloud.
 const issueJWT = async (user) => {
   if (isLocal) {
+    console.log("local issue JWT")
     const pathToPrvKey = path.join(__dirname, '../../../', 'private.pem')//'../../../../public.pem'
     PRV_KEY = fs.readFileSync(pathToPrvKey, 'utf8');
   } else {
+    console.log("s3 issue JWT")
     PRV_KEY = await s3Keys.getPrivate();
   }
 

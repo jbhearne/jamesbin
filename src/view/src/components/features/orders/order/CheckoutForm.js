@@ -1,10 +1,12 @@
 //imports
 import {useStripe, useElements, PaymentElement} from '@stripe/react-stripe-js';
 
+
 //URL used by Stripe to redirect after the payment is processed
-const deployUrl = 'https://gentle-yoke-fish.cyclic.app';
-const builtLocalUrl = 'http://localhost:3000';
-const servedLocalUrl = 'http://localhost:3002';
+const returnUrl = 'https://gentle-yoke-fish.cyclic.app'; //deployUrl 
+//const returnUrl = 'http://localhost:3000';  //builtLocalUrl
+//const returnUrl = 'http://localhost:3002';  //servedLocalUrl
+//const returnUrl = process.env.STRIPE_RETURN_URL
 
 //Component used by Stripe to render PaymentElement
 const CheckoutForm = ({ amount }) => {
@@ -33,7 +35,7 @@ const CheckoutForm = ({ amount }) => {
         //return_url: 'http://localhost:3002/order/complete',  //TODO this might actually work now since I set the frontend routes
         //return_url: builtLocalUrl,
         //return_url: servedLocalUrl,
-        return_url: deployUrl,
+        return_url: returnUrl + "/order/complete",
       },
     });
 
