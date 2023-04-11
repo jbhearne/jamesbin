@@ -2,13 +2,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { apiFetch, apiPost } from '../../../utils/apiFetch';
 
-//Thunk used to get a list of orders from the database. Takes an (user) id arg.
+//Thunk used to get a list of orders from the database. 
+//Takes an (user) id arg.
 export const fetchOrders = createAsyncThunk(
   'cart/fetchOrders',
   async (id) => {
     const token = localStorage.getItem("id_token");
     const orders = await apiFetch(`/orders/user/${id}`, token);
     //testlog console.log(orders)
+
+    //Builds the array that is returned to fetchOrders action.payload used to set the orders: [] state.
     return orders.map(order => {
       return {
         id: order.id,
@@ -23,13 +26,16 @@ export const fetchOrders = createAsyncThunk(
   }
 );
 
-//Thunk used to get a list of items that are on a singal order. Takes an (order) id arg.
+//Thunk used to get a list of items that are on a singal order. 
+//Takes an (order) id arg.
 export const fetchItems = createAsyncThunk(
   'cart/fetchItems',
   async (id) => {
     const token = localStorage.getItem("id_token");
     const items = await apiFetch(`/cart/order/${id}`, token);
     //testlog console.log(items)
+
+    //Builds the array that is returned to fetchItems action.payload used to set orderItems: [] state.
     return items.map(item => {
       return {
         id: item.id,
@@ -53,6 +59,8 @@ export const fetchCheckout = createAsyncThunk(
     //testlog console.log(orders)
     //testlog console.log('fetchCheckout')
     //testlog console.log(checkout)
+
+    //Builds an object that is returned to the action.payload used to set checkoutOrder: {} state.
     return {
       id: checkout.items[0].order_id,
       items: checkout.items,
@@ -97,6 +105,8 @@ export const fetchCompleteOrder = createAsyncThunk(
   async ({ completeCheckout: completeCheckout, cart: cart }) => {
     const token = localStorage.getItem("id_token");
     const completeOrder = await apiPost('/checkout', completeCheckout, token);
+
+    //Builds an object that is returned to fetchCompleteOrder action.payload used to set complete order: {} state.
     return {
         id: completeOrder.order.id,
         billing: completeCheckout.billing,

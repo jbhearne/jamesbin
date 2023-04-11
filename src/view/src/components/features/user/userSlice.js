@@ -2,7 +2,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { apiFetch } from '../../../utils/apiFetch';
 
-//Thunk that fetches user info from the database, builds an object and sets user: {} state.
+//Thunk that fetches user info from the database. 
+//Takes no args.
 export const fetchUser = createAsyncThunk(
   'user/fetchUser',
   async () => {
@@ -13,6 +14,8 @@ export const fetchUser = createAsyncThunk(
 
     const token = localStorage.getItem("id_token");
     const user = await apiFetch("/user", token);
+
+    //Builds an object and returns it to fetchUser action.payload used to set user: {} state.
     return {
       id: user.id,
       fullname: user.fullname,

@@ -3,7 +3,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { apiFetch, apiDelete, multiPost, apiPut} from '../../../utils/apiFetch';
 import './cart.css';
 
-//Async thunk used to set the state of the cart array state. It also sycronizes the database and redux.
+//Async thunk used to set the state of the cart array state. It also sycronizes the database and redux. 
+//Takes a object with (user) id and cart properties. Cart is [{...}, {...}] (see return array at the bottom of the thunk)
 export const fetchCart = createAsyncThunk(
   'cart/fetchCart',
   async ({ id: id, cart: cart }) => {
@@ -18,7 +19,7 @@ export const fetchCart = createAsyncThunk(
     //if there are any cart items that are present locally in state, but not on the database,
     //those get added to the database then the all the datbase items are fetched and a new cart array is built.
     if (cart.length > 0) {
-      const localItems = cart.filter(item => item.id < 0);
+      const localItems = cart.filter(item => item.id < 0); //local cart items are given negative value ids. Ids less tham zero are filtered into a new array.
       const bodies = localItems.map(body => {
         return { productId: body.productId, quantity: body.quantity };
       });
@@ -32,6 +33,8 @@ export const fetchCart = createAsyncThunk(
       //testlog console.log('after multi ' + (parseInt(Date.now()) - 1678800000000))
     }
     const newCart = await apiFetch(`/cart/user/${id}`, token);
+
+    //Build the array and return it to fetchCart action.payload used to set cart: [] state.
     return newCart.map(item =>{
       return {
         id: item.id,
@@ -47,7 +50,8 @@ export const fetchCart = createAsyncThunk(
 
 
 //TODO make this update the store
-//Used to remove an item from the cart on the database
+//Used to remove an item from the cart on the database. 
+//Takes a (cart) id arg.
 export const deleteUserCartItem = createAsyncThunk(
   'cart/deleteUserCartItem',
   async (id) => {
@@ -58,7 +62,8 @@ export const deleteUserCartItem = createAsyncThunk(
 
 
 //TODO make this update the store
-//Used change the quantitiy of an item in the cart on the database
+//Used change the quantitiy of an item in the cart on the database.
+//Takes an obect with (cart) id and body properties. Body should be { quantity:number }.
 export const updateUserCartItem = createAsyncThunk(
   'cart/updateUserCartItem',
   async ({id: id, body: body}) => {

@@ -2,11 +2,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { apiFetch } from '../../../utils/apiFetch';
 
-//Thunk that fetches all product info from the database and builds and array and sets the products:[] state.
+//Thunk that fetches all product info from the database. 
+//Takes no args.
 export const fetchProducts = createAsyncThunk(
   'products/fetchProducts',
   async () => { 
     const response = await apiFetch('/products'); //TODO this needs to be limited on the server app so that the user does not have to download the entire catalog, but it would require serverside pagination and syncronization with redux.
+
+    //Builds an array returned to fetchProducts action.payload and sets the products:[] state.
     return response.map(product => {
       return {
         id: product.id,
@@ -19,7 +22,7 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
-//Thunk that fetchs product details from the database, builds a product object and set the product:{} state
+//Thunk that fetchs product details from the database
 //Takes: an (product) id
 export const fetchProduct = createAsyncThunk(
   'product/fetchProduct',
@@ -36,6 +39,7 @@ export const fetchProduct = createAsyncThunk(
       vendor.description = v.description;
     }
     
+    //Builds a product object and returns it to the fetchProduct action.payload used to set the product:{} state.
     return {
       id: product.id,
       name: product.name,
@@ -47,7 +51,6 @@ export const fetchProduct = createAsyncThunk(
     }
   }
 );
-
 
 //Products slice of the state
 export const productsSlice = createSlice({

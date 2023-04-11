@@ -2,11 +2,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { apiFetch } from '../../../utils/apiFetch';
 
-//Thunk that fetches all the vendors from the database and builds an array and sets vendors: [] state
+//Thunk that fetches all the vendors from the database. 
+//Takes no args.
 export const fetchVendors = createAsyncThunk(
   'products/fetchVendors',
   async () => {
     const response = await apiFetch('/vendors');
+
+    //Builds an array and returns it to fetchVendors action.payload used to set vendors: [] state
     return response.map(vendor => {
       return {
         id: vendor.id,
