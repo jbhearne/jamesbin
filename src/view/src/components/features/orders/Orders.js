@@ -93,7 +93,7 @@ function Orders({ test, test2 }) {
         <tbody>
           {orders.filter((item, idx) => idx >= p.pageStart && idx < p.pageEnd).map(order => {
             if (order.dateCompleted) {
-              if (isOrderItems && order.id === orderItems[0].orderId) {
+              if (isOrderItems && order.id === orderItems[0].orderId) {  //FIXME warning about not returning. Probably due two return statements inside conditional.
                 return (
                   <Order className='highlight' key={order.id} order={order} handleOrderClick={handleOrderClick} />
                 )

@@ -1,6 +1,6 @@
 //Dependencies
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, NavLink, useSearchParams, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, fetchUser, setIsloggedIn } from './components/features/user/userSlice';
@@ -19,6 +19,7 @@ import Register from './components/features/user/register/Register';
 import ProductPage from './components/features/products/product/ProductPage'
 import LoggedIn from './components/LoggedIn';
 import Logout from './components/features/user/login/Logout';
+import NotFound from './components/NotFound';
 import GetStripe from './components/features/orders/order/GetStripe';
 
 //Top level of react application containing all other components
@@ -85,6 +86,7 @@ function App() {
           <Route path='/user/register' element={<Register />} />
           <Route path='/user/login' element={<Login />} />
           <Route path='/user' element={<User />} />
+          <Route path='/*' element={<NotFound />} />
           </Routes>
         </main>
       </Router>

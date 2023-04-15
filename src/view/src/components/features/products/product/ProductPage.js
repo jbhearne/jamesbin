@@ -48,7 +48,7 @@ function Product() {
     <div className='product-page'>
       <h2 className='product-name'>{product.name}</h2>
       <h3 className='price'>{product.price}</h3>
-      <img src={`/images/products/product-img-${product.id}.png`} onError={addDefaultSrc} />
+      <img src={`/images/products/product-img-${product.id}.png`} onError={addDefaultSrc} alt={product.name} />
       <p>{product.description}</p>
       <h4>{product.vendorName}</h4>
       <p>{product.vendorDescription}</p>

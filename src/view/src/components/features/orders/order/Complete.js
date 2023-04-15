@@ -1,5 +1,6 @@
 //Imports
 import { useSelector, useDispatch } from "react-redux";
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useEffect } from "react";
 import { 
   selectCompleteOrder,
@@ -27,6 +28,16 @@ function Complete() {
   const useDefaultDelivery = useSelector(selectUseDefaultDelivery);
   const cart = useSelector(selectCart);
   const completeOrder = useSelector(selectCompleteOrder);
+
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (searchParams.get("redirect_status") !== "succeeded") {  //TODO store this info and use instead of redirect_status payment_intent=pi_RANDOMCHARS&payment_intent_client_secret=pi_RANDOMCHARS_secret_RANDOMCHARSmm
+      navigate('/orders')
+    }
+  }, [])
 
   useEffect(() => {
     //testlog console.log('useEffect')

@@ -53,10 +53,10 @@ app.get('/api/secret', (req, res, next) => {req.secTest = 'secTest'; next()}, (r
 );
 
 //Use frontends routes to serve index.html
-const frontendRoutes = require('./frontend-routes')
-app.use(frontendRoutes);
+//const frontendRoutes = require('./frontend-routes')
+//app.use(frontendRoutes);
 //Home route
-app.get('/', (req, res) => { //TODO: add * and get rid of frontend routes, add a oops page to frontend.
+app.get('/*', (req, res) => { //TODO: add * and get rid of frontend routes, add a oops page to frontend.
   res.sendFile(path.join(__dirname, 'src', 'view', 'build', 'index.html'))
 })
 

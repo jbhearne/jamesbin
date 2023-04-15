@@ -5,6 +5,8 @@ import { removeOrders, removeCheckoutOrder, removeOrderItems, removeCompleteOrde
 import { logoutToken } from "../../../../utils/apiLogin";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import './logout.css';
+
 
 //Component that used to create a logout link
 function Logout(props) {
@@ -30,9 +32,9 @@ function Logout(props) {
 
   //Renders any text nodes or other elements as a link that logs the user out.
   return (
-    <a href='#' onClick={logout}>
+    <button onClick={logout}>
       {props.children}
-    </a>
+    </button>
   )
 }
 

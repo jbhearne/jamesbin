@@ -13,7 +13,7 @@ function Product(props) {
     <div className='product'>
       <h4 className='productName'>{product.name}</h4>
       <p className='price'>{product.price}</p>
-      <img src={`/images/products/product-img-${product.id}.png` /*update to use S3 storage*/} onError={addDefaultSrc} />
+      <img src={`/images/products/product-img-${product.id}.png` /*update to use S3 storage*/} onError={addDefaultSrc} alt={product.name} />
     </div>
   )
 }
