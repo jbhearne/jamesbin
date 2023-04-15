@@ -1,11 +1,18 @@
+//import
 import { apiPost } from '../../../../utils/apiFetch';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
+//Component that renders a form to create a new user
 function Register() {
+
+  //React state
   const [ message, setMessage ] = useState('');
+
+  //React Router constant
   const navigate = useNavigate()
 
+  //On submission it builds a new user object and then posts this to the register api route and sets a message about the result. If successful user is redirected to the login form.
   const handleSubmit = async (e) => {
     e.preventDefault()
     const newUser = {
@@ -28,6 +35,7 @@ function Register() {
     setMessage(result.msg);
   }
 
+  //Renders a form for creating a new user, if unsuccessful a message will be displayed.
   return (
     <div>
       <form name='register' onSubmit={handleSubmit}>

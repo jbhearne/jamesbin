@@ -1,5 +1,6 @@
 const pool = require('../pool');
 
+//function that inserts a larger amount of pre-generated data into the tables needed for the app to function. Database specified in the .env file in database_creation
 const popDatabase = async () => {
   const sql = "insert into contact (phone, address, city, state, zip, email) values ('none', 'none', 'none', 'none', 'none', 'none');\
   insert into contact (phone, address, city, state, zip, email) values ('975-270-8275', '73 Rieder Pass', 'Syców', null, '56-500', 'ktimoney0@hp.com');\

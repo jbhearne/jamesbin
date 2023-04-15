@@ -113,8 +113,8 @@ const changeVendor = async (id, updates) => {
   if (noContactResults) return noContactResults;
   const vendorObj = vendorRes.rows[0];
   const contactObj = contactRes.rows[0];
-  //console.log(vendorObj)
-  //console.log(contactObj)
+  //testlog console.log(vendorObj)
+  //testlog console.log(contactObj)
   const updatedVendor = formatVendorOutput(vendorObj, contactObj);
   return updatedVendor;
 };

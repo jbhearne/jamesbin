@@ -1,5 +1,6 @@
 const pool = require('./pool');
 
+//function that deletes the necessary tables on the database specified in the .env file in database_creation
 const clearDatabase = async () => {
   const sql = 'DROP TABLE IF EXISTS "cart" CASCADE;\
   DROP TABLE IF EXISTS "orders" CASCADE;\

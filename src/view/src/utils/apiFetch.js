@@ -1,7 +1,10 @@
 
+//Import the api URL
 import dataUrl from "./dataUrl";
+
 //TODO move token to this file const token = localStorage.getItem("id_token");
 
+//GETs data from the server API at the specified endpoint, if a token is supplied it sets the headers to inlcude Authorization. Returns the data from the api.
 export const apiFetch = async (endpoint, token) => {
   const headers = token ? {
     'content-type': 'application/json',
@@ -19,6 +22,8 @@ export const apiFetch = async (endpoint, token) => {
   return data;
 }
 
+//POSTs data to the server API at the specified endpoint, if a token is supplied it sets the headers to inlcude Authorization.
+//Returns the data/message from the api.
 export const apiPost = async (endpoint, body, token) => {
   //testlog console.log(body)
   const headers = token ? {
@@ -40,14 +45,18 @@ export const apiPost = async (endpoint, body, token) => {
   return jsonData;
 }
 
+//A recursive function that POSTs data to the server API at the specified endpoint for each item in an array, 
+//if a token is supplied it sets the headers to inlcude Authorization. Returns the data/message from the api.
 export const multiPost = async (endpoint, arr, i, token) => {
   //testlog console.log('top of multi ' + (parseInt(Date.now()) - 1678800000000))
   if (i === arr.length) return
   await apiPost(endpoint, arr[i], token)
-  await multiPost(endpoint, arr, i + 1, token)
+  await multiPost(endpoint, arr, i + 1, token) //LEARNED - a recursive function is used to keep each POST synchronous. for loop would just keep running while waiting for each POST.
   //testlog console.log('bottom of multi ' + (parseInt(Date.now()) - 1678800000000))
 }
 
+//PUTs data to the server API at the specified endpoint to update the database, if a token is supplied it sets the headers to inlcude Authorization.
+//Returns the data/message from the api.
 export const apiPut = async (endpoint, body, token) => {
   const headers = token ? {
     'content-type': 'application/json',
@@ -68,6 +77,8 @@ export const apiPut = async (endpoint, body, token) => {
   return jsonData;
 }
 
+//DELETEs data from the database using the server API at the specified endpoint, 
+//if a token is supplied it sets the headers to inlcude Authorization. Returns the data/message from the api.
 export const apiDelete = async (endpoint, token) => {
   const headers = token ? {
     'content-type': 'application/json',
@@ -87,44 +98,5 @@ export const apiDelete = async (endpoint, token) => {
   return jsonData;
 }
 
-/*GARBAGE
-//IDEA these were interpreted from a web post
-
-export const setToken = (response) => {
-  const expiresAt = Date.now() + parseInt(response.expiresIn);
-
-  localStorage.setItem('id_token', response.token);
-  localStorage.setItem("expires_at", JSON.stringify(expiresAt));
-}
-
-export const logoutToken = () => {
-  localStorage.removeItem('id_token');
-  localStorage.removeItem('expires_at');
-}
-
-export const isLoggedIn = () => {
-  const exp = localStorage.getItem('expires_at');
-  const expiresAt = JSON.parse(exp);
-  return Date.now().valueOf() < expiresAt;
-}
-
-export const isLoggedOut = () => {
-  return !isLoggedIn();
-}
-
-export const fetchLogin = async (body) => {
-  console.log(body)
-  const data = await fetch(dataUrl + '/login', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  });
-  const jwtResponse = await data.json();
-  setToken(jwtResponse);
-  return isLoggedIn();
-}
-*/
 
 

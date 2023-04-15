@@ -1,5 +1,6 @@
 const pool = require('./pool');
 
+//function that creates the necessary tables on the database specified in the .env file in database_creation
 const createDatabase = async () => {
   const sql = 'CREATE TABLE "session" (\
     "sid" varchar NOT NULL COLLATE "default",\

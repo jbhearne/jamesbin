@@ -36,6 +36,7 @@ const getUserById = async (request, response) => {
   }
 }
 
+//get the current user from the database based on the request.user object. Sends response object.
 const getCurrentUser = async (request, response) => {
   const id = parseInt(request.user.id);
   console.log(id + 'user')

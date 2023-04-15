@@ -1,17 +1,23 @@
+/////////////////////////////////////////////////////
+///a homemade form validation module -- I realize there are libraries that do this much more comphensively than anything that I can do, but it seemed like a fun excercise since this is not a real ecommerce site.
+
+//define character sets for required characters
 const upperStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const lowerStr = 'abcdefghijklmnopqrstuvwxyz';
 const symbolStr = '!@#$%^&*()_-{}[]?';
 const numberStr = '0123456789';
 
-const forIncludes = (password, str) => {
+//checks each character in a in a string to see if it is in the form input
+const forIncludes = (input, str) => {
   for (let i = 0; i < str.length; i++) {
-    //console.log(password)
-    if (password.includes(str[i])) return true;
+    //testlog console.log(password)
+    if (input.includes(str[i])) return true;
   }
   return false;
 }
 
 module.exports = {
+  //validates a password based on options chosen or defaults if no options object included, returns an object with isValid boolean and information about the validation.
   password (password, options = {}) {
     const { 
       min = 6,

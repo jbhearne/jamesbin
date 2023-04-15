@@ -1,39 +1,32 @@
+//imports
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../user/userSlice";
-//GARBAGE import { useNavigate } from "react-router-dom";
 import { subtotal } from "../../../../utils/utils";
-import { deleteUserCartItem, removeItemFromCart, /*GARBAGE addItemToCart, */ fetchCart, selectTempCartId, selectCart, updateUserCartItem } from "../cartSlice";
+import { deleteUserCartItem, removeItemFromCart, fetchCart, selectCart, updateUserCartItem } from "../cartSlice";
 
+//Component for rendering a line item representing a product in the cart
 function Item({ item, controls }) {
+  //props: item is the data that needs to be rendered, controls is a boolean to determine if the cart is only for display or has controls to delete or update the cart.
 
+  //Redux constants
   const dispatch = useDispatch();
-  //GARBAGE const navigate = useNavigate();
-
+  const cart = useSelector(selectCart);
+  const user = useSelector(selectUser);
+  
+  //Removes a cart item from database and Redux.
   const handleDelete = (id) => {
     dispatch(deleteUserCartItem(id));
     dispatch(removeItemFromCart(id));
   }
 
-  //GARBAGE const tempCartId = useSelector(selectTempCartId);
-  const cart = useSelector(selectCart);
-  const user = useSelector(selectUser);
-
+  //Change item quantity on database and then fetch the updated cart
   const handleUpdate = async (e) => {
     e.preventDefault()
     await dispatch(updateUserCartItem({ id: item.id, body: { productId: item.productId, quantity: e.target.quantity.value }}));
-    /*GARBAGE dispatch(addItemToCart({
-      id: tempCartId,
-      productName: item.productName,
-      productId: item.productId,
-      orderId: -1,
-      price: item.price,
-      quantity: e.target.quantity.value,
-    }))*/
-    //GARBAGE await dispatch(deleteUserCartItem(item.id));
-    //GARBAGE await dispatch(removeItemFromCart(item.id));
     dispatch(fetchCart({ id: user.id, cart: cart }));
   }
 
+  //Render the a table row with the item data
   return (
     <tr className="cartItem">
       <td className="product-name">{item.productName}</td>
@@ -46,8 +39,7 @@ function Item({ item, controls }) {
           <button className="update">update</button>
         </form>
         </td>)}
-      {controls && (<td><button className="delete" onClick={() => handleDelete(item.id)}>☓</button></td>)}
-      {/*GARBAGE  <td>{item.id}</td> */}
+      {controls && (<td><button className="delete" onClick={() => handleDelete(item.id)}>☓</button></td>)} 
     </tr>
   )
 }

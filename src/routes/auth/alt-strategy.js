@@ -1,3 +1,4 @@
+//GARBAGE - unused module
 //REVIEW this will end up querying the database everytime passport.authenticate is called.
   //REVIEW i think you could change this so that you could save more user info in the JWT and then extract that and 
   //REVIEW then call done() using the extracted info which i think puts sets the req.user object.

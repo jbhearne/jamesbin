@@ -1,29 +1,30 @@
-
+//imports 
 import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react';
-//GARBAGE import { Link } from 'react-router-dom';
-//GARBAGE import { selectUser } from '../../../user/userSlice';
 import { 
   setBilling, 
-  /*GARBAGE  selectIsOrderLoading , */
   setUseDefaultBilling,
   selectUseDefaultBilling,
  } from '../../ordersSlice';
-//GARBAGE import { apiPut } from '../../../../../utils/apiFetch';
 
-
+//Component for rendering billing info and accepting billing form data
 function Billing({ billing, controls = true }) {
-  //GARBAGE const isLoading = useSelector(selectIsOrderLoading);
-  const useDefaultBilling = useSelector(selectUseDefaultBilling);
-  //GARBAGE const user = useSelector(selectUser);
+  //props: billing is the data, controls is a boolean that determines if the editing button is active.
+
+  //React component state 
   const [editMode, setEditMode] = useState(false);
   const [message, setMessage] = useState('');
-  const dispatch = useDispatch()
 
+  //Redux constants 
+  const dispatch = useDispatch();
+  const useDefaultBilling = useSelector(selectUseDefaultBilling);
+
+  //Handles the checkbox that determines if the user wants to enter billing info or use their default info.
   const handleCheck = (e) => {
     dispatch(setUseDefaultBilling(e.target.checked))
   }
 
+  //Handles the submission of updated billing info.
   const handleSubmit = async (e) => {
     e.preventDefault()
     const newBilling = {
@@ -38,10 +39,10 @@ function Billing({ billing, controls = true }) {
         zip: e.target.zip.value,
       }
     }
-    dispatch(setBilling(newBilling))
-    //GARBAGE const token = localStorage.getItem("id_token");
+    dispatch(setBilling(newBilling)) //TODO this only sets redux state. I had previously used this info inside this component. This is needed by fetchCompleteOrder, now that get dispatched in Complete.js, but that is after redirection and redux state is lost. TLDR need to add an update function for billing and Delivery.
   }
 
+  //Returns a form for updating billing info
   const edit = () => {
     return (
       <div>
@@ -69,6 +70,7 @@ function Billing({ billing, controls = true }) {
     )
   }
   
+  //Returns formatted billing info and if controls prop is true includes a button to enter edit mode
   const view = () => {
     //testlog console.log('view')
     //testlog console.log(billing)
@@ -105,6 +107,7 @@ function Billing({ billing, controls = true }) {
     )
   }
 
+  //Renders either the form or the formatted info based on the editMode state.
   return (
     <div className='billing-delivery'>
      {editMode ? edit() : view()}

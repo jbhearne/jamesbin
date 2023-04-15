@@ -91,7 +91,7 @@ const addUser = async (newUser) => {
   return user;
 };
 
-//takes a user ID and a user update object that may or may not include properties: fullname, username, contect 
+//takes a user ID and a user update object that may or may not include properties: fullname, username, contact 
 const changeUser = async (id, updates) => {
   const existingUser = await findUserById(id);
   const isUnique = await isUsernameUnique(updates.username);

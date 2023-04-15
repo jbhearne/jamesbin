@@ -16,7 +16,6 @@ const {
   completeOrderNow,
   findItemsByOrderId,
 } = require('../models/findOrder');
-
 const { 
   formatContactOutput,
   formatNewDelivery,
@@ -95,10 +94,10 @@ const updateOrder = async (request, response) => {
   }
 }
 
-//deletes an ordder
+//deletes an order
 const deleteOrder = async (request, response) => {
   const id = parseInt(request.params.id);
-  const order = await removeOrder(id)
+  const order = await removeOrder(id);
   response.status(200).send(`Order deleted with ID: ${order.id}`);
   try {
     const order = await removeOrder(id);
@@ -112,13 +111,13 @@ const deleteOrder = async (request, response) => {
 }
 
 //checkout updates order table and alters other related tables. requires a request object.
-//body = { useDefaultDelivery, useDefaultBilling, delivery, billing, ccPlaceholder }
+//body on request = { useDefaultDelivery, useDefaultBilling, delivery, billing, ccPlaceholder }
 const checkout = async (request, response) => {
   const body = request.body;
   const user = request.user;
   try {
     const cart = await collectCart(user.id);
-    //console.log(cart)
+    //testlog console.log(cart)
     const amount = cart.total;
 
     const isNotOneOrder = cart.items.some((item) => item.order_id !== cart.items[0].order_id);

@@ -1,7 +1,9 @@
 
-
+//Component that renders the info of an individual Vendor
 function Vendor({ vendor }) {
+  //props: vendor contains the data to be rendered
 
+  //Renders vendor info
   return (
     <div>
       <h3>{vendor.name}</h3>

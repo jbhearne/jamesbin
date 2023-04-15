@@ -1,21 +1,28 @@
+//import
 import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react';
-//GARBAGE import { Link } from 'react-router-dom';
 import { selectUser, fetchUser } from './userSlice';
 import { apiPut } from '../../../utils/apiFetch';
 import "./user.css";
 
+//Component for rendering and updating user info
 function User() {
-  const user = useSelector(selectUser);
+
+  //React state
   const [editMode, setEditMode] = useState(false);
   const [message, setMessage] = useState('');
   const [editUsername, setEditUsername] = useState(false);
-  const dispatch = useDispatch()
 
+  //Redux constants 
+  const dispatch = useDispatch()
+  const user = useSelector(selectUser);
+
+  //Handles the checkbox that determines if the user wants to update the username in addition to other user info
   const handleCheck = (e) => {
     setEditUsername(e.target.checked)
   }
 
+  //on submission it builds a updateUser object and uses it to update the database. Then fetches the updated user and resets the editmode.
   const handleSubmit = async (e) => {
     e.preventDefault()
     const updateUser = {
@@ -41,6 +48,7 @@ function User() {
     }
   }
 
+  //Returns a form for updating the user info.,
   const editUser = () => {
     return (
       <div className='main-user'>
@@ -67,6 +75,7 @@ function User() {
     )
   }
   
+  //returns formatted user information for viewing and a button to change the editMode state.
   const viewUser = () => {
     return (
       <div className='main-user'>
@@ -88,6 +97,7 @@ function User() {
     )
   }
 
+  //Renders  either the form or formatted info based on editMode state.
   return (
     <div>
      {editMode ? editUser() : viewUser()}
