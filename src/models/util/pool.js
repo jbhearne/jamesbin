@@ -9,6 +9,10 @@ const pool = new Pool({
   host: process.env.DB_HOST,
   database: process.env.DATABASE,
   password: process.env.DB_PASSWORD,
+  max: 5, // set pool max size
+  idleTimeoutMillis: 1000, // close idle clients after 1 second
+  //connectionTimeoutMillis: 1000, // return an error after 1 second if connection could not be established
+  maxUses: 7500, // close (and replace) a connection after it has been used 7500 times (see below for discussion)
   //port: process.env.DB_PORT
 })
 
