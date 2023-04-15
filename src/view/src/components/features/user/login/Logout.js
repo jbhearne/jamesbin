@@ -32,7 +32,7 @@ function Logout(props) {
 
   //Renders any text nodes or other elements as a link that logs the user out.
   return (
-    <button onClick={logout}>
+    <button className="logout" onClick={logout}>
       {props.children}
     </button>
   )

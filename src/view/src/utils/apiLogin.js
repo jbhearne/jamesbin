@@ -41,5 +41,9 @@ export const fetchLogin = async (body) => {
   });
   const jwtResponse = await data.json();
   setToken(jwtResponse);
-  return isLoggedIn();
+  //return isLoggedIn();
+  return {
+    msg: jwtResponse.msg,
+    success: jwtResponse.success,
+  }
 }

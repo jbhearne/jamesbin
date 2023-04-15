@@ -1,4 +1,7 @@
-.logout button {
+button.logout  {
   border: 0;
   background-color: unset;
+  font-size: 1rem;
+  font-weight: 400;
+  text-decoration: underline;
 }

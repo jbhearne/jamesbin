@@ -1,12 +1,16 @@
 //imports
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { fetchUser, setIsloggedIn } from '../userSlice';
 import { fetchLogin } from '../../../../utils/apiLogin';
 import './Login.css'
 
 //Component that renders a form used to login 
 function Login() {
+
+  //React state
+  const [message, setMessage] = useState('');
 
   //Redux constants
   const dispatch = useDispatch();
@@ -22,10 +26,12 @@ function Login() {
       password: e.target.password.value
     })
 
-    dispatch(setIsloggedIn(isLoggedIn))
+    dispatch(setIsloggedIn(isLoggedIn.success));
     dispatch(fetchUser());
-    if(isLoggedIn) {
+    if(isLoggedIn.success) {
       navigate('/');
+    } else {
+      setMessage(isLoggedIn.msg);
     }
 
   }
@@ -36,14 +42,15 @@ function Login() {
       <form id="login" name='login' onSubmit={handleLogin}>
         <div className='login-field'>
           <label htmlFor='username'>Username:</label>
-          <input type='text' id='username' defaultValue='Fantom'></input>
+          <input type='text' id='username'></input>
         </div>
         <div className='login-field'>
           <label htmlFor='password' >Password:</label>
-          <input type='password' id='password' defaultValue='happytime'></input>
+          <input type='password' id='password'></input>
         </div>
-        <button form='login' type='submit' ></button>
+        <button form='login' type='submit' >Login</button>
       </form>
+      <p>{message}</p>
       <Link className='registerLink' to='/user/register'>Register</Link>
     </div>
   )
