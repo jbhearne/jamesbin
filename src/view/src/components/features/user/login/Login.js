@@ -36,11 +36,11 @@ function Login() {
       <form id="login" name='login' onSubmit={handleLogin}>
         <div className='login-field'>
           <label htmlFor='username'>Username:</label>
-          <input type='text' id='username' defaultValue='Fantom'></input>
+          <input type='text' id='username' ></input>
         </div>
         <div className='login-field'>
           <label htmlFor='password' >Password:</label>
-          <input type='password' id='password' defaultValue='happytime'></input>
+          <input type='password' id='password' ></input>
         </div>
         <button form='login' type='submit' >Login</button>
       </form>
