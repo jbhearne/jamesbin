@@ -42,7 +42,7 @@ function Login() {
           <label htmlFor='password' >Password:</label>
           <input type='password' id='password' defaultValue='happytime'></input>
         </div>
-        <button form='login' type='submit' ></button>
+        <button form='login' type='submit' >Login</button>
       </form>
       <Link className='registerLink' to='/user/register'>Register</Link>
     </div>

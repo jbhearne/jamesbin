@@ -66,7 +66,7 @@ router.post("/register", async (req, res, next) => {
       return res.status(400).json({ msg: 'User already exists.', success: false })
     }
 
-    const validPassword = validate.password(password, { min: 3, include: ',.', exclude: 'a' })
+    const validPassword = validate.password(password, { min: 3, /*include: ',.', exclude: 'a'*/ })
 
     if (!validPassword.isValid) {
       return res.status(400).json({ msg: validPassword.msg, success: false })
